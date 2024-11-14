@@ -1,12 +1,29 @@
 <?php
 
+use App\Models\Vehicle;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 
 new #[Layout('layouts.front-end')] class extends Component {
+
+    public $vehicles;
+
+    public function mount()
+    {
+        $this->vehicles = Vehicle::all();
+    }
+
 } ?>
 
 <div class="page-content">
+
+    @if (session('success'))
+        <div class="alert text-success alert-light" id="success-message"
+             style="position: fixed; top: 20px; right: 20px; max-width: 300px; z-index: 1000; padding: 15px; border-radius: 5px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+            {{ session('success') }}
+        </div>
+    @endif
+
     <div id="banner-in">
         <img src="front-end/images/banner-inner.jpg" id="bannerin-img">
         <div id="inner-container">
@@ -34,7 +51,8 @@ new #[Layout('layouts.front-end')] class extends Component {
                                placeholder="Search for car by make,model or any keyword" aria-label="Search car">
                     </div>
                     <div class="col-sm-4">
-                        <a href="{{ route('front-end.create-car') }}" class="btn2" style="margin-top:0;">Submit a Car</a>
+                        <a href="{{ route('front-end.create-car') }}" class="btn2" style="margin-top:0;">Submit a
+                            Car</a>
                     </div>
                 </div>
                 <!-- =======end of Search====-->
@@ -85,214 +103,40 @@ new #[Layout('layouts.front-end')] class extends Component {
                 </div>
                 <!--===end of filter ==-->
 
-                <div id="car-wrap">
-                    <a href="{{ route('front-end.car-details') }}"><img src="front-end/images/car-thumbnail.jpg" class="car-thumb"/></a>
-                    <table class="table">
-                        <tbody>
-                        <tr>
-                            <td colspan="2"><a href="{{ route('front-end.car-details') }}" class="title3"><strong>Mercedes-Benz ML
-                                        350</strong></a></td>
-                        </tr>
-                        <tr>
-                            <td>2014</td>
-                            <td>Mombasa</td>
-                        </tr>
-                        <tr>
-                            <td>Total votes:</td>
-                            <td><strong>100</strong></td>
-                        </tr>
-                        <tr>
-                            <td><a href="{{ route('front-end.checkout') }}" type="button" class="btn btn-primary btn-sm">Vote for me</a>
-                            </td>
-                            <td><a href="#" style="float:right;"><img src="front-end/images/share.png"/></a></td>
-                        </tr>
-
-                        </tbody>
-                    </table>
-                </div> <!--==end of <div id="car-wrap">==-->
-
-                <div id="car-wrap">
-                    <a href="{{ route('front-end.car-details') }}"><img src="front-end/images/car-thumbnail.jpg" class="car-thumb"/></a>
-                    <table class="table">
-                        <tbody>
-                        <tr>
-                            <td colspan="2"><a href="{{ route('front-end.car-details') }}" class="title3"><strong>Mercedes-Benz ML
-                                        350</strong></a></td>
-                        </tr>
-                        <tr>
-                            <td>2014</td>
-                            <td>Mombasa</td>
-                        </tr>
-                        <tr>
-                            <td>Total votes:</td>
-                            <td><strong>100</strong></td>
-                        </tr>
-                        <tr>
-                            <td><a href="{{ route('front-end.checkout') }}" type="button" class="btn btn-primary btn-sm">Vote for me</a>
-                            </td>
-                            <td><a href="#" style="float:right;"><img src="front-end/images/share.png"/></a></td>
-                        </tr>
-
-                        </tbody>
-                    </table>
-                </div> <!--==end of <div id="car-wrap">==-->
-
-                <div id="car-wrap">
-                    <a href="{{ route('front-end.car-details') }}"><img src="front-end/images/car-thumbnail.jpg" class="car-thumb"/></a>
-                    <table class="table">
-                        <tbody>
-                        <tr>
-                            <td colspan="2"><a href="{{ route('front-end.car-details') }}" class="title3"><strong>Mercedes-Benz ML
-                                        350</strong></a></td>
-                        </tr>
-                        <tr>
-                            <td>2014</td>
-                            <td>Mombasa</td>
-                        </tr>
-                        <tr>
-                            <td>Total votes:</td>
-                            <td><strong>100</strong></td>
-                        </tr>
-                        <tr>
-                            <td><a href="{{ route('front-end.checkout') }}" type="button" class="btn btn-primary btn-sm">Vote for me</a>
-                            </td>
-                            <td><a href="#" style="float:right;"><img src="front-end/images/share.png"/></a></td>
-                        </tr>
-
-                        </tbody>
-                    </table>
-                </div> <!--==end of <div id="car-wrap">==-->
-
-                <div id="car-wrap">
-                    <a href="{{ route('front-end.car-details') }}"><img src="front-end/images/car-thumbnail.jpg" class="car-thumb"/></a>
-                    <table class="table">
-                        <tbody>
-                        <tr>
-                            <td colspan="2"><a href="{{ route('front-end.car-details') }}" class="title3"><strong>Mercedes-Benz ML
-                                        350</strong></a></td>
-                        </tr>
-                        <tr>
-                            <td>2014</td>
-                            <td>Mombasa</td>
-                        </tr>
-                        <tr>
-                            <td>Total votes:</td>
-                            <td><strong>100</strong></td>
-                        </tr>
-                        <tr>
-                            <td><a href="{{ route('front-end.checkout') }}"" type="button" class="btn btn-primary btn-sm">Vote for me</a>
-                            </td>
-                            <td><a href="#" style="float:right;"><img src="front-end/images/share.png"/></a></td>
-                        </tr>
-
-                        </tbody>
-                    </table>
-                </div> <!--==end of <div id="car-wrap">==-->
-
-
-                <div id="car-wrap">
-                    <a href="{{ route('front-end.car-details') }}"><img src="front-end/images/car-thumbnail.jpg" class="car-thumb"/></a>
-                    <table class="table">
-                        <tbody>
-                        <tr>
-                            <td colspan="2"><a href="{{ route('front-end.car-details') }}" class="title3"><strong>Mercedes-Benz ML
-                                        350</strong></a></td>
-                        </tr>
-                        <tr>
-                            <td>2014</td>
-                            <td>Mombasa</td>
-                        </tr>
-                        <tr>
-                            <td>Total votes:</td>
-                            <td><strong>100</strong></td>
-                        </tr>
-                        <tr>
-                            <td><a href="{{ route('front-end.checkout') }}" type="button" class="btn btn-primary btn-sm">Vote for me</a>
-                            </td>
-                            <td><a href="#" style="float:right;"><img src="front-end/images/share.png"/></a></td>
-                        </tr>
-
-                        </tbody>
-                    </table>
-                </div> <!--==end of <div id="car-wrap">==-->
-
-                <div id="car-wrap">
-                    <a href="{{ route('front-end.car-details') }}"><img src="front-end/images/car-thumbnail.jpg" class="car-thumb"/></a>
-                    <table class="table">
-                        <tbody>
-                        <tr>
-                            <td colspan="2"><a href="{{ route('front-end.car-details') }}" class="title3"><strong>Mercedes-Benz ML
-                                        350</strong></a></td>
-                        </tr>
-                        <tr>
-                            <td>2014</td>
-                            <td>Mombasa</td>
-                        </tr>
-                        <tr>
-                            <td>Total votes:</td>
-                            <td><strong>100</strong></td>
-                        </tr>
-                        <tr>
-                            <td><a href="{{ route('front-end.checkout') }}" type="button" class="btn btn-primary btn-sm">Vote for me</a>
-                            </td>
-                            <td><a href="#" style="float:right;"><img src="front-end/images/share.png"/></a></td>
-                        </tr>
-
-                        </tbody>
-                    </table>
-                </div> <!--==end of <div id="car-wrap">==-->
-
-                <div id="car-wrap">
-                    <a href="{{ route('front-end.car-details') }}"><img src="front-end/images/car-thumbnail.jpg" class="car-thumb"/></a>
-                    <table class="table">
-                        <tbody>
-                        <tr>
-                            <td colspan="2"><a href="{{ route('front-end.car-details') }}" class="title3"><strong>Mercedes-Benz ML
-                                        350</strong></a></td>
-                        </tr>
-                        <tr>
-                            <td>2014</td>
-                            <td>Mombasa</td>
-                        </tr>
-                        <tr>
-                            <td>Total votes:</td>
-                            <td><strong>100</strong></td>
-                        </tr>
-                        <tr>
-                            <td><a href="{{ route('front-end.checkout') }}" type="button" class="btn btn-primary btn-sm">Vote for me</a>
-                            </td>
-                            <td><a href="#" style="float:right;"><img src="front-end/images/share.png"/></a></td>
-                        </tr>
-
-                        </tbody>
-                    </table>
-                </div> <!--==end of <div id="car-wrap">==-->
-
-                <div id="car-wrap">
-                    <a href="{{ route('front-end.car-details') }}"><img src="front-end/images/car-thumbnail.jpg" class="car-thumb"/></a>
-                    <table class="table">
-                        <tbody>
-                        <tr>
-                            <td colspan="2"><a href="{{ route('front-end.car-details') }}" class="title3"><strong>Mercedes-Benz ML
-                                        350</strong></a></td>
-                        </tr>
-                        <tr>
-                            <td>2014</td>
-                            <td>Mombasa</td>
-                        </tr>
-                        <tr>
-                            <td>Total votes:</td>
-                            <td><strong>100</strong></td>
-                        </tr>
-                        <tr>
-                            <td><a href="{{ route('front-end.checkout') }}" type="button" class="btn btn-primary btn-sm">Vote for me</a>
-                            </td>
-                            <td><a href="#" style="float:right;"><img src="front-end/images/share.png"/></a></td>
-                        </tr>
-
-                        </tbody>
-                    </table>
-                </div> <!--==end of <div id="car-wrap">==-->
+                @forelse($vehicles as $vehicle)
+                    <div id="car-wrap">
+                        <a style="text-decoration:none;" href="{{ route('front-end.car-details') }}">
+                            <img
+                                src="{{ $vehicle->images->isNotEmpty() ? $vehicle->images->first()->image_url : 'path/to/placeholder.jpg' }}"
+                                class="car-thumb"/>
+                            <table class="table">
+                                <tbody>
+                                <tr>
+                                    <td colspan="2"><a href="{{ route('front-end.car-details') }}" class="title3">
+                                            <strong>{{ $vehicle->name.' '.$vehicle->make->name.'-'.$vehicle->vehicle_model->name }}</strong></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>{{ $vehicle->manufacturing_year }}</td>
+                                    <td>{{ $vehicle->location }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Total votes:</td>
+                                    <td><strong>{{ $vehicle->votes->count() }}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td><a href="{{ route('front-end.checkout',$vehicle->id) }}" type="button"
+                                           class="btn btn-primary btn-sm">Vote for me</a>
+                                    </td>
+                                    <td><a href="#" style="float:right;"><img src="front-end/images/share.png"/></a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                    </div>
+                @empty
+                    <p class="text-center">No Vehicle Found</p>
+                @endforelse
 
 
             </div> <!--==end of <div id="page-contents">==-->
@@ -313,5 +157,11 @@ new #[Layout('layouts.front-end')] class extends Component {
             </form>
         </div> <!--==end of <div id="container">==-->
     </div> <!--==end of <div id="newsletter-wrap">==-->
-
 </div>
+@push('js')
+    <script>
+        setTimeout(function () {
+            document.getElementById('success-message').style.display = 'none';
+        }, 4000); // Hide after 3 seconds
+    </script>
+@endpush

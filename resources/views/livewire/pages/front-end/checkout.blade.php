@@ -1,9 +1,63 @@
 <?php
 
+use App\Models\Transaction;
+use App\Models\Vehicle;
+use App\Models\Vote;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 
 new #[Layout('layouts.front-end')] class extends Component {
+
+    public $vehicle_id;
+
+    public function mount($vehicle_id)
+    {
+        $this->vehicle_id = $vehicle_id;
+    }
+
+
+    public function confirmPayment()
+    {
+
+        //check the payment status here
+
+        //store vote details
+        $vote = Vote::create([
+            'user_id' => auth()->user()->id,
+            'vehicle_id' => $this->vehicle_id
+        ]);
+
+        //store transaction details
+        Transaction::create([
+            'vote_id' => $vote->id,
+            'amount' => 2000,
+            'transaction_code' => $this->generateUniqueCode(),
+            'user_account_number' => auth()->user()->account_number,
+            'status' => 'completed'
+        ]);
+
+        $vehicle = Vehicle::where('id', $this->vehicle_id)->first();
+
+        session()->flash('success', 'Your have voted for vehicle ' . $vehicle->vehicle_reg . ' successfully!');
+        $this->redirectRoute('front-end.car-awards');
+
+    }
+
+    function generateUniqueCode()
+    {
+        // Define the prefix and suffix
+        $prefix = 'SQRT';
+        $suffix = 'ER';
+
+        // Generate a random 4-digit number
+        $randomNumber = mt_rand(1000, 9999);
+
+        // Combine them into the desired format
+        $uniqueCode = $prefix . $randomNumber . $suffix;
+
+        return $uniqueCode;
+    }
+
 } ?>
 
 <div class="page-content">
@@ -23,13 +77,14 @@ new #[Layout('layouts.front-end')] class extends Component {
         <div id="container">
             <div id="page-contents">
                 <div id="register">
-                    <form class="row g-3">
+                    <form wire:submit="confirmPayment" class="row g-3">
                         <div class="col-md-4">
                             <img src="front-end/images/mpesa.png">
                         </div>
                         <div class="col-md-8">
-                            <p>For every Ksh. 50, you receive one vote. For example, a payment of Ksh. 100 will earn you 2 votes.Each vote enters you into a weekly draw for a chance to win cash prizes.
-                                The more you vote, the higher your chances of winning.<br />
+                            <p>For every Ksh. 50, you receive one vote. For example, a payment of Ksh. 100 will earn you
+                                2 votes.Each vote enters you into a weekly draw for a chance to win cash prizes.
+                                The more you vote, the higher your chances of winning.<br/>
                                 <em>Terms and Conditions apply</em></p>
                         </div>
 
@@ -37,8 +92,8 @@ new #[Layout('layouts.front-end')] class extends Component {
                         <ul style="margin-left:20px;">
                             <li>Go to Pay Bill on the M-Pesa</li>
                             <li>Business number - 4002487</li>
-                            <li>Account Number - <strong>RTYEWR</strong></li>
-                            <li>Enter Amount </li>
+                            <li>Account Number - <strong>{{ auth()->user()->account_number }}</strong></li>
+                            <li>Enter Amount</li>
                             <li>Enter your M-Pesa PIN</li>
                             <li>Wait for confirmation.</li>
                         </ul>
@@ -63,7 +118,8 @@ new #[Layout('layouts.front-end')] class extends Component {
             <h1>SIGN UP FOR AUTO SHOW ALERTS</h1>
             <h2>Sign up to recieve exclusive tickets offers,show info,awards etc.</h2>
             <form id="newsletter">
-                <input type="email" id="newsInputEmail1" aria-describedby="emailHelp" placeholder="Enter your email address">
+                <input type="email" id="newsInputEmail1" aria-describedby="emailHelp"
+                       placeholder="Enter your email address">
                 <button type="submit" class="btn btn-primary">SIGN UP</button>
             </form>
         </div> <!--==end of <div id="container">==-->
