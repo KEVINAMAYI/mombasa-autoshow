@@ -21,9 +21,9 @@ class Vote extends Model
         return $this->belongsTo(Vehicle::class);
     }
 
-    public function transactions()
+    public function transaction()
     {
-        return $this->hasOne(Transaction::class, 'vote_id');
+        return $this->belongsTo(Transaction::class);
     }
 
 }

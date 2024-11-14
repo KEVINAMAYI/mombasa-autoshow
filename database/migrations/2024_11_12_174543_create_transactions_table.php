@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('vote_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('phone_number')->constrained()->cascadeOnDelete();
             $table->decimal('amount', 8, 2)->default(50);
             $table->string('transaction_code')->unique()->nullable();
-            $table->string('user_account_number');
+            $table->string('vehicle_account_number');
             $table->enum('status', ['pending', 'completed', 'failed'])->default('pending');
             $table->timestamps();
         });

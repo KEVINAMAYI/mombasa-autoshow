@@ -50,7 +50,7 @@ new class extends Component {
                                 <li><a class="dropdown-item" href="{{ route('front-end.my-cars') }}">Car of the year</a>
                                 </li>
                                 <li><a class="dropdown-item" href="{{ route('front-end.my-votes') }}">My Votes</a></li>
-                                <li><a class="dropdown-item" href="{{ route('front-end.transactions') }}">My
+                                <li><a class="dropdown-item" href="{{ route('front-end.my-transactions') }}">My
                                         Transactions</a></li>
                                 <!--====== for super admins view only =========-->
                                 <li><a class="dropdown-item" href="{{ route('front-end.results') }}">Voting Results</a>

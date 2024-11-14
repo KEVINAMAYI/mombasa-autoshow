@@ -29,6 +29,7 @@ return new class extends Migration {
             $table->string('route');
             $table->longText('description');
             $table->boolean('published')->default(false);
+            $table->string('account_number')->nullable();
             $table->timestamps();
         });
     }

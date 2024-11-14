@@ -11,7 +11,11 @@ class Transaction extends Model
 
     protected  $guarded = ['id'];
 
-    public function vote(){
-        return $this->belongsTo(Vote::class);
+    public function votes(){
+        return $this->hasMany(Vote::class);
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class);
     }
 }

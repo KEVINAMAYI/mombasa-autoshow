@@ -18,23 +18,34 @@ new #[Layout('layouts.front-end')] class extends Component {
 
     public function confirmPayment()
     {
-
         //check the payment status here
 
-        //store vote details
-        $vote = Vote::create([
-            'user_id' => auth()->user()->id,
-            'vehicle_id' => $this->vehicle_id
-        ]);
+        $amount_payable = 2000;
+
+        $vehicle = Vehicle::where('id',$this->vehicle_id)->first();
 
         //store transaction details
-        Transaction::create([
-            'vote_id' => $vote->id,
-            'amount' => 2000,
+        $transaction = Transaction::create([
+            'user_id' => auth()->user()->id,
+            'amount' => $amount_payable,
             'transaction_code' => $this->generateUniqueCode(),
-            'user_account_number' => auth()->user()->account_number,
+            'vehicle_account_number' => $vehicle->account_number,
+            'phone_number' => '+254795704301',
             'status' => 'completed'
         ]);
+
+        $votes = $amount_payable / 50;
+
+        for ($i = 1; $i <= $votes; $i++) {
+
+            // Store vote details
+            $vote = Vote::create([
+                'transaction_id' => $transaction->id,
+                'user_id' => auth()->user()->id,
+                'vehicle_id' => $this->vehicle_id
+            ]);
+        }
+
 
         $vehicle = Vehicle::where('id', $this->vehicle_id)->first();
 

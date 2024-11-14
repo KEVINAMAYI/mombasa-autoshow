@@ -39,38 +39,13 @@ new #[Layout('layouts.front-end')] class extends Component
 
         $validated['password'] = Hash::make($validated['password']);
 
-        event(new Registered($user = User::create($validated+ ['account_number' => $this->generateAccountNumber()])));
+        event(new Registered($user = User::create($validated)));
 
         Auth::login($user);
 
         $this->redirect(RouteServiceProvider::HOME, navigate: true);
     }
 
-    public function generateAccountNumber()
-    {
-        // Get the latest user account number
-        $latestAccountNumber = User::latest('id')->first();
-
-        // Extract the numeric part and increment it
-        if ($latestAccountNumber) {
-            $lastNumber = (int) substr($latestAccountNumber->account_number, 3); // Assuming 'MSA' is the prefix
-            $newNumber = $lastNumber + 1;
-        } else {
-            // If there are no users, start from 12345
-            $newNumber = 1;
-        }
-
-        // Generate the new account number with the 'MSA' prefix
-        $accountNumber = 'MSA' . $newNumber;
-
-        // Ensure the account number is unique
-        while (User::where('account_number', $accountNumber)->exists()) {
-            $newNumber++;
-            $accountNumber = 'MSA' . $newNumber;
-        }
-
-        return $accountNumber;
-    }
 
 }; ?>
 

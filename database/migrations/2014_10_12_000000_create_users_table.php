@@ -21,7 +21,6 @@ return new class extends Migration
             $table->foreignId('country_id');
             $table->foreignId('town_id');
             $table->integer('accept_terms');
-            $table->string('account_number')->nullable();
             $table->boolean('is_active')->default(true);
             $table->boolean('is_admin')->default(false);
             $table->timestamp('email_verified_at')->nullable();

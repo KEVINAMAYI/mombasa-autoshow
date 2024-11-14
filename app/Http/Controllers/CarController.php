@@ -45,7 +45,7 @@ class CarController extends Controller
         try {
 
             // Create the vehicle record
-            $vehicle = Vehicle::create($validated);
+            $vehicle = Vehicle::create($validated + ['account_number' => $this->generateAccountNumber()]);
 
             // Ensure the public/vehicle_images directory exists
             $destinationPath = public_path('vehicle_images');
@@ -88,4 +88,35 @@ class CarController extends Controller
             return redirect()->route('front-end.create-car')->withErrors(['error' => 'There was an error while saving the vehicle!']);
         }
     }
+
+
+    public function generateAccountNumber()
+    {
+        // Get the latest user account number
+        $latestAccountNumber = Vehicle::latest('id')->first();
+
+        // Extract the numeric part and increment it
+        if ($latestAccountNumber) {
+            $lastNumber = (int)substr($latestAccountNumber->account_number, 3); // Assuming 'MSA' is the prefix
+            $newNumber = $lastNumber + 1;
+        } else {
+            // If there are no vehicles, start from 1
+            $newNumber = 1;
+        }
+
+        // Ensure the total length (prefix + numeric part) is 6 digits
+        $numericPart = str_pad($newNumber, 3, '0', STR_PAD_LEFT); // Padding only the numeric part to 3 digits
+        $accountNumber = 'MSA' . $numericPart;
+
+        // Ensure the account number is unique
+        while (Vehicle::where('account_number', $accountNumber)->exists()) {
+            $newNumber++;
+            $numericPart = str_pad($newNumber, 3, '0', STR_PAD_LEFT); // Re-pad if the number changes
+            $accountNumber = 'MSA' . $numericPart;
+        }
+
+        return $accountNumber;
+    }
+
+
 }

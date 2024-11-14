@@ -156,7 +156,7 @@ class MakeSeeder extends Seeder
             // Create the models associated with the make
             foreach ($models as $modelName) {
                 vehicleModel::create([
-                    'vehicle_model_id' => $make->id,
+                    'make_id' => $make->id,
                     'name' => $modelName,
                 ]);
             }

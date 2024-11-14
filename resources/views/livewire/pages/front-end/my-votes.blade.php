@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Vote;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 
@@ -75,7 +76,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                 <div class="row mb-4 g-8">
                     <div class="col-sm-12">
                         <input type="text" name="search" wire:model.live="search" class="form-control"
-                               placeholder="Search users">
+                               placeholder="Search votes">
                     </div>
 
                 </div>
@@ -103,7 +104,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="text-center">No Votes Were Found</td>
+                            <td colspan="8" class="text-center">No Vote Was Found</td>
                         </tr>
                     @endforelse
                     </tbody>
