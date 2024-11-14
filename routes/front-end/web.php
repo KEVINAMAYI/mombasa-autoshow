@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CarController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
@@ -22,8 +23,9 @@ Route::name('front-end.')->group(function () {
     Volt::route('/contactus', 'pages.front-end.contactus')
         ->name('contactus');
 
-    Volt::route('/create-car', 'pages.front-end.create-car')
-        ->name('create-car');
+    //use normal laravel when storing/editing vehicles
+    Route::get('/create-car', [CarController::class, 'showForm'])->name('create-car');
+    Route::post('/create-car', [CarController::class, 'store'])->name('store-car');
 
     Volt::route('/faqs', 'pages.front-end.faqs')
         ->name('faqs');

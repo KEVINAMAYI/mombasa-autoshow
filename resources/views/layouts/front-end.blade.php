@@ -41,7 +41,11 @@
     </div> <!--==end of <div id="container">==-->
 </div> <!--==end of <div id="top-bar">==-->
 
-{{ $slot }}
+@if(Route::currentRouteName() == 'front-end.create-car')
+    @yield('content')
+@else
+    {{ $slot }}
+@endif
 
 <div id="footer-wrap">
     <div id="container">

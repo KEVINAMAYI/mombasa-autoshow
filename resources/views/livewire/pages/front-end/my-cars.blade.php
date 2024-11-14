@@ -20,14 +20,14 @@ new #[Layout('layouts.front-end')] class extends Component
     <div id="wrapper-inner">
         <div id="container">
             <div id="page-contents">
-                <div style="width:100%; float:left;"><a href="create-car.html" class="btn2">Submit a Car</a></div>
+                <div style="width:100%; float:left;"><a href="{{ route('front-end.create-car') }}"  class="btn2">Submit a Car</a></div>
                 <h3 class="title2">MY CARS SUBMITTED FOR AWARDS</h3>
                 <div id="car-wrap">
-                    <a href="car-details.html"><img src="front-end/images/car-thumbnail.jpg" class="car-thumb" /></a>
+                    <a href="{{ route('front-end.car-details') }}" ><img src="front-end/images/car-thumbnail.jpg" class="car-thumb" /></a>
                     <table class="table">
                         <tbody>
                         <tr>
-                            <td colspan="2"><a href="car-details.html" class="title3"><strong>Mercedes-Benz ML 350</strong></a></td>
+                            <td colspan="2"><a href="{{ route('front-end.car-details') }}"  class="title3"><strong>Mercedes-Benz ML 350</strong></a></td>
                         </tr>
                         <tr>
                             <td>2014</td>
@@ -69,11 +69,11 @@ new #[Layout('layouts.front-end')] class extends Component
                     </table>
                 </div> <!--==end of <div id="car-wrap">==-->
                 <div id="car-wrap">
-                    <a href="car-details.html"><img src="front-end/images/car-thumbnail.jpg" class="car-thumb" /></a>
+                    <a href="{{ route('front-end.car-details') }}"><img src="front-end/images/car-thumbnail.jpg" class="car-thumb" /></a>
                     <table class="table">
                         <tbody>
                         <tr>
-                            <td colspan="2"><a href="car-details.html" class="title3"><strong>Mercedes-Benz ML 350</strong></a></td>
+                            <td colspan="2"><a  href="{{ route('front-end.car-details') }}" class="title3"><strong>Mercedes-Benz ML 350</strong></a></td>
                         </tr>
                         <tr>
                             <td>2014</td>
