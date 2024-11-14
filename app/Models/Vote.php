@@ -11,12 +11,19 @@ class Vote extends Model
 
     protected $guarded = ['id'];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function vehicle(){
+    public function vehicle()
+    {
         return $this->belongsTo(Vehicle::class);
+    }
+
+    public function transactions()
+    {
+        return $this->hasOne(Transaction::class, 'vote_id');
     }
 
 }
