@@ -14,8 +14,14 @@ class TownSeeder extends Seeder
     public function run(): void
     {
         Town::insert([
-            [ 'name' => 'Nairobi'],
-            [ 'name' => 'Kampala']
+            [
+                'name' => 'Nairobi',
+                'country_id' => 1
+            ],
+            [
+                'name' => 'Kampala',
+                'country_id' => 2
+            ]
         ]);
     }
 }

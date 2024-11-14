@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="en">
 <head>
-
     <base href="{{ URL::to('/') }}">
 
     <!-- Required meta tags -->
@@ -9,12 +8,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Mombasa Auto Show</title>
     <!-- Bootstrap CSS -->
-    <link href="front-end/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link href="front-end/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="front-end/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="front-end/css/style.css" rel="stylesheet" type="text/css"/>
+
+
+    <style>
+        .dt-length label {
+            text-transform: capitalize;
+            padding: 10px; /* Adjust padding as needed */
+        }
+    </style>
 
     <!-- Bootstrap JS -->
-    <script src="front-end/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+    <script src="front-end/js/bootstrap.min.js"
+            integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
+            crossorigin="anonymous"></script>
 </head>
 <body>
 <div id="top-bar">
@@ -74,6 +84,14 @@
         </div> <!--==end of <div id="top-right"> ==-->
     </div> <!--==end of <div id="container">==-->
 </div> <!--==end of <div id="top-bar">==-->
+
+<!-- sweet alert js -->
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<x-livewire-alert::scripts/>
+
+@stack('js')
 
 </body>
 </html>

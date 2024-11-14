@@ -29,7 +29,7 @@ new #[Layout('layouts.front-end')] class extends Component
         $validated = $this->validate([
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'phone_number' => ['required', 'string', 'max:255'],
+            'phone_number' => ['required', 'string', 'max:255','unique:'.User::class],
             'country_id' => ['required', 'string', 'max:255'],
             'town_id' => ['required', 'string', 'max:255'],
             'accept_terms' => ['required'],
@@ -39,12 +39,39 @@ new #[Layout('layouts.front-end')] class extends Component
 
         $validated['password'] = Hash::make($validated['password']);
 
-        event(new Registered($user = User::create($validated)));
+        event(new Registered($user = User::create($validated+ ['account_number' => $this->generateAccountNumber()])));
 
         Auth::login($user);
 
         $this->redirect(RouteServiceProvider::HOME, navigate: true);
     }
+
+    public function generateAccountNumber()
+    {
+        // Get the latest user account number
+        $latestAccountNumber = User::latest('id')->first();
+
+        // Extract the numeric part and increment it
+        if ($latestAccountNumber) {
+            $lastNumber = (int) substr($latestAccountNumber->account_number, 3); // Assuming 'MSA' is the prefix
+            $newNumber = $lastNumber + 1;
+        } else {
+            // If there are no users, start from 12345
+            $newNumber = 1;
+        }
+
+        // Generate the new account number with the 'MSA' prefix
+        $accountNumber = 'MSA' . $newNumber;
+
+        // Ensure the account number is unique
+        while (User::where('account_number', $accountNumber)->exists()) {
+            $newNumber++;
+            $accountNumber = 'MSA' . $newNumber;
+        }
+
+        return $accountNumber;
+    }
+
 }; ?>
 
 

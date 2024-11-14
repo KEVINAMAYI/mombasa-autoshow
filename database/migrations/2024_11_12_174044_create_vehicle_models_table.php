@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('vehicle_models', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->foreignId('make_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

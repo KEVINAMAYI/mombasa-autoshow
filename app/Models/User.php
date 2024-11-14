@@ -26,6 +26,8 @@ class User extends Authenticatable
         'phone_number',
         'email',
         'password',
+        'account_number',
+        'is_active'
     ];
 
 
@@ -48,7 +50,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'is_active' => 'boolean',
     ];
+
 
     public function votes(){
         return $this->hasMany(Vote::class);
@@ -56,6 +60,14 @@ class User extends Authenticatable
 
     public function transactions(){
         return Transaction::where('user_account_number', $this->account_number)->get();
+    }
+
+    public function country(){
+        return $this->belongsTo(Country::class);
+    }
+
+    public function town(){
+        return $this->belongsTo(Town::class);
     }
 
 }

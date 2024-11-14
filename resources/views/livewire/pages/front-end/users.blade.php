@@ -1,9 +1,67 @@
 <?php
+
+use App\Models\User;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 
-new #[Layout('layouts.front-end')] class extends Component
-{} ?>
+new #[Layout('layouts.front-end')] class extends Component {
+
+    use LivewireAlert;
+
+    public $users;
+    public $search = '';
+
+
+    public function mount()
+    {
+        $this->getUsers();
+    }
+
+
+    public function updatedSearch()
+    {
+        $this->getUsers();
+    }
+
+    // Method to fetch users based on search input
+    public function getUsers()
+    {
+        if ($this->search) {
+            $this->users = User::where('first_name', 'like', '%' . $this->search . '%')
+                ->orWhere('last_name', 'like', '%' . $this->search . '%')
+                ->orWhere('email', 'like', '%' . $this->search . '%')
+                ->orWhere('phone_number', 'like', '%' . $this->search . '%')
+                ->get();
+        } else {
+            $this->users = User::all();
+        }
+    }
+
+    public function updatesUserStatus($user_id)
+    {
+        try {
+
+            $user = User::find($user_id);
+
+            if ($user->is_active) {
+                $user->update(['is_active' => false]);
+            } else {
+                $user->update(['is_active' => true]);
+            }
+
+            $this->getUsers();
+            $this->alert('success', 'User Updated successfully');
+
+        } catch (Exception $exception) {
+
+            $this->alert('error', 'There was an error while updating user');
+
+        }
+
+    }
+
+} ?>
 
 <div class="page-content">
     <div id="banner-in">
@@ -23,16 +81,18 @@ new #[Layout('layouts.front-end')] class extends Component
             <div id="page-contents">
 
 
-                <div class="row g-3">
-                    <div class="col-sm-8">
-                        <input type="text" class="form-control" placeholder="Search users" aria-label="Search users">
+                <div class="row mb-4 g-8">
+                    <div class="col-sm-12">
+                        <input type="text" name="search" wire:model.live="search" class="form-control"
+                               placeholder="Search users">
                     </div>
 
                 </div>
                 <!-- =======end of Search====-->
 
 
-                <table class="table">
+                <table id="users_table"
+                       class="table">
                     <tbody>
                     <tr>
                         <td><strong>Names</strong></td>
@@ -44,50 +104,35 @@ new #[Layout('layouts.front-end')] class extends Component
                         <td><strong>Date</strong></td>
                         <td><strong>Action</strong></td>
                     </tr>
-                    <tr>
-                        <td>John Doe</td>
-                        <td>john.doe@gmail.com</td>
-                        <td>+254 123456789</td>
-                        <td>Kenya</td>
-                        <td>Nairobi</td>
-                        <td>Active</td>
-                        <td>11-NOV-2024</td>
-                        <td><a href="#">Deactivate</a></td>
-                    </tr>
-                    <tr>
-                        <td>John Doe</td>
-                        <td>john.doe@gmail.com</td>
-                        <td>+254 123456789</td>
-                        <td>Kenya</td>
-                        <td>Nairobi</td>
-                        <td>Active</td>
-                        <td>11-NOV-2024</td>
-                        <td><a href="#">Deactivate</a></td>
-                    </tr>
-                    <tr>
-                        <td>John Doe</td>
-                        <td>john.doe@gmail.com</td>
-                        <td>+254 123456789</td>
-                        <td>Kenya</td>
-                        <td>Nairobi</td>
-                        <td>Active</td>
-                        <td>11-NOV-2024</td>
-                        <td><a href="#">Deactivate</a></td>
-                    </tr>
-                    <tr>
-                        <td>John Doe</td>
-                        <td>john.doe@gmail.com</td>
-                        <td>+254 123456789</td>
-                        <td>Kenya</td>
-                        <td>Nairobi</td>
-                        <td>Active</td>
-                        <td>11-NOV-2024</td>
-                        <td><a href="#">Deactivate</a></td>
-                    </tr>
+
+                    @forelse($users as $user)
+                        <tr>
+                            <td>{{ $user->first_name.' '.$user->last_name }}</td>
+                            <td>{{ $user->email }}</td>
+                            <td>{{ $user->phone_number }}</td>
+                            <td>{{ $user->country->name }}</td>
+                            <td>{{ $user->town->name }}</td>
+                            <td>{{ $user->is_active ? 'Active' : 'Inactive' }}</td>
+                            <td>{{ \Carbon\Carbon::parse($user->created_at)->format('d-M-Y') }}</td>
+                            <td>
+                                @if($user->is_active)
+                                    <button wire:click="updatesUserStatus({{$user->id}})"
+                                            class="btn btn-sm btn-outline-warning">Deactivate
+                                    </button>
+                                @else
+                                    <button wire:click="updatesUserStatus({{$user->id}})"
+                                            class="btn btn-sm btn-outline-success">Activate
+                                    </button>
+                                @endif
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="8" class="text-center">No Users Were Found</td>
+                        </tr>
+                    @endforelse
                     </tbody>
                 </table>
-
-
 
 
             </div> <!--==end of <div id="page-contents">==-->
@@ -102,7 +147,8 @@ new #[Layout('layouts.front-end')] class extends Component
             <h1>SIGN UP FOR AUTO SHOW ALERTS</h1>
             <h2>Sign up to recieve exclusive tickets offers,show info,awards etc.</h2>
             <form id="newsletter">
-                <input type="email" id="newsInputEmail1" aria-describedby="emailHelp" placeholder="Enter your email address">
+                <input type="email" id="newsInputEmail1" aria-describedby="emailHelp"
+                       placeholder="Enter your email address">
                 <button type="submit" class="btn btn-primary">SIGN UP</button>
             </form>
         </div> <!--==end of <div id="container">==-->

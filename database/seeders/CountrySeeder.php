@@ -14,8 +14,15 @@ class CountrySeeder extends Seeder
     public function run(): void
     {
         Country::insert([
-            [ 'name' => 'Kenya'],
-            [ 'name' => 'Uganda']
+            [
+                'name' => 'Kenya',
+                'code' => '254'
+            ],
+            [
+                'name' => 'Uganda',
+                'code' => '256'
+
+            ]
         ]);
     }
 }
