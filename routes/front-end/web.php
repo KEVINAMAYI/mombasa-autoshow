@@ -30,9 +30,6 @@ Route::name('front-end.')->group(function () {
     Volt::route('/faqs', 'pages.front-end.faqs')
         ->name('faqs');
 
-    Volt::route('/my-cars', 'pages.front-end.my-cars')
-        ->name('my-cars');
-
     Volt::route('/my-profile', 'pages.front-end.my-profile')
         ->name('my-profile');
 

@@ -9,27 +9,27 @@ use Livewire\Volt\Component;
 new #[Layout('layouts.front-end')] class extends Component {
 
     public $vehicle_id;
+    public $vehicle;
 
     public function mount($vehicle_id)
     {
         $this->vehicle_id = $vehicle_id;
+        $this->vehicle = Vehicle::where('id',$this->vehicle_id)->first();
+
     }
 
 
     public function confirmPayment()
     {
-        //check the payment status here
-
         $amount_payable = 2000;
-
-        $vehicle = Vehicle::where('id',$this->vehicle_id)->first();
 
         //store transaction details
         $transaction = Transaction::create([
             'user_id' => auth()->user()->id,
+            'vehicle_id' => $this->vehicle_id,
             'amount' => $amount_payable,
             'transaction_code' => $this->generateUniqueCode(),
-            'vehicle_account_number' => $vehicle->account_number,
+            'vehicle_account_number' => $this->vehicle->account_number,
             'phone_number' => '+254795704301',
             'status' => 'completed'
         ]);
@@ -47,9 +47,8 @@ new #[Layout('layouts.front-end')] class extends Component {
         }
 
 
-        $vehicle = Vehicle::where('id', $this->vehicle_id)->first();
 
-        session()->flash('success', 'Your have voted for vehicle ' . $vehicle->vehicle_reg . ' successfully!');
+        session()->flash('success', 'Your have voted for vehicle ' . $this->vehicle->vehicle_reg . ' successfully!');
         $this->redirectRoute('front-end.car-awards');
 
     }
@@ -103,7 +102,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                         <ul style="margin-left:20px;">
                             <li>Go to Pay Bill on the M-Pesa</li>
                             <li>Business number - 4002487</li>
-                            <li>Account Number - <strong>{{ auth()->user()->account_number }}</strong></li>
+                            <li>Account Number - <strong>{{ $vehicle->account_number }}</strong></li>
                             <li>Enter Amount</li>
                             <li>Enter your M-Pesa PIN</li>
                             <li>Wait for confirmation.</li>

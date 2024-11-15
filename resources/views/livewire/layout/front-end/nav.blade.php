@@ -47,7 +47,7 @@ new class extends Component {
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 <li><a class="dropdown-item" href="{{ route('front-end.my-profile') }}">My Profile</a>
                                 </li>
-                                <li><a class="dropdown-item" href="{{ route('front-end.my-cars') }}">Car of the year</a>
+                                <li><a class="dropdown-item" href="{{ route('front-end.car-awards') }}">Car of the year</a>
                                 </li>
                                 <li><a class="dropdown-item" href="{{ route('front-end.my-votes') }}">My Votes</a></li>
                                 <li><a class="dropdown-item" href="{{ route('front-end.my-transactions') }}">My
