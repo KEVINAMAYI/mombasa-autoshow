@@ -58,7 +58,7 @@ class User extends Authenticatable
     }
 
     public function transactions(){
-        return Transaction::where('user_account_number', $this->account_number)->get();
+        return $this->belongsTo(User::class,'user_id');
     }
 
     public function country(){
