@@ -11,19 +11,27 @@ class Vehicle extends Model
 
     protected $guarded = ['id'];
 
-    public function vehicle_model(){
+    protected $casts = [
+        'is_published' => 'boolean',
+    ];
+
+    public function vehicle_model()
+    {
         return $this->belongsTo(vehicleModel::class);
     }
 
-    public function make(){
+    public function make()
+    {
         return $this->belongsTo(Make::class);
     }
 
-    public function images(){
-        return $this->hasMany(Image::class,'vehicle_id');
+    public function images()
+    {
+        return $this->hasMany(Image::class, 'vehicle_id');
     }
 
-    public function votes(){
-        return $this->hasMany(Vote::class,'vehicle_id');
+    public function votes()
+    {
+        return $this->hasMany(Vote::class, 'vehicle_id');
     }
 }

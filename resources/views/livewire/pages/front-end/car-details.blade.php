@@ -1,16 +1,43 @@
 <?php
 
 use App\Models\Vehicle;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 
 new #[Layout('layouts.front-end')] class extends Component {
 
     public $vehicle;
+    use LivewireAlert;
+
 
     public function mount(Vehicle $vehicle)
     {
         $this->vehicle = $vehicle;
+    }
+
+    public function updateVehiclePublication(){
+        try {
+
+            $vehicle = Vehicle::find($this->vehicle->id);
+
+            if ($vehicle->published) {
+                $vehicle->update(['published' => false]);
+                $message = 'Vehicle unpublished successfully';
+
+            } else {
+                $vehicle->update(['published' => true]);
+                $message = 'Vehicle published successfully';
+            }
+
+            $this->vehicle = $vehicle;
+            $this->alert('success', $message);
+
+        } catch (Exception $exception) {
+
+            $this->alert('error', 'There was an error while updating vehicle');
+
+        }
     }
 
 
@@ -105,7 +132,14 @@ new #[Layout('layouts.front-end')] class extends Component {
                             </td>
                             <td><a href="#" style="float:right;"><img src="front-end/images/share.png"/></a></td>
                         </tr>
-
+                        <tr>
+                            <td><a href="#" class="btn btn-success btn-sm">Edit</a></td>
+                            @if($vehicle->published)
+                                <td><button wire:click="updateVehiclePublication" class="btn btn-danger btn-sm" style="float:right;">Unpublish</button></td>
+                            @else
+                                <td><button wire:click="updateVehiclePublication" class="btn btn-info btn-sm text-white" style="float:right;">Publish</button></td>
+                            @endif
+                        </tr>
                         </tbody>
                     </table>
                 </div> <!--==end of <div id="right-col">==-->

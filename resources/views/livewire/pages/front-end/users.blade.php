@@ -46,12 +46,14 @@ new #[Layout('layouts.front-end')] class extends Component {
 
             if ($user->is_active) {
                 $user->update(['is_active' => false]);
+                $message = 'User deactivated successfully';
             } else {
                 $user->update(['is_active' => true]);
+                $message = 'User activated successfully';
             }
 
             $this->getUsers();
-            $this->alert('success', 'User Updated successfully');
+            $this->alert('success', $message);
 
         } catch (Exception $exception) {
 
