@@ -126,7 +126,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="text-center">No Transaction Was Found</td>
+                            <td colspan="9" class="text-center">No Transaction Was Found</td>
                         </tr>
                     @endforelse
                     </tbody>

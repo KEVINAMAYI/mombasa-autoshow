@@ -4,12 +4,16 @@ use App\Models\Transaction;
 use App\Models\Vehicle;
 use App\Models\Vote;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Validate;
 use Livewire\Volt\Component;
 
 new #[Layout('layouts.front-end')] class extends Component {
 
     public $vehicle_id;
     public $vehicle;
+
+    #[Validate('required|integer|min:50')]
+    public $amount_payable = 50;
 
     public function mount($vehicle_id)
     {
@@ -21,36 +25,47 @@ new #[Layout('layouts.front-end')] class extends Component {
 
     public function confirmPayment()
     {
-        $amount_payable = 2000;
+        try {
 
-        //store transaction details
-        $transaction = Transaction::create([
-            'user_id' => auth()->user()->id,
-            'vehicle_id' => $this->vehicle_id,
-            'amount' => $amount_payable,
-            'transaction_code' => $this->generateUniqueCode(),
-            'vehicle_account_number' => $this->vehicle->account_number,
-            'phone_number' => '+254795704301',
-            'status' => 'completed'
-        ]);
+            // Validate user input
+            $this->validate();
 
-        $votes = $amount_payable / 50;
-
-        for ($i = 1; $i <= $votes; $i++) {
-
-            // Store vote details
-            $vote = Vote::create([
-                'transaction_id' => $transaction->id,
+            // Store transaction details
+            $transaction = Transaction::create([
                 'user_id' => auth()->user()->id,
-                'vehicle_id' => $this->vehicle_id
+                'vehicle_id' => $this->vehicle_id,
+                'amount' => $this->amount_payable,
+                'transaction_code' => $this->generateUniqueCode(),
+                'vehicle_account_number' => $this->vehicle->account_number,
+                'phone_number' => '+254795704301',
+                'status' => 'completed',
             ]);
+
+            $votes = $this->amount_payable / 50;
+
+            for ($i = 1; $i <= $votes; $i++) {
+                // Store vote details
+                Vote::create([
+                    'transaction_id' => $transaction->id,
+                    'user_id' => auth()->user()->id,
+                    'vehicle_id' => $this->vehicle_id,
+                ]);
+            }
+
+            session()->flash('success', 'You have voted for vehicle ' . $this->vehicle->vehicle_reg . ' successfully!');
+            return redirect()->route('front-end.car-awards');
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Handle validation errors
+            return redirect()->back()
+                ->withErrors($e->validator)
+                ->withInput();
+
+        } catch (\Exception $e) {
+            // Handle other exceptions
+            session()->flash('error', 'An unexpected error occurred. Please try again.');
+            return redirect()->back()->withInput();
         }
-
-
-
-        session()->flash('success', 'Your have voted for vehicle ' . $this->vehicle->vehicle_reg . ' successfully!');
-        $this->redirectRoute('front-end.car-awards');
-
     }
 
     function generateUniqueCode()
@@ -100,11 +115,19 @@ new #[Layout('layouts.front-end')] class extends Component {
 
                         <p>
                         <ul style="margin-left:20px;">
-                            <li>Go to Pay Bill on the M-Pesa</li>
-                            <li>Business number - 4002487</li>
-                            <li>Account Number - <strong>{{ $vehicle->account_number }}</strong></li>
-                            <li>Enter Amount</li>
-                            <li>Enter your M-Pesa PIN</li>
+                            <li>
+                                Enter the amount you wish to pay in the input field below: <br>
+                                <input type="number" wire:model="amount_payable" placeholder="Enter the amount here" style="margin: 10px 0; padding: 5px; font-size: 16px; width: 100%; max-width: 300px;" />
+                                @error('amount_payable')
+                                <p class="text-danger text-xs pt-1"> {{ $message }} </p>
+                                @enderror
+                            </li>
+                            <hr>
+                            <li>Go to <strong>Pay Bill</strong> on the <strong>M-Pesa</strong></li>
+                            <li>Enter <strong>Business number</strong> - <strong>4002487</strong></li>
+                            <li>Enter the <strong>Account Number</strong> - <strong>{{ $vehicle->account_number }}</strong></li>
+                            <li>Enter the <strong>same amount</strong> you specified above</li>
+                            <li>Enter your <strong>M-Pesa PIN</strong></li>
                             <li>Wait for confirmation.</li>
                         </ul>
                         </p>

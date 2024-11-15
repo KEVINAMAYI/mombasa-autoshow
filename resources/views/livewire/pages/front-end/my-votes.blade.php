@@ -95,7 +95,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                     @forelse($votes as $vote)
                         <tr>
                             <td>
-                                <a href="{{ route('front-end.car-details', ['id' => $vote->vehicle->id]) }}">{{ $vote->vehicle->name.' '.$vote->vehicle->make->name.'-'.$vote->vehicle->vehicle_model->name }}</a>
+                                <a href="{{ route('front-end.car-details', $vote->vehicle->id) }}">{{ $vote->vehicle->name.' '.$vote->vehicle->make->name.'-'.$vote->vehicle->vehicle_model->name }}</a>
                             </td>
                             <td>{{ \Carbon\Carbon::parse($vote->latest_vote)->format('d-M-Y H:i') }}</td>
                             <td>{{ $vote->vote_count*50 }}</td> <!-- Assuming vehicle ID or other vehicle details -->

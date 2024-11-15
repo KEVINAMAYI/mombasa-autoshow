@@ -117,7 +117,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                             <td>{{ $transaction->transaction_code }}</td>
                             <td>{{ $transaction->vehicle_account_number }}</td>
                             <td>
-                                <a href="{{ route('front-end.car-details', ['id' => $transaction->votes->first()->vehicle->id]) }}">{{ $transaction->votes->first()->vehicle->name.' '.$transaction->votes->first()->vehicle->make->name.'-'.$transaction->votes->first()->vehicle->vehicle_model->name }}</a>
+                                <a href="{{ route('front-end.car-details',$transaction->votes->first()->vehicle->id) }}">{{ $transaction->votes->first()->vehicle->name.' '.$transaction->votes->first()->vehicle->make->name.'-'.$transaction->votes->first()->vehicle->vehicle_model->name }}</a>
                             </td>
                             <td>{{ \Carbon\Carbon::parse($transaction->created_at)->format('d-M-Y H:i') }}</td>
                             <td>{{ $transaction->amount }}</td>
