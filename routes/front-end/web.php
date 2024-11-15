@@ -14,7 +14,7 @@ Route::name('front-end.')->group(function () {
     Volt::route('/car-awards', 'pages.front-end.car-awards')
         ->name('car-awards');
 
-    Volt::route('/car-details', 'pages.front-end.car-details')
+    Volt::route('/car-details/{vehicle}', 'pages.front-end.car-details')
         ->name('car-details');
 
     Volt::route('/checkout/{vehicle_id}', 'pages.front-end.checkout')

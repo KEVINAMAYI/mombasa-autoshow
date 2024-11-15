@@ -31,6 +31,12 @@ class LoginForm extends Form
     {
         $this->ensureIsNotRateLimited();
 
+        if (!User::where('email', $this->only('email'))->first()) {
+            throw ValidationException::withMessages([
+                'form.email' => 'These credentials do not exist.',
+            ]);
+        }
+
         if (!User::where('email', $this->only('email'))->first()->is_active) {
             throw ValidationException::withMessages([
                 'form.email' => 'User Account is deactivated, Kindly contact the admin',

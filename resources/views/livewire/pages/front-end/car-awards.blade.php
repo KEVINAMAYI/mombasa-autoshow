@@ -105,14 +105,15 @@ new #[Layout('layouts.front-end')] class extends Component {
 
                 @forelse($vehicles as $vehicle)
                     <div id="car-wrap">
-                        <a style="text-decoration:none;" href="{{ route('front-end.car-details') }}">
+                        <a style="text-decoration:none;" href="{{ route('front-end.car-details',$vehicle->id) }}">
                             <img
-                                src="{{ $vehicle->images->isNotEmpty() ? $vehicle->images->first()->image_url : 'path/to/placeholder.jpg' }}"
+                                src="{{ $vehicle->images->isNotEmpty() ? $vehicle->images->first()->image_url : 'front-end/images/slider/car.jpg' }}"
                                 class="car-thumb"/>
                             <table class="table">
                                 <tbody>
                                 <tr>
-                                    <td colspan="2"><a href="{{ route('front-end.car-details') }}" class="title3">
+                                    <td colspan="2"><a href="{{ route('front-end.car-details',$vehicle->id) }}"
+                                                       class="title3">
                                             <strong>{{ $vehicle->name.' '.$vehicle->make->name.'-'.$vehicle->vehicle_model->name }}</strong></a>
                                     </td>
                                 </tr>

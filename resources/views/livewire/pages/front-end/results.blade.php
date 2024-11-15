@@ -95,11 +95,11 @@ new #[Layout('layouts.front-end')] class extends Component {
                     @forelse($votes as $vote)
                         <tr>
                             <td>
-                                <a href="{{ route('front-end.car-details', ['id' => $vote->vehicle->id]) }}">{{ $vote->vehicle->name.' '.$vote->vehicle->make->name.'-'.$vote->vehicle->vehicle_model->name }}</a>
+                                <a href="{{ route('front-end.car-details', $vote->vehicle->id) }}">{{ $vote->vehicle->name.' '.$vote->vehicle->make->name.'-'.$vote->vehicle->vehicle_model->name }}</a>
                             </td>
                             <td>{{ $vote->total_amount }}</td>
                             <!-- Assuming vehicle ID or other vehicle details -->
-                            <td><a href="{{ route('front-end.car-details') }}"><strong>{{ $vote->vote_count }}</strong></a>
+                            <td><a href="{{ route('front-end.car-details',$vote->vehicle->id) }}"><strong>{{ $vote->vote_count }}</strong></a>
                             </td>
                         </tr>
                     @empty
