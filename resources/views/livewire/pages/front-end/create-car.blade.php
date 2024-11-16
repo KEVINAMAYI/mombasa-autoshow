@@ -26,16 +26,31 @@
                         <form action="{{ route('front-end.create-car') }}" method="post" enctype="multipart/form-data"
                               class="row g-3">
                             @csrf
-                            <div class="col-md-4">
+                            <div style="display: none;" class="col-md-4">
                                 <label for="reason" class="form-label"><strong>Submit car for?</strong></label>
                                 <select name="reason" id="reason" class="form-select">
                                     <option value="">Choose...</option>
-                                    <option value="award" {{ old('reason') == 'award' ? 'selected' : '' }}>Car of the
+                                    <option value="award" selected >Car of the
                                         year award
                                     </option>
                                 </select>
                                 @error('reason')
                                 <p class="text-danger text-xs pt-1"> {{ $message }} </p>
+                                @enderror
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="category_id" class="form-label"><strong>Category</strong></label>
+                                <select name="category_id" id="category_id" class="form-select">
+                                    <option value="">Choose...</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                            {{ $category->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('category_id')
+                                <p class="text-danger text-xs pt-1">{{ $message }}</p>
                                 @enderror
                             </div>
 

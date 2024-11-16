@@ -12,6 +12,7 @@ return new class extends Migration {
     {
         Schema::create('vehicles', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->foreignId('make_id')->constrained()->cascadeOnDelete();
             $table->foreignId('vehicle_model_id')->constrained()->cascadeOnDelete();
             $table->enum('reason', ['award']);

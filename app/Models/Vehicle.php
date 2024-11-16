@@ -15,6 +15,11 @@ class Vehicle extends Model
         'is_published' => 'boolean',
     ];
 
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
     public function vehicle_model()
     {
         return $this->belongsTo(vehicleModel::class);

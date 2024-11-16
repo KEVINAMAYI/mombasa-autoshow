@@ -1,16 +1,83 @@
 <?php
 
+use App\Models\Category;
+use App\Models\Make;
 use App\Models\Vehicle;
+use App\Models\VehicleModel;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 
 new #[Layout('layouts.front-end')] class extends Component {
 
     public $vehicles;
+    public $makes;
+    public $categories;
+    public $models;
+    public $search = '';
+    public $category_id;
+    public $make_id;
+    public $vehicle_model_id;
 
     public function mount()
     {
-        $this->vehicles = Vehicle::where('published',1)->get();
+        $this->getVehicles();
+        $this->makes = Make::all();
+        $this->categories = Category::all();
+        $this->models = VehicleModel::all();
+    }
+
+    public function updatedSearch()
+    {
+        $this->getVehicles();
+    }
+
+    public function updateModels()
+    {
+        $this->models = VehicleModel::where('make_id', $this->make_id)->get();
+        $this->getVehicles();
+    }
+
+    public function getVehicles()
+    {
+        $query = Vehicle::where('published', 1)
+            ->with(['make', 'vehicle_model', 'images', 'votes']); // Eager load relationships
+
+        if ($this->search) {
+            $query->where('vehicle_reg', 'like', '%' . $this->search . '%')
+                ->orWhere('location', 'like', '%' . $this->search . '%')
+                ->orWhere('name', 'like', '%' . $this->search . '%')
+                ->orWhere('sacco', 'like', '%' . $this->search . '%')
+                ->orWhere('route', 'like', '%' . $this->search . '%')
+                ->orWhere('interior_color', 'like', '%' . $this->search . '%')
+                ->orWhere('exterior_color', 'like', '%' . $this->search . '%')
+                ->orWhere('transmission', 'like', '%' . $this->search . '%')
+                ->orWhereHas('make', function ($makeQuery) {
+                    $makeQuery->where('name', 'like', '%' . $this->search . '%');
+                })
+                ->orWhereHas('vehicle_model', function ($modelQuery) {
+                    $modelQuery->where('name', 'like', '%' . $this->search . '%');
+                })
+                ->orWhereHas('category', function ($modelQuery) {
+                    $modelQuery->where('name', 'like', '%' . $this->search . '%');
+                });
+        }
+
+        // Make Filter
+        if ($this->category_id) {
+            $query->where('category_id', $this->category_id);
+        }
+
+        // Make Filter
+        if ($this->make_id) {
+            $query->where('make_id', $this->make_id);
+        }
+
+        // Model Filter
+        if ($this->vehicle_model_id) {
+            $query->where('vehicle_model_id', $this->vehicle_model_id);
+        }
+
+        $this->vehicles = $query->get();
     }
 
 } ?>
@@ -46,75 +113,71 @@ new #[Layout('layouts.front-end')] class extends Component {
                     prize,trophies and many more giveaways.</p>
 
                 <div class="row g-3">
-                    <div class="col-sm-8">
-                        <input type="text" class="form-control"
-                               placeholder="Search for car by make,model or any keyword" aria-label="Search car">
+                    <div class="{{ auth()->user()->is_admin ? 'col-sm-9' : 'col-sm-12' }}">
+                        <input type="text" name="search" wire:model.live="search" class="form-control"
+                               placeholder="Search for car by make, model, or any keyword">
                     </div>
-                    <div class="col-sm-4">
-                        <a href="{{ route('front-end.create-car') }}" class="btn2" style="margin-top:0;">Submit a
-                            Car</a>
-                    </div>
+                    @if(auth()->user()->is_admin)
+                        <div class="col-sm-3">
+                            <a href="{{ route('front-end.create-car') }}" class="btn2" style="margin-top:0;">Submit a
+                                Car</a>
+                        </div>
+                    @endif
                 </div>
                 <!-- =======end of Search====-->
                 <div class="row g-3" style="margin-top:5px;">
                     <div class="col-sm-3">
                         <label class="visually-hidden" for="autoSizingSelect">Category</label>
-                        <select class="form-select" id="autoSizingSelect">
-                            <option selected>Category...</option>
-                            <option value="sedan">Sedan</option>
-                            <option value="coupe">Coupe</option>
-                            <option value="hatchback">Hatchback</option>
-                            <option value="station-wagon">Station Wagon</option>
-                            <option value="suv">SUV</option>
-                            <option value="pick-up">Pick up</option>
-                            <option value="van">Van</option>
-                            <option value="mini-van">Mini Van</option>
-                            <option value="wagon">Wagon</option>
-                            <option value="convertible">Convertible</option>
-                            <option value="bus">Bus</option>
-                            <option value="truck">Truck</option>
+                        <select wire:change="getVehicles" wire:model="category_id" class="form-select" id="autoSizingSelect">
+                            <option value="" selected>All Categories...</option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="col-sm-3">
-                        <label class="visually-hidden" for="autoSizingSelect">Make</label>
-                        <select class="form-select" id="autoSizingSelect">
-                            <option selected>Make...</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
+                        <label class="visually-hidden" for="make_id">All Makes</label>
+                        <select wire:change="updateModels" wire:model="make_id" class="form-select" id="make_id">
+                            <option value="" selected>All Makes...</option>
+                            @foreach($makes as $make)
+                                <option value="{{ $make->id }}">{{ $make->name }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="col-sm-3">
-                        <label class="visually-hidden" for="autoSizingSelect">Model</label>
-                        <select class="form-select" id="autoSizingSelect">
-                            <option selected>Model...</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
+                        <label class="visually-hidden" for="vehicle_model_id">All Models</label>
+                        <select wire:change="getVehicles" class="form-select" wire:model="vehicle_model_id"
+                                id="vehicle_model_id">
+                            <option value="" selected>All Models...</option>
+                            @foreach($models as $model)
+                                <option value="{{ $model->id }}">{{ $model->name }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="col-sm-3">
                         <label class="visually-hidden" for="autoSizingSelect">Year of Award</label>
                         <select class="form-select" id="autoSizingSelect">
-                            <option selected>Year of Award...</option>
-                            <option value="1">2025</option>
+                            <option value="2025">2025</option>
                         </select>
                     </div>
                 </div>
-                <!--===end of filter ==-->
 
-                @forelse($vehicles as $vehicle)
+            @if($vehicles->isNotEmpty()) <!-- Use isNotEmpty() for collection check -->
+                @foreach($vehicles as $vehicle)
                     <div id="car-wrap">
-                        <a style="text-decoration:none;" href="{{ route('front-end.car-details',$vehicle->id) }}">
+                        <a style="text-decoration:none;" href="{{ route('front-end.car-details', $vehicle->id) }}">
                             <img
                                 src="{{ $vehicle->images->isNotEmpty() ? $vehicle->images->first()->image_url : 'front-end/images/slider/car.jpg' }}"
                                 class="car-thumb"/>
                             <table class="table">
                                 <tbody>
                                 <tr>
-                                    <td colspan="2"><a href="{{ route('front-end.car-details',$vehicle->id) }}"
-                                                       class="title3">
-                                            <strong>{{ $vehicle->name.' '.$vehicle->make->name.'-'.$vehicle->vehicle_model->name }}</strong></a>
+                                    <td colspan="2">
+                                        <a href="{{ route('front-end.car-details', $vehicle->id) }}" class="title3">
+                                            <strong>{{ $vehicle->name }}
+                                                {{ optional($vehicle->make)->name }} -
+                                                {{ optional($vehicle->vehicle_model)->name }}</strong>
+                                        </a>
                                     </td>
                                 </tr>
                                 <tr>
@@ -126,7 +189,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                                     <td><strong>{{ $vehicle->votes->count() }}</strong></td>
                                 </tr>
                                 <tr>
-                                    <td><a href="{{ route('front-end.checkout',$vehicle->id) }}" type="button"
+                                    <td><a href="{{ route('front-end.checkout', $vehicle->id) }}" type="button"
                                            class="btn btn-primary btn-sm">Vote for me</a>
                                     </td>
                                     <td><a href="#" style="float:right;"><img src="front-end/images/share.png"/></a>
@@ -134,14 +197,14 @@ new #[Layout('layouts.front-end')] class extends Component {
                                 </tr>
                                 </tbody>
                             </table>
+                        </a>
                     </div>
-                @empty
-                    <p style="margin-top:20px; font-weight:bold; font-size:18px;" class="text-warning text-center">No Vehicle Found</p>
-                @endforelse
-
-
+                @endforeach
+                @else
+                    <p style="margin-top:20px; font-weight:bold; font-size:18px;" class="text-warning text-center">No
+                        Vehicle Found</p>
+                @endif
             </div> <!--==end of <div id="page-contents">==-->
-
         </div> <!--==end of <div id="container">==-->
     </div> <!--==end of <div id="wrapper-inner">==-->
 

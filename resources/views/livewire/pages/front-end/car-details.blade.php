@@ -138,6 +138,10 @@ new #[Layout('layouts.front-end')] class extends Component {
                             <td>{{ $vehicle->vehicle_reg }}</td>
                         </tr>
                         <tr>
+                            <td>Category</td>
+                            <td>{{ $vehicle->category->name }}</td>
+                        </tr>
+                        <tr>
                             <td><a href="{{ route('front-end.checkout',$vehicle->id) }}" type="button"
                                    class="btn btn-primary btn-sm">Vote for me</a>
                             </td>

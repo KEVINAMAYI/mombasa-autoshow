@@ -27,7 +27,7 @@
                               class="row g-3">
                             @method('PUT')
                             @csrf
-                            <div class="col-md-4">
+                            <div style="display: none;" class="col-md-4">
                                 <label for="reason" class="form-label"><strong>Submit car for?</strong></label>
                                 <select name="reason" id="reason" class="form-select">
                                     <option value="">Choose...</option>
@@ -38,6 +38,21 @@
                                 </select>
                                 @error('reason')
                                 <p class="text-danger text-xs pt-1"> {{ $message }} </p>
+                                @enderror
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="category_id" class="form-label"><strong>Category</strong></label>
+                                <select name="category_id" id="category_id" class="form-select">
+                                    <option value="">Choose...</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}" {{ old('category_id',$vehicle->category_id) == $category->id ? 'selected' : '' }}>
+                                            {{ $category->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('category_id')
+                                <p class="text-danger text-xs pt-1">{{ $message }}</p>
                                 @enderror
                             </div>
 

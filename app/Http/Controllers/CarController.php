@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Image;
 use App\Models\Make;
 use App\Models\Vehicle;
@@ -17,9 +18,10 @@ class CarController extends Controller
 {
     public function showForm()
     {
+        $categories = Category::all();
         $makes = Make::all();
         $models = VehicleModel::all();
-        return view('livewire.pages.front-end.create-car', compact('models', 'makes'));  // Show the form
+        return view('livewire.pages.front-end.create-car', compact('models', 'makes', 'categories'));  // Show the form
     }
 
     public function store(Request $request)
@@ -28,6 +30,7 @@ class CarController extends Controller
         // Handle form submission and validation
         $validated = $request->validate([
             'reason' => 'required|string',
+            'category_id' => 'required|string',
             'make_id' => 'required|string',
             'vehicle_model_id' => 'required|string',
             'manufacturing_year' => 'required',
@@ -127,9 +130,10 @@ class CarController extends Controller
 
     public function showEditForm(Vehicle $vehicle)
     {
+        $categories = Category::all();
         $models = VehicleModel::all();
         $makes = Make::all();
-        return view('livewire.pages.front-end.edit-car', compact('vehicle', 'makes', 'models'));
+        return view('livewire.pages.front-end.edit-car', compact('vehicle', 'makes', 'models','categories'));
     }
 
 
@@ -138,6 +142,7 @@ class CarController extends Controller
         // Handle form submission and validation
         $validated = $request->validate([
             'reason' => 'required|string',
+            'category_id' => 'required|string',
             'make_id' => 'required|string',
             'vehicle_model_id' => 'required|string',
             'manufacturing_year' => 'required',
