@@ -18,7 +18,7 @@ new #[Layout('layouts.front-end')] class extends Component {
     public function mount($vehicle_id)
     {
         $this->vehicle_id = $vehicle_id;
-        $this->vehicle = Vehicle::where('id',$this->vehicle_id)->first();
+        $this->vehicle = Vehicle::where('id', $this->vehicle_id)->first();
 
     }
 
@@ -117,7 +117,9 @@ new #[Layout('layouts.front-end')] class extends Component {
                         <ul style="margin-left:20px;">
                             <li>
                                 Enter the amount you wish to pay in the input field below: <br>
-                                <input type="number" wire:model="amount_payable" placeholder="Enter the amount here" style="margin: 10px 0; padding: 5px; font-size: 16px; width: 100%; max-width: 300px;" />
+                                <input type="number" wire:model.live="amount_payable"
+                                       placeholder="Enter the amount here"
+                                       style="margin: 10px 0; padding: 5px; font-size: 16px; width: 100%; max-width: 300px;"/>
                                 @error('amount_payable')
                                 <p class="text-danger text-xs pt-1"> {{ $message }} </p>
                                 @enderror
@@ -125,7 +127,8 @@ new #[Layout('layouts.front-end')] class extends Component {
                             <hr>
                             <li>Go to <strong>Pay Bill</strong> on the <strong>M-Pesa</strong></li>
                             <li>Enter <strong>Business number</strong> - <strong>4002487</strong></li>
-                            <li>Enter the <strong>Account Number</strong> - <strong>{{ $vehicle->account_number }}</strong></li>
+                            <li>Enter the <strong>Account Number</strong> -
+                                <strong>{{ $vehicle->account_number }}</strong></li>
                             <li>Enter the <strong>same amount</strong> you specified above</li>
                             <li>Enter your <strong>M-Pesa PIN</strong></li>
                             <li>Wait for confirmation.</li>
@@ -133,8 +136,13 @@ new #[Layout('layouts.front-end')] class extends Component {
                         </p>
 
                         <div class="col-12">
-                            <button type="submit" class="btn btn-success">Confirm Payment</button>
+                            <button type="submit" {{ $amount_payable < 50 ? 'disabled' : '' }} class="btn btn-success">
+                                Confirm Payment
+                            </button>
                         </div>
+                        @if($amount_payable < 50)
+                            <strong class="text-danger text-xs pt-1">*If the amount is less than KES 50, you won't be abe to confirm payment </strong>
+                        @endif
                     </form>
 
 
