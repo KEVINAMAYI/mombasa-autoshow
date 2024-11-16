@@ -14,25 +14,30 @@ Route::name('front-end.')->group(function () {
     Volt::route('/car-awards', 'pages.front-end.car-awards')
         ->name('car-awards');
 
+    Volt::route('/contactus', 'pages.front-end.contactus')
+        ->name('contactus');
+
+    Volt::route('/faqs', 'pages.front-end.faqs')
+        ->name('faqs');
+
+    Volt::route('/privacy', 'pages.front-end.privacy')
+        ->name('privacy');
+
+    Volt::route('/terms', 'pages.front-end.terms')
+        ->name('terms');
+
+    Volt::route('/voting', 'pages.front-end.voting')
+        ->name('voting');
+});
+
+
+Route::middleware('auth')->name('front-end.')->group(function () {
+
     Volt::route('/car-details/{vehicle}', 'pages.front-end.car-details')
         ->name('car-details');
 
     Volt::route('/checkout/{vehicle_id}', 'pages.front-end.checkout')
         ->name('checkout');
-
-    Volt::route('/contactus', 'pages.front-end.contactus')
-        ->name('contactus');
-
-    //use normal laravel when storing/editing vehicles
-    Route::get('/create-car', [CarController::class, 'showForm'])->name('create-car');
-    Route::post('/create-car', [CarController::class, 'store'])->name('store-car');
-
-    //use normal laravel when storing/editing vehicles
-    Route::get('/edit-car/{vehicle}', [CarController::class, 'showEditForm'])->name('edit-car');
-    Route::put('/edit-car/{vehicle}', [CarController::class, 'update'])->name('update-car');
-
-    Volt::route('/faqs', 'pages.front-end.faqs')
-        ->name('faqs');
 
     Volt::route('/my-profile', 'pages.front-end.my-profile')
         ->name('my-profile');
@@ -43,24 +48,25 @@ Route::name('front-end.')->group(function () {
     Volt::route('/my-votes', 'pages.front-end.my-votes')
         ->name('my-votes');
 
-    Volt::route('/privacy', 'pages.front-end.privacy')
-        ->name('privacy');
+    //Admin Routes
+    Route::middleware(['is_admin'])->group(function () {
+        Volt::route('/results', 'pages.front-end.results')
+            ->name('results');
 
-    Volt::route('/results', 'pages.front-end.results')
-        ->name('results');
+        Volt::route('/transactions', 'pages.front-end.transactions')
+            ->name('transactions');
 
-    Volt::route('/terms', 'pages.front-end.terms')
-        ->name('terms');
+        Volt::route('/users', 'pages.front-end.users')
+            ->name('users');
 
-    Volt::route('/transactions', 'pages.front-end.transactions')
-        ->name('transactions');
+        Volt::route('/vote-per-car', 'pages.front-end.vote-per-car')
+            ->name('vote-per-car');
 
-    Volt::route('/users', 'pages.front-end.users')
-        ->name('users');
+        //use normal laravel when storing/editing vehicles
+        Route::get('/create-car', [CarController::class, 'showForm'])->name('create-car');
+        Route::post('/create-car', [CarController::class, 'store'])->name('store-car');
+        Route::get('/edit-car/{vehicle}', [CarController::class, 'showEditForm'])->name('edit-car');
+        Route::put('/edit-car/{vehicle}', [CarController::class, 'update'])->name('update-car');
+    });
 
-    Volt::route('/vote-per-car', 'pages.front-end.vote-per-car')
-        ->name('vote-per-car');
-
-    Volt::route('/voting', 'pages.front-end.voting')
-        ->name('voting');
 });

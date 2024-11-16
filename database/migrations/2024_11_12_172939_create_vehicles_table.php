@@ -28,7 +28,7 @@ return new class extends Migration {
             $table->string('sacco');
             $table->string('route');
             $table->longText('description');
-            $table->boolean('published')->default(false);
+            $table->boolean('published')->default(true);
             $table->string('account_number')->nullable();
             $table->timestamps();
         });

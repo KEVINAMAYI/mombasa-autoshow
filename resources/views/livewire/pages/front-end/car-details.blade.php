@@ -17,7 +17,8 @@ new #[Layout('layouts.front-end')] class extends Component {
         $this->vehicle = $vehicle;
     }
 
-    public function updateVehiclePublication(){
+    public function updateVehiclePublication()
+    {
 
         DB::beginTransaction();
         try {
@@ -71,7 +72,8 @@ new #[Layout('layouts.front-end')] class extends Component {
                         <div class="carousel-inner">
                             @forelse($vehicle->images as $image )
                                 <div class="carousel-item active">
-                                    <img src="{{ $vehicle->images->first()->image_url }}" class="d-block w-100" alt="...">
+                                    <img src="{{ $vehicle->images->first()->image_url }}" class="d-block w-100"
+                                         alt="...">
                                 </div>
                             @empty
                                 <div class="carousel-item active">
@@ -99,7 +101,9 @@ new #[Layout('layouts.front-end')] class extends Component {
                     <table class="table">
                         <tbody>
                         <tr>
-                            <td colspan="2"><a href="car-details.html" class="title3"><strong>{{ $vehicle->name.' '.$vehicle->make->name.'-'.$vehicle->vehicle_model->name }}</strong></a></td>
+                            <td colspan="2"><a href="car-details.html"
+                                               class="title3"><strong>{{ $vehicle->name.' '.$vehicle->make->name.'-'.$vehicle->vehicle_model->name }}</strong></a>
+                            </td>
                         </tr>
                         <tr>
                             <td>{{ $vehicle->manufacturing_year }}</td>
@@ -134,18 +138,30 @@ new #[Layout('layouts.front-end')] class extends Component {
                             <td>{{ $vehicle->vehicle_reg }}</td>
                         </tr>
                         <tr>
-                            <td><a href="{{ route('front-end.checkout',$vehicle->id) }}" type="button" class="btn btn-primary btn-sm">Vote for me</a>
+                            <td><a href="{{ route('front-end.checkout',$vehicle->id) }}" type="button"
+                                   class="btn btn-primary btn-sm">Vote for me</a>
                             </td>
                             <td><a href="#" style="float:right;"><img src="front-end/images/share.png"/></a></td>
                         </tr>
-                        <tr>
-                            <td><a href="{{ route('front-end.edit-car',$vehicle->id) }}" class="btn btn-success btn-sm">Edit</a></td>
-                            @if($vehicle->published)
-                                <td><button wire:click="updateVehiclePublication" class="btn btn-danger btn-sm" style="float:right;">Unpublish</button></td>
-                            @else
-                                <td><button wire:click="updateVehiclePublication" class="btn btn-info btn-sm text-white" style="float:right;">Publish</button></td>
-                            @endif
-                        </tr>
+                        @if(auth()->user()->is_admin)
+                            <tr>
+                                <td><a href="{{ route('front-end.edit-car',$vehicle->id) }}"
+                                       class="btn btn-success btn-sm">Edit</a></td>
+                                @if($vehicle->published)
+                                    <td>
+                                        <button wire:click="updateVehiclePublication" class="btn btn-danger btn-sm"
+                                                style="float:right;">Unpublish
+                                        </button>
+                                    </td>
+                                @else
+                                    <td>
+                                        <button wire:click="updateVehiclePublication"
+                                                class="btn btn-info btn-sm text-white" style="float:right;">Publish
+                                        </button>
+                                    </td>
+                                @endif
+                            </tr>
+                        @endif
                         </tbody>
                     </table>
                 </div> <!--==end of <div id="right-col">==-->

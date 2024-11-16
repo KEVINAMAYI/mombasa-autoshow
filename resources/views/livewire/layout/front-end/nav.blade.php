@@ -11,8 +11,7 @@ new class extends Component {
     public function logout(Logout $logout): void
     {
         $logout();
-
-        $this->redirect('/', navigate: true);
+        $this->redirect('/');
     }
 
 }; ?>
@@ -47,18 +46,23 @@ new class extends Component {
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 <li><a class="dropdown-item" href="{{ route('front-end.my-profile') }}">My Profile</a>
                                 </li>
-                                <li><a class="dropdown-item" href="{{ route('front-end.car-awards') }}">Car of the year</a>
+                                <li><a class="dropdown-item" href="{{ route('front-end.car-awards') }}">Car of the
+                                        year</a>
                                 </li>
                                 <li><a class="dropdown-item" href="{{ route('front-end.my-votes') }}">My Votes</a></li>
                                 <li><a class="dropdown-item" href="{{ route('front-end.my-transactions') }}">My
                                         Transactions</a></li>
                                 <!--====== for super admins view only =========-->
-                                <li><a class="dropdown-item" href="{{ route('front-end.results') }}">Voting Results</a>
-                                </li>
-                                <li><a class="dropdown-item" href="{{ route('front-end.users') }}">All Users</a></li>
-                                <li><a class="dropdown-item" href="{{ route('front-end.transactions') }}">All
-                                        Transactions</a></li>
-                                <!--====== for super admins view only =========-->
+                                @if(auth()->user()->is_admin)
+                                    <li><a class="dropdown-item" href="{{ route('front-end.results') }}">Voting
+                                            Results</a>
+                                    </li>
+                                    <li><a class="dropdown-item" href="{{ route('front-end.users') }}">All Users</a>
+                                    </li>
+                                    <li><a class="dropdown-item" href="{{ route('front-end.transactions') }}">All
+                                            Transactions</a></li>
+                                @endif
+                            <!--====== for super admins view only =========-->
                                 <li><a wire:click="logout" class="dropdown-item" href="#">Log Out</a></li>
                             </ul>
                         </li>

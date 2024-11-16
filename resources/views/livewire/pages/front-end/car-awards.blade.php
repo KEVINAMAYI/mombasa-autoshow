@@ -10,7 +10,7 @@ new #[Layout('layouts.front-end')] class extends Component {
 
     public function mount()
     {
-        $this->vehicles = Vehicle::all();
+        $this->vehicles = Vehicle::where('published',1)->get();
     }
 
 } ?>
@@ -136,7 +136,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                             </table>
                     </div>
                 @empty
-                    <p class="text-center">No Vehicle Found</p>
+                    <p style="margin-top:20px; font-weight:bold; font-size:18px;" class="text-warning text-center">No Vehicle Found</p>
                 @endforelse
 
 
