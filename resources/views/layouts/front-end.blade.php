@@ -41,7 +41,7 @@
     </div> <!--==end of <div id="container">==-->
 </div> <!--==end of <div id="top-bar">==-->
 
-@if(Route::currentRouteName() == 'front-end.create-car')
+@if(in_array(Route::currentRouteName(),['front-end.create-car','front-end.edit-car']))
     @yield('content')
 @else
     {{ $slot }}

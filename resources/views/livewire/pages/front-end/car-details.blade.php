@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Vehicle;
+use Illuminate\Support\Facades\DB;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
@@ -17,6 +18,8 @@ new #[Layout('layouts.front-end')] class extends Component {
     }
 
     public function updateVehiclePublication(){
+
+        DB::beginTransaction();
         try {
 
             $vehicle = Vehicle::find($this->vehicle->id);
@@ -31,10 +34,13 @@ new #[Layout('layouts.front-end')] class extends Component {
             }
 
             $this->vehicle = $vehicle;
+
+            DB::commit();
             $this->alert('success', $message);
 
         } catch (Exception $exception) {
 
+            DB::rollBack();
             $this->alert('error', 'There was an error while updating vehicle');
 
         }
@@ -133,7 +139,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                             <td><a href="#" style="float:right;"><img src="front-end/images/share.png"/></a></td>
                         </tr>
                         <tr>
-                            <td><a href="#" class="btn btn-success btn-sm">Edit</a></td>
+                            <td><a href="{{ route('front-end.edit-car',$vehicle->id) }}" class="btn btn-success btn-sm">Edit</a></td>
                             @if($vehicle->published)
                                 <td><button wire:click="updateVehiclePublication" class="btn btn-danger btn-sm" style="float:right;">Unpublish</button></td>
                             @else

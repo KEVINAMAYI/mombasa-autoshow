@@ -27,6 +27,10 @@ Route::name('front-end.')->group(function () {
     Route::get('/create-car', [CarController::class, 'showForm'])->name('create-car');
     Route::post('/create-car', [CarController::class, 'store'])->name('store-car');
 
+    //use normal laravel when storing/editing vehicles
+    Route::get('/edit-car/{vehicle}', [CarController::class, 'showEditForm'])->name('edit-car');
+    Route::put('/edit-car/{vehicle}', [CarController::class, 'update'])->name('update-car');
+
     Volt::route('/faqs', 'pages.front-end.faqs')
         ->name('faqs');
 
