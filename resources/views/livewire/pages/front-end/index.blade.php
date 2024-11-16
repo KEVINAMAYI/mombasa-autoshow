@@ -19,7 +19,7 @@ new #[Layout('layouts.front-end')] class extends Component
                 <h1>CAR OF THE YEAR</h1>
                 <h2>AWARDS</h2>
                 <h3>2025</h3>
-                <a href="car-awards.html" class="btn1">VOTE NOW</a>
+                <a href="{{ route('front-end.car-awards') }}" class="btn1">VOTE NOW</a>
             </div> <!--==end of <div id="title-wrap">==-->
         </div><!----end of  <div id="home-container">---->
     </div> <!--==end of <div id="banner"> ==-->
@@ -31,7 +31,7 @@ new #[Layout('layouts.front-end')] class extends Component
             </p>
             <p>Kenyan Automobile Industry has been on rise since a few years, absorbing the shocks of global economic ups and downs. This growth is particularly visible in personal vehicle segments like 2-Wheelers and 4-Wheelers. With almost all major automobile manufacturers having their base in Nairobi and Mombasa, the population of vehicles is on rise. This event will provide a special focus on Car dealers/Sellers, Auto Spares dealers, financial institutions, Insurance institutions, and car importers.
             </p>
-            <a href="car-awards.html" class="btn2">VOTE NOW</a>
+            <a href="{{ route('front-end.car-awards') }}" class="btn2">VOTE NOW</a>
         </div> <!--==end of <div id="container">==-->
     </div> <!--==end of <div id="about-wrap">==-->
 

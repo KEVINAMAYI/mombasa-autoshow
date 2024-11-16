@@ -131,7 +131,8 @@ new #[Layout('layouts.front-end')] class extends Component {
                                 <strong>{{ $vehicle->account_number }}</strong></li>
                             <li>Enter the <strong>same amount</strong> you specified above</li>
                             <li>Enter your <strong>M-Pesa PIN</strong></li>
-                            <li>Wait for confirmation.</li>
+                            <li>Wait for <strong>Confirmation message</strong></li>
+                            <li>Click on <strong>Confirm Payment button</strong> to complete voting</li>
                         </ul>
                         </p>
 
