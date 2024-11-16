@@ -57,11 +57,13 @@ new class extends Component {
                                     <li><a class="dropdown-item" href="{{ route('front-end.results') }}">Voting
                                             Results</a>
                                     </li>
-                                    <li><a class="dropdown-item" href="{{ route('front-end.users') }}">All Users</a>
-                                    </li>
                                     <li><a class="dropdown-item" href="{{ route('front-end.transactions') }}">All
                                             Transactions</a></li>
-                                @endif
+                                    <li><a class="dropdown-item" href="{{ route('front-end.vehicles') }}">All Vehicles</a>
+                                    </li>
+                                    <li><a class="dropdown-item" href="{{ route('front-end.users') }}">All Users</a>
+                                    </li>
+                            @endif
                             <!--====== for super admins view only =========-->
                                 <li><a wire:click="logout" class="dropdown-item" href="#">Log Out</a></li>
                             </ul>

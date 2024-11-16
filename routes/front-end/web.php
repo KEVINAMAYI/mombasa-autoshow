@@ -56,6 +56,9 @@ Route::middleware('auth')->name('front-end.')->group(function () {
         Volt::route('/transactions', 'pages.front-end.transactions')
             ->name('transactions');
 
+        Volt::route('/vehicles', 'pages.front-end.vehicles')
+            ->name('vehicles');
+
         Volt::route('/users', 'pages.front-end.users')
             ->name('users');
 

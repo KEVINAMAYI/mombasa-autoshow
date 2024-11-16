@@ -63,6 +63,31 @@ new #[Layout('layouts.front-end')] class extends Component {
 
     }
 
+    public function updatesUserAdminStatus($user_id)
+    {
+        try {
+
+            $user = User::find($user_id);
+
+            if ($user->is_admin) {
+                $user->update(['is_admin' => false]);
+                $message = 'User is unset as Admin successfully';
+            } else {
+                $user->update(['is_admin' => true]);
+                $message = 'User is set to Admin successfully';
+            }
+
+            $this->getUsers();
+            $this->alert('success', $message);
+
+        } catch (Exception $exception) {
+
+            $this->alert('error', 'There was an error while updating user');
+
+        }
+
+    }
+
 } ?>
 
 <div class="page-content">
@@ -124,6 +149,15 @@ new #[Layout('layouts.front-end')] class extends Component {
                                 @else
                                     <button wire:click="updatesUserStatus({{$user->id}})"
                                             class="btn btn-sm btn-outline-success">Activate
+                                    </button>
+                                @endif
+                                @if($user->is_admin)
+                                    <button wire:click="updatesUserAdminStatus({{$user->id}})"
+                                            class="btn btn-sm btn-outline-danger">Remove Admin
+                                    </button>
+                                @else
+                                    <button wire:click="updatesUserAdminStatus({{$user->id}})"
+                                            class="btn btn-sm btn-outline-success">Set as Admin
                                     </button>
                                 @endif
                             </td>
