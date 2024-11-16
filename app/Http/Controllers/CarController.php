@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Image;
 use App\Models\Make;
 use App\Models\Vehicle;
-use App\Models\vehicleModel;
+use App\Models\VehicleModel;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -17,11 +17,14 @@ class CarController extends Controller
 {
     public function showForm()
     {
-        return view('livewire.pages.front-end.create-car');  // Show the form
+        $makes = Make::all();
+        $models = VehicleModel::all();
+        return view('livewire.pages.front-end.create-car', compact('models', 'makes'));  // Show the form
     }
 
     public function store(Request $request)
     {
+
         // Handle form submission and validation
         $validated = $request->validate([
             'reason' => 'required|string',
@@ -124,7 +127,7 @@ class CarController extends Controller
 
     public function showEditForm(Vehicle $vehicle)
     {
-        $models = vehicleModel::all();
+        $models = VehicleModel::all();
         $makes = Make::all();
         return view('livewire.pages.front-end.edit-car', compact('vehicle', 'makes', 'models'));
     }
@@ -197,12 +200,12 @@ class CarController extends Controller
 
             DB::commit();  // Commit the transaction
             session()->flash('success', 'Your vehicle has been updated successfully!');
-            return redirect()->route('front-end.edit-car',$vehicle->id);
+            return redirect()->route('front-end.edit-car', $vehicle->id);
 
         } catch (Exception $e) {
             DB::rollBack();  // Rollback the transaction
             session()->flash('error', 'There was an error while updating the vehicle!');
-            return redirect()->route('front-end.edit-car',$vehicle->id)->withErrors(['error' => 'There was an error while updating the vehicle!']);
+            return redirect()->route('front-end.edit-car', $vehicle->id)->withErrors(['error' => 'There was an error while updating the vehicle!']);
         }
     }
 
