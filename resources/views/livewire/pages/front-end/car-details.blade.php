@@ -101,7 +101,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                     <table class="table">
                         <tbody>
                         <tr>
-                            <td colspan="2"><a href="car-details.html"
+                            <td colspan="2"><a href="{{ route('front-end.car-details',$vehicle->id) }}"
                                                class="title3"><strong>{{ $vehicle->name.' '.$vehicle->make->name.'-'.$vehicle->vehicle_model->name }}</strong></a>
                             </td>
                         </tr>

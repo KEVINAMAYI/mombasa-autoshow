@@ -41,36 +41,8 @@
                                 @enderror
                             </div>
 
-                            <div class="col-md-4">
-                                <label for="make_id" class="form-label">Make</label>
-                                <select name="make_id" id="make_id" class="form-select">
-                                    <option value="">Choose...</option>
-                                    @foreach ($makes as $make)
-                                        <option
-                                            value="{{ $make->id }}" {{ old('make_id', $vehicle->make_id) == $make->id ? 'selected' : '' }}>
-                                            {{ $make->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('make_id')
-                                <p class="text-danger text-xs pt-1"> {{ $message }} </p>
-                                @enderror
-                            </div>
-
-                            <div class="col-md-4">
-                                <label for="vehicle_model_id" class="form-label">Model</label>
-                                <select name="vehicle_model_id" id="vehicle_model_id" class="form-select">
-                                    <option value="">Choose...</option>
-                                    @foreach ($models as $model)
-                                        <option
-                                            value="{{ $model->id }}" {{ old('vehicle_model_id', $vehicle->vehicle_model_id) == $model->id ? 'selected' : '' }}>
-                                            {{ $model->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('vehicle_model_id')
-                                <p class="text-danger text-xs pt-1"> {{ $message }} </p>
-                                @enderror
+                            <div class="col-md-8">
+                                <livewire:layout.front-end.edit-car-make-models :vehicle="$vehicle" />
                             </div>
 
                             <div class="col-md-4">
