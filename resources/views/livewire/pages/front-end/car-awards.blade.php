@@ -128,7 +128,8 @@ new #[Layout('layouts.front-end')] class extends Component {
                 <div class="row g-3" style="margin-top:5px;">
                     <div class="col-sm-3">
                         <label class="visually-hidden" for="autoSizingSelect">Category</label>
-                        <select wire:change="getVehicles" wire:model="category_id" class="form-select" id="autoSizingSelect">
+                        <select wire:change="getVehicles" wire:model="category_id" class="form-select"
+                                id="autoSizingSelect">
                             <option value="" selected>All Categories...</option>
                             @foreach($categories as $category)
                                 <option value="{{ $category->id }}">{{ $category->name }}</option>

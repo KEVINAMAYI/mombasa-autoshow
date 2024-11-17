@@ -78,6 +78,32 @@ new #[Layout('layouts.front-end')] class extends Component {
     }
 
 
+    public function updateFeatured($vehicle_id)
+    {
+        try {
+
+            $vehicle = Vehicle::find($vehicle_id);
+
+            if ($vehicle->featured) {
+                $vehicle->update(['featured' => false]);
+                $message = 'Vehicle removed as Featured successfully';
+            } else {
+                $vehicle->update(['featured' => true]);
+                $message = 'Vehicle set as Featured successfully';
+            }
+
+            $this->getVehicles();
+            $this->alert('success', $message);
+
+        } catch (Exception $exception) {
+
+            $this->alert('error', 'There was an error while updating user');
+
+        }
+
+    }
+
+
 } ?>
 
 <div class="page-content">
@@ -122,8 +148,10 @@ new #[Layout('layouts.front-end')] class extends Component {
 
                     @forelse($vehicles as $vehicle)
                         <tr>
-                            <td><a style="text-decoration:underline;" href="{{ route('front-end.car-details',$vehicle->id) }}"
-                                   class="title3">{{ $vehicle->name.' '.$vehicle->make->name.'-'.$vehicle->vehicle_model->name }}</a></td>
+                            <td><a style="text-decoration:underline;"
+                                   href="{{ route('front-end.car-details',$vehicle->id) }}"
+                                   class="title3">{{ $vehicle->name.' '.$vehicle->make->name.'-'.$vehicle->vehicle_model->name }}</a>
+                            </td>
                             <td>{{ $vehicle->vehicle_reg }}</td>
                             <td>{{ $vehicle->eng_cc }}</td>
                             <td>{{ $vehicle->fuel_type }}</td>
@@ -136,6 +164,15 @@ new #[Layout('layouts.front-end')] class extends Component {
                                 @else
                                     <button wire:click="updatesVehicleStatus({{$vehicle->id}})"
                                             class="btn btn-sm btn-outline-success">Publish
+                                    </button>
+                                @endif
+                                @if($vehicle->featured)
+                                    <button wire:click="updateFeatured({{$vehicle->id}})"
+                                            class="btn btn-sm btn-outline-danger">Remove as Featured
+                                    </button>
+                                @else
+                                    <button wire:click="updateFeatured({{$vehicle->id}})"
+                                            class="btn btn-sm btn-outline-info">Set as Featured
                                     </button>
                                 @endif
                             </td>

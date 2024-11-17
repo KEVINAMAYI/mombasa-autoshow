@@ -1,10 +1,27 @@
 <?php
 
+use App\Models\Vehicle;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 
-new #[Layout('layouts.front-end')] class extends Component
-{} ?>
+new #[Layout('layouts.front-end')] class extends Component {
+
+    public $vehicles;
+
+    public function mount()
+    {
+        $this->vehicles = $this->getVehicles();
+    }
+
+    public function getVehicles()
+    {
+        return Vehicle::where('published', 1)
+            ->where('featured', 1)
+            ->with(['make', 'vehicle_model', 'images', 'votes'])
+            ->get();
+    }
+
+} ?>
 
 <div class="page-content">
     <div id="banner">
@@ -27,9 +44,14 @@ new #[Layout('layouts.front-end')] class extends Component
     <div id="about-wrap">
         <div id="container">
             <h1>About the Event</h1>
-            <p>The Car of the Year Awards 2025 is scheduled to happen on 30th October 2025, at Mama Ngina Waterfront  Mombasa.  We have organized a series of activities with the climax being the Automotive awards.
+            <p>The Car of the Year Awards 2025 is scheduled to happen on 30th October 2025, at Mama Ngina Waterfront
+                Mombasa. We have organized a series of activities with the climax being the Automotive awards.
             </p>
-            <p>Kenyan Automobile Industry has been on rise since a few years, absorbing the shocks of global economic ups and downs. This growth is particularly visible in personal vehicle segments like 2-Wheelers and 4-Wheelers. With almost all major automobile manufacturers having their base in Nairobi and Mombasa, the population of vehicles is on rise. This event will provide a special focus on Car dealers/Sellers, Auto Spares dealers, financial institutions, Insurance institutions, and car importers.
+            <p>Kenyan Automobile Industry has been on rise since a few years, absorbing the shocks of global economic
+                ups and downs. This growth is particularly visible in personal vehicle segments like 2-Wheelers and
+                4-Wheelers. With almost all major automobile manufacturers having their base in Nairobi and Mombasa, the
+                population of vehicles is on rise. This event will provide a special focus on Car dealers/Sellers, Auto
+                Spares dealers, financial institutions, Insurance institutions, and car importers.
             </p>
             <a href="{{ route('front-end.car-awards') }}" class="btn2">VOTE NOW</a>
         </div> <!--==end of <div id="container">==-->
@@ -41,99 +63,49 @@ new #[Layout('layouts.front-end')] class extends Component
     <div id="awards-wrap">
         <div id="container">
             <h1>Featured Cars</h1>
-            <div id="car-wrap">
-                <a href="car-details.html"><img src="front-end/images/car-thumbnail.jpg" class="car-thumb" /></a>
-                <table class="table">
-                    <tbody>
-                    <tr>
-                        <td colspan="2"><a href="car-details.html" class="title3"><strong>Mercedes-Benz ML 350</strong></a></td>
-                    </tr>
-                    <tr>
-                        <td>2014</td>
-                        <td>Mombasa</td>
-                    </tr>
-                    <tr>
-                        <td>Total votes: </td>
-                        <td><strong>100</strong></td>
-                    </tr>
-                    <tr>
-                        <td><a href="checkout.html" type="button" class="btn btn-primary btn-sm">Vote for me</a></td>
-                        <td><a href="#" style="float:right;"><img src="front-end/images/share.png" /></a></td>
-                    </tr>
-
-                    </tbody>
-                </table>
-            </div> <!--==end of <div id="car-wrap">==-->
-
-            <div id="car-wrap">
-                <a href="car-details.html"><img src="front-end/images/car-thumbnail.jpg" class="car-thumb" /></a>
-                <table class="table">
-                    <tbody>
-                    <tr>
-                        <td colspan="2"><a href="car-details.html" class="title3"><strong>Mercedes-Benz ML 350</strong></a></td>
-                    </tr>
-                    <tr>
-                        <td>2014</td>
-                        <td>Mombasa</td>
-                    </tr>
-                    <tr>
-                        <td>Total votes: </td>
-                        <td><strong>100</strong></td>
-                    </tr>
-                    <tr>
-                        <td><a href="checkout.html" type="button" class="btn btn-primary btn-sm">Vote for me</a></td>
-                        <td><a href="#" style="float:right;"><img src="front-end/images/share.png" /></a></td>
-                    </tr>
-
-                    </tbody>
-                </table>
-            </div> <!--==end of <div id="car-wrap">==-->
-            <div id="car-wrap">
-                <a href="car-details.html"><img src="front-end/images/car-thumbnail.jpg" class="car-thumb" /></a>
-                <table class="table">
-                    <tbody>
-                    <tr>
-                        <td colspan="2"><a href="car-details.html" class="title3"><strong>Mercedes-Benz ML 350</strong></a></td>
-                    </tr>
-                    <tr>
-                        <td>2014</td>
-                        <td>Mombasa</td>
-                    </tr>
-                    <tr>
-                        <td>Total votes: </td>
-                        <td><strong>100</strong></td>
-                    </tr>
-                    <tr>
-                        <td><a href="checkout.html" type="button" class="btn btn-primary btn-sm">Vote for me</a></td>
-                        <td><a href="#" style="float:right;"><img src="front-end/images/share.png" /></a></td>
-                    </tr>
-
-                    </tbody>
-                </table>
-            </div> <!--==end of <div id="car-wrap">==-->
-            <div id="car-wrap">
-                <a href="car-details.html"><img src="front-end/images/car-thumbnail.jpg" class="car-thumb" /></a>
-                <table class="table">
-                    <tbody>
-                    <tr>
-                        <td colspan="2"><a href="car-details.html" class="title3"><strong>Mercedes-Benz ML 350</strong></a></td>
-                    </tr>
-                    <tr>
-                        <td>2014</td>
-                        <td>Mombasa</td>
-                    </tr>
-                    <tr>
-                        <td>Total votes: </td>
-                        <td><strong>100</strong></td>
-                    </tr>
-                    <tr>
-                        <td><a href="checkout.html" type="button" class="btn btn-primary btn-sm">Vote for me</a></td>
-                        <td><a href="#" style="float:right;"><img src="front-end/images/share.png" /></a></td>
-                    </tr>
-
-                    </tbody>
-                </table>
-            </div> <!--==end of <div id="car-wrap">==-->
+        @if($vehicles->isNotEmpty()) <!-- Use isNotEmpty() for collection check -->
+            @foreach($vehicles as $vehicle)
+                <div id="car-wrap">
+                    <a style="text-decoration:none;" href="{{ route('front-end.car-details', $vehicle->id) }}">
+                        <img
+                            src="{{ $vehicle->images->isNotEmpty() ? $vehicle->images->first()->image_url : 'front-end/images/slider/car.jpg' }}"
+                            class="car-thumb"/>
+                        <table class="table">
+                            <tbody>
+                            <tr>
+                                <td colspan="2">
+                                    <a href="{{ route('front-end.car-details', $vehicle->id) }}" class="title3">
+                                        <strong>{{ $vehicle->name }}
+                                            {{ optional($vehicle->make)->name }} -
+                                            {{ optional($vehicle->vehicle_model)->name }}</strong>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>{{ $vehicle->manufacturing_year }}</td>
+                                <td>{{ $vehicle->location }}</td>
+                            </tr>
+                            <tr>
+                                <td>Total votes:</td>
+                                <td><strong>{{ $vehicle->votes->count() }}</strong></td>
+                            </tr>
+                            <tr>
+                                <td><a href="{{ route('front-end.checkout', $vehicle->id) }}" type="button"
+                                       class="btn btn-primary btn-sm">Vote for me</a>
+                                </td>
+                                <td><a href="#" style="float:right;"><img src="front-end/images/share.png"/></a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </a>
+                </div>
+            @endforeach
+            @else
+                <p style="margin-top:20px; font-weight:bold; font-size:18px;" class="text-warning text-center">No
+                    Vehicle Found</p>
+        @endif
+        <!--==end of <div id="car-wrap">==-->
 
         </div> <!--==end of <div id="container">==-->
     </div> <!--==end of <div id="about-wrap">==-->
@@ -166,7 +138,8 @@ new #[Layout('layouts.front-end')] class extends Component
             <h1>SIGN UP FOR AUTO SHOW ALERTS</h1>
             <h2>Sign up to recieve exclusive tickets offers,show info,awards etc.</h2>
             <form id="newsletter">
-                <input type="email" id="newsInputEmail1" aria-describedby="emailHelp" placeholder="Enter your email address">
+                <input type="email" id="newsInputEmail1" aria-describedby="emailHelp"
+                       placeholder="Enter your email address">
                 <button type="submit" class="btn btn-primary">SIGN UP</button>
             </form>
         </div> <!--==end of <div id="container">==-->
