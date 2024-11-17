@@ -27,14 +27,14 @@ new #[Layout('layouts.front-end')] class extends Component {
         $userId = Auth::id();
 
         $query = Vote::where('user_id', $userId)
-        ->select(
-            'vehicle_id',
-            'transaction_id', // Include transaction_id for relationship
-            \DB::raw('count(*) as vote_count'),
-            \DB::raw('MAX(created_at) as latest_vote')
-        )
-        ->with(['vehicle', 'transaction']) // Include relationships
-        ->groupBy('vehicle_id', 'transaction_id'); // Group by transaction_id as well
+            ->select(
+                'vehicle_id',
+                'transaction_id', // Include transaction_id for relationship
+                \DB::raw('count(*) as vote_count'),
+                \DB::raw('MAX(created_at) as latest_vote')
+            )
+            ->with(['vehicle', 'transaction']) // Include relationships
+            ->groupBy('vehicle_id', 'transaction_id'); // Group by transaction_id as well
 
 
         // Apply search filter if search term is provided
@@ -97,21 +97,24 @@ new #[Layout('layouts.front-end')] class extends Component {
                         <td><strong>Votes</strong></td>
                         <td><strong>Phone</strong></td>
                     </tr>
-                    @forelse($votes as $vote)
-                        <tr>
-                            <td>
-                                <a href="{{ route('front-end.car-details', $vote->vehicle->id) }}">{{ $vote->vehicle->name.' '.$vote->vehicle->make->name.'-'.$vote->vehicle->vehicle_model->name }}</a>
-                            </td>
-                            <td>{{ \Carbon\Carbon::parse($vote->latest_vote)->format('d-M-Y H:i') }}</td>
-                            <td>{{ $vote->transaction?->amount ?? 'N/A' }}</td>
-                            <td>{{ $vote->vote_count }}</td>
-                            <td>{{ auth()->user()->phone_number }}</td> <!-- Using the logged-in user's phone number -->
-                        </tr>
-                    @empty
+                    @if(!empty($votes))
+                        @foreach($votes as $vote)
+                            <tr>
+                                <td>
+                                    <a href="{{ route('front-end.car-details', $vote->vehicle->id) }}">{{ $vote->vehicle->name.' '.$vote->vehicle->make->name.'-'.$vote->vehicle->vehicle_model->name }}</a>
+                                </td>
+                                <td>{{ \Carbon\Carbon::parse($vote->latest_vote)->format('d-M-Y H:i') }}</td>
+                                <td>{{ $vote->transaction?->amount ?? 'N/A' }}</td>
+                                <td>{{ $vote->vote_count }}</td>
+                                <td>{{ auth()->user()->phone_number }}</td>
+                                <!-- Using the logged-in user's phone number -->
+                            </tr>
+                        @endforeach
+                    @else
                         <tr>
                             <td colspan="8" class="text-center">No Vote Was Found</td>
                         </tr>
-                    @endforelse
+                    @endif
                     </tbody>
                 </table>
 
