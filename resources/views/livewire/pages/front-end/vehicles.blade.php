@@ -32,8 +32,6 @@ new #[Layout('layouts.front-end')] class extends Component {
             $query->where('vehicle_reg', 'like', '%' . $this->search . '%')
                 ->orWhere('location', 'like', '%' . $this->search . '%')
                 ->orWhere('name', 'like', '%' . $this->search . '%')
-                ->orWhere('sacco', 'like', '%' . $this->search . '%')
-                ->orWhere('route', 'like', '%' . $this->search . '%')
                 ->orWhere('interior_color', 'like', '%' . $this->search . '%')
                 ->orWhere('exterior_color', 'like', '%' . $this->search . '%')
                 ->orWhere('transmission', 'like', '%' . $this->search . '%')
