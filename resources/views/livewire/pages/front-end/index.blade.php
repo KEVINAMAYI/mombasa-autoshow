@@ -102,8 +102,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                 </div>
             @endforeach
             @else
-                <p style="margin-top:20px; font-weight:bold; font-size:18px;" class="text-warning text-center">No
-                    Vehicle Found</p>
+                <p style="margin-top:20px; font-weight:bold; font-size:18px;" class="text-warning text-center">No Featured Vehicle Found</p>
         @endif
         <!--==end of <div id="car-wrap">==-->
 
