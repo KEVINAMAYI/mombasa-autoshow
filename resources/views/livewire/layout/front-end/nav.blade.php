@@ -16,13 +16,6 @@ new class extends Component {
 
 }; ?>
 
-@push('css')
-    <style>
-        .logout:hover {
-            color: black;
-        }
-    </style>
-@endpush
 <div id="main-menu">
     <nav class="navbar navbar-expand-lg navbar-light ">
         <div class="container-fluid">
@@ -73,7 +66,14 @@ new class extends Component {
                                     </li>
                             @endif
                             <!--====== for super admins view only =========-->
-                                <li><button wire:click="logout" class="text-white logout dropdown-item" >Log Out</button></li>
+                                <li>
+                                    <button wire:click="logout" class="dropdown-item"
+                                            style="font-weight:bold; font-size:15px; color: white; transition: color 0.3s ease;"
+                                            onmouseover="this.style.color='black';"
+                                            onmouseout="this.style.color='white';">
+                                        Log Out
+                                    </button>
+                                </li>
                             </ul>
                         </li>
                     @endauth
