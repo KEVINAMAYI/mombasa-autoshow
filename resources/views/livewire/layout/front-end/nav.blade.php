@@ -8,10 +8,10 @@ new class extends Component {
     /**
      * Log the current user out of the application.
      */
-    public function logout(Logout $logout): void
+    public function logout(Logout $logout)
     {
         $logout();
-        $this->redirect('/');
+        return redirect()->route('front-end.index');
     }
 
 }; ?>
@@ -59,7 +59,8 @@ new class extends Component {
                                     </li>
                                     <li><a class="dropdown-item" href="{{ route('front-end.transactions') }}">All
                                             Transactions</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('front-end.vehicles') }}">All Vehicles</a>
+                                    <li><a class="dropdown-item" href="{{ route('front-end.vehicles') }}">All
+                                            Vehicles</a>
                                     </li>
                                     <li><a class="dropdown-item" href="{{ route('front-end.users') }}">All Users</a>
                                     </li>

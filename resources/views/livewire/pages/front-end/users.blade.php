@@ -138,7 +138,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->phone_number }}</td>
                             <td>{{ $user->country->name }}</td>
-                            <td>{{ $user->town->name }}</td>
+                            <td>{{ $user->town }}</td>
                             <td>{{ $user->is_active ? 'Active' : 'Inactive' }}</td>
                             <td>{{ \Carbon\Carbon::parse($user->created_at)->format('d-M-Y') }}</td>
                             <td>

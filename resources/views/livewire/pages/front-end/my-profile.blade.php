@@ -20,7 +20,7 @@ new #[Layout('layouts.front-end')] class extends Component {
     public $country_id;
     public $countries;
     public $town_id;
-    public $towns;
+    public $town;
     public $password;
     public $password_confirmation; // Add this for confirmation validation
 
@@ -33,7 +33,7 @@ new #[Layout('layouts.front-end')] class extends Component {
         $this->email = $user->email;
         $this->phone_number = $user->phone_number;
         $this->country_id = $user->country_id;
-        $this->town_id = $user->town_id;
+        $this->town = $user->town;
 
         $this->countries = Country::all();
         $this->towns = Town::all();
@@ -47,7 +47,7 @@ new #[Layout('layouts.front-end')] class extends Component {
             'email' => 'required|email',
             'phone_number' => 'required|string',
             'country_id' => 'required|exists:countries,id',
-            'town_id' => 'required|exists:towns,id',
+            'town' => 'required|string',
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
         ];
     }
@@ -64,7 +64,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                 'email' => $this->email,
                 'phone_number' => $this->phone_number,
                 'country_id' => $this->country_id,
-                'town_id' => $this->town_id,
+                'town' => $this->town,
             ];
 
             if (!empty($this->password)) {
@@ -135,13 +135,8 @@ new #[Layout('layouts.front-end')] class extends Component {
                         </div>
 
                         <div class="col-md-6">
-                            <label for="town_id" class="form-label">Town</label>
-                            <select id="town_id" wire:model="town_id" class="form-select">
-                                <option value="">Choose...</option>
-                                @foreach($towns as $town)
-                                    <option value="{{ $town->id }}">{{ $town->name }}</option>
-                                @endforeach
-                            </select>
+                            <label for="town" class="form-label">Town</label>
+                            <input type="text" name="town" class="form-control" id="town" wire:model="town">
                             @error('town_id') <span class="text-danger">{{ $message }}</span> @enderror
                         </div>
 

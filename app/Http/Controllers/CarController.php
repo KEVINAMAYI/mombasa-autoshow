@@ -26,7 +26,6 @@ class CarController extends Controller
 
     public function store(Request $request)
     {
-
         // Handle form submission and validation
         $validated = $request->validate([
             'reason' => 'required|string',
@@ -43,14 +42,11 @@ class CarController extends Controller
             'vehicle_reg' => 'required|string',
             'price' => 'required',
             'name' => 'required|string',
-            'sacco' => 'required|string',
-            'route' => 'required|string',
             'description' => 'required|string',
             'vehicle_images' => 'required',
         ]);
 
         DB::beginTransaction();
-
         try {
 
             // Create the vehicle record
@@ -133,7 +129,7 @@ class CarController extends Controller
         $categories = Category::all();
         $models = VehicleModel::all();
         $makes = Make::all();
-        return view('livewire.pages.front-end.edit-car', compact('vehicle', 'makes', 'models','categories'));
+        return view('livewire.pages.front-end.edit-car', compact('vehicle', 'makes', 'models', 'categories'));
     }
 
 
@@ -155,8 +151,6 @@ class CarController extends Controller
             'vehicle_reg' => 'required|string',
             'price' => 'required',
             'name' => 'required|string',
-            'sacco' => 'required|string',
-            'route' => 'required|string',
             'description' => 'required|string',
         ]);
 

@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Make;
-use App\Models\vehicleModel;
+use App\Models\VehicleModel;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -155,7 +155,7 @@ class MakeSeeder extends Seeder
 
             // Create the models associated with the make
             foreach ($models as $modelName) {
-                vehicleModel::create([
+                VehicleModel::create([
                     'make_id' => $make->id,
                     'name' => $modelName,
                 ]);

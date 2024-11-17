@@ -30,7 +30,7 @@
                                 <label for="reason" class="form-label"><strong>Submit car for?</strong></label>
                                 <select name="reason" id="reason" class="form-select">
                                     <option value="">Choose...</option>
-                                    <option value="award" selected >Car of the
+                                    <option value="award" selected>Car of the
                                         year award
                                     </option>
                                 </select>
@@ -44,7 +44,8 @@
                                 <select name="category_id" id="category_id" class="form-select">
                                     <option value="">Choose...</option>
                                     @foreach($categories as $category)
-                                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                        <option
+                                            value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
                                             {{ $category->name }}
                                         </option>
                                     @endforeach
@@ -62,27 +63,33 @@
                                 <label for="manufacturing_year" class="form-label">Year of Manufacture</label>
                                 <select id="manufacturing_year" name="manufacturing_year" class="form-select">
                                     <option value="">Choose...</option>
-                                    <option {{ old('manufacturing_year') == '2020' ? 'selected' : '' }}>2020</option>
-                                    <option {{ old('manufacturing_year') == '2021' ? 'selected' : '' }}>2021</option>
-                                    <option {{ old('manufacturing_year') == '2022' ? 'selected' : '' }}>2022</option>
+                                    @for ($year = 2010; $year <= 2025; $year++)
+                                        <option
+                                            value="{{ $year }}" {{ old('manufacturing_year') == $year ? 'selected' : '' }}>
+                                            {{ $year }}
+                                        </option>
+                                    @endfor
                                 </select>
                                 @error('manufacturing_year')
                                 <p class="text-danger text-xs pt-1"> {{ $message }} </p>
                                 @enderror
                             </div>
-
+                            @php
+                                $kenyaTowns = [
+                                    'Nairobi', 'Mombasa', 'Nakuru', 'Kisumu', 'Eldoret', 'Kisii', 'Kericho',
+                                    'Malindi', 'Kitale', 'Nyeri', 'Thika', 'Embu', 'Meru', 'Kakamega', 'Laikipia',
+                                    'Voi', 'Lamu', 'Garissa', 'Isiolo', 'Nanyuki', 'Bomet', 'Ruiru', 'Kiambu', 'Mtwapa'
+                                ];
+                            @endphp
                             <div class="col-md-4">
                                 <label for="location" class="form-label">Location</label>
                                 <select id="location" name="location" class="form-select">
                                     <option value="">Choose...</option>
-                                    <option value="Nairobi" {{ old('location') == 'Nairobi' ? 'selected' : '' }}>
-                                        Nairobi
-                                    </option>
-                                    <option value="Mombasa" {{ old('location') == 'Mombasa' ? 'selected' : '' }}>
-                                        Mombasa
-                                    </option>
-                                    <option value="Nakuru" {{ old('location') == 'Nakuru' ? 'selected' : '' }}>Nakuru
-                                    </option>
+                                    @foreach ($kenyaTowns as $town)
+                                        <option value="{{ $town }}" {{ old('location') == $town ? 'selected' : '' }}>
+                                            {{ $town }}
+                                        </option>
+                                    @endforeach
                                 </select>
                                 @error('location')
                                 <p class="text-danger text-xs pt-1"> {{ $message }} </p>
@@ -150,10 +157,40 @@
                                     <option value="black" {{ old('exterior_color') == 'black' ? 'selected' : '' }}>
                                         Black
                                     </option>
-                                    <option
-                                        value="pearl_white" {{ old('exterior_color') == 'pearl_white' ? 'selected' : '' }}>
-                                        Pearl White
+                                    <option value="white" {{ old('exterior_color') == 'white' ? 'selected' : '' }}>
+                                        White
                                     </option>
+                                    <option value="gray_silver" {{ old('exterior_color') == 'gray_silver' ? 'selected' : '' }}>
+                                        Gray/Silver
+                                    </option>
+                                    <option value="blue" {{ old('exterior_color') == 'blue' ? 'selected' : '' }}>
+                                        Blue
+                                    </option>
+                                    <option value="red" {{ old('exterior_color') == 'red' ? 'selected' : '' }}>
+                                        Red
+                                    </option>
+                                    <option value="green" {{ old('exterior_color') == 'green' ? 'selected' : '' }}>
+                                        Green
+                                    </option>
+                                    <option value="yellow" {{ old('exterior_color') == 'yellow' ? 'selected' : '' }}>
+                                        Yellow
+                                    </option>
+                                    <option value="orange" {{ old('exterior_color') == 'orange' ? 'selected' : '' }}>
+                                        Orange
+                                    </option>
+                                    <option value="brown" {{ old('exterior_color') == 'brown' ? 'selected' : '' }}>
+                                        Brown
+                                    </option>
+                                    <option value="gold" {{ old('exterior_color') == 'gold' ? 'selected' : '' }}>
+                                        Gold
+                                    </option>
+                                    <option value="beige_tan" {{ old('exterior_color') == 'beige_tan' ? 'selected' : '' }}>
+                                        Beige/Tan
+                                    </option>
+                                    <option value="purple" {{ old('exterior_color') == 'purple' ? 'selected' : '' }}>
+                                        Purple
+                                    </option>
+
                                 </select>
                                 @error('exterior_color')
                                 <p class="text-danger text-xs pt-1"> {{ $message }} </p>
@@ -183,24 +220,6 @@
                                 <input type="text" name="name" class="form-control" id="name" placeholder="Vehicle Name"
                                        value="{{ old('name') }}">
                                 @error('name')
-                                <p class="text-danger text-xs pt-1"> {{ $message }} </p>
-                                @enderror
-                            </div>
-
-                            <div class="col-md-4">
-                                <label for="sacco" class="form-label">Sacco Name</label>
-                                <input type="text" name="sacco" class="form-control" id="sacco" placeholder="Sacco Name"
-                                       value="{{ old('sacco') }}">
-                                @error('sacco')
-                                <p class="text-danger text-xs pt-1"> {{ $message }} </p>
-                                @enderror
-                            </div>
-
-                            <div class="col-md-4">
-                                <label for="route" class="form-label">Route</label>
-                                <input type="text" name="route" class="form-control" id="route" placeholder="Route"
-                                       value="{{ old('route') }}">
-                                @error('route')
                                 <p class="text-danger text-xs pt-1"> {{ $message }} </p>
                                 @enderror
                             </div>

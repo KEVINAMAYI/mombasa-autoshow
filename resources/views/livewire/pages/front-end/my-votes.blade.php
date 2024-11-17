@@ -26,11 +26,16 @@ new #[Layout('layouts.front-end')] class extends Component {
 
         $userId = Auth::id();
 
-        // Start query for votes with grouping
         $query = Vote::where('user_id', $userId)
-            ->select('vehicle_id', \DB::raw('count(*) as vote_count'), \DB::raw('MAX(created_at) as latest_vote'))
-            ->with('vehicle') // Include vehicle relationship
-            ->groupBy('vehicle_id');
+        ->select(
+            'vehicle_id',
+            'transaction_id', // Include transaction_id for relationship
+            \DB::raw('count(*) as vote_count'),
+            \DB::raw('MAX(created_at) as latest_vote')
+        )
+        ->with(['vehicle', 'transaction']) // Include relationships
+        ->groupBy('vehicle_id', 'transaction_id'); // Group by transaction_id as well
+
 
         // Apply search filter if search term is provided
         if ($this->search) {
@@ -98,7 +103,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                                 <a href="{{ route('front-end.car-details', $vote->vehicle->id) }}">{{ $vote->vehicle->name.' '.$vote->vehicle->make->name.'-'.$vote->vehicle->vehicle_model->name }}</a>
                             </td>
                             <td>{{ \Carbon\Carbon::parse($vote->latest_vote)->format('d-M-Y H:i') }}</td>
-                            <td>{{ $vote->vote_count*50 }}</td> <!-- Assuming vehicle ID or other vehicle details -->
+                            <td>{{ $vote->transaction?->amount ?? 'N/A' }}</td>
                             <td>{{ $vote->vote_count }}</td>
                             <td>{{ auth()->user()->phone_number }}</td> <!-- Using the logged-in user's phone number -->
                         </tr>

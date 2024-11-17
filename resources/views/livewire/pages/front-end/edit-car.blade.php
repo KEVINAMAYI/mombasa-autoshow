@@ -23,7 +23,8 @@
             <div id="container">
                 <div id="page-contents">
                     <div id="car-form">
-                        <form action="{{ route('front-end.update-car',$vehicle->id) }}" method="post" enctype="multipart/form-data"
+                        <form action="{{ route('front-end.update-car',$vehicle->id) }}" method="post"
+                              enctype="multipart/form-data"
                               class="row g-3">
                             @method('PUT')
                             @csrf
@@ -46,7 +47,8 @@
                                 <select name="category_id" id="category_id" class="form-select">
                                     <option value="">Choose...</option>
                                     @foreach($categories as $category)
-                                        <option value="{{ $category->id }}" {{ old('category_id',$vehicle->category_id) == $category->id ? 'selected' : '' }}>
+                                        <option
+                                            value="{{ $category->id }}" {{ old('category_id',$vehicle->category_id) == $category->id ? 'selected' : '' }}>
                                             {{ $category->name }}
                                         </option>
                                     @endforeach
@@ -57,34 +59,41 @@
                             </div>
 
                             <div class="col-md-8">
-                                <livewire:layout.front-end.edit-car-make-models :vehicle="$vehicle" />
+                                <livewire:layout.front-end.edit-car-make-models :vehicle="$vehicle"/>
                             </div>
 
                             <div class="col-md-4">
                                 <label for="manufacturing_year" class="form-label">Year of Manufacture</label>
                                 <select id="manufacturing_year" name="manufacturing_year" class="form-select">
                                     <option value="">Choose...</option>
-                                    <option {{ old('manufacturing_year', $vehicle->manufacturing_year) == '2020' ? 'selected' : '' }}>2020</option>
-                                    <option {{ old('manufacturing_year', $vehicle->manufacturing_year) == '2021' ? 'selected' : '' }}>2021</option>
-                                    <option {{ old('manufacturing_year', $vehicle->manufacturing_year) == '2022' ? 'selected' : '' }}>2022</option>
+                                    @for ($year = 2010; $year <= 2025; $year++)
+                                        <option
+                                            value="{{ $year }}" {{ old('manufacturing_year', $vehicle->manufacturing_year) == $year ? 'selected' : '' }}>
+                                            {{ $year }}
+                                        </option>
+                                    @endfor
                                 </select>
                                 @error('manufacturing_year')
                                 <p class="text-danger text-xs pt-1"> {{ $message }} </p>
                                 @enderror
                             </div>
-
+                            @php
+                                $kenyaTowns = [
+                                    'Nairobi', 'Mombasa', 'Nakuru', 'Kisumu', 'Eldoret', 'Kisii', 'Kericho',
+                                    'Malindi', 'Kitale', 'Nyeri', 'Thika', 'Embu', 'Meru', 'Kakamega', 'Laikipia',
+                                    'Voi', 'Lamu', 'Garissa', 'Isiolo', 'Nanyuki', 'Bomet', 'Ruiru', 'Kiambu', 'Mtwapa'
+                                ];
+                            @endphp
                             <div class="col-md-4">
                                 <label for="location" class="form-label">Location</label>
                                 <select id="location" name="location" class="form-select">
                                     <option value="">Choose...</option>
-                                    <option value="Nairobi" {{ old('location',$vehicle->location) == 'Nairobi' ? 'selected' : '' }}>
-                                        Nairobi
-                                    </option>
-                                    <option value="Mombasa" {{ old('location',$vehicle->location) == 'Mombasa' ? 'selected' : '' }}>
-                                        Mombasa
-                                    </option>
-                                    <option value="Nakuru" {{ old('location',$vehicle->location) == 'Nakuru' ? 'selected' : '' }}>Nakuru
-                                    </option>
+                                    @foreach ($kenyaTowns as $town)
+                                        <option
+                                            value="{{ $town }}" {{ old('location', $vehicle->location) == $town ? 'selected' : '' }}>
+                                            {{ $town }}
+                                        </option>
+                                    @endforeach
                                 </select>
                                 @error('location')
                                 <p class="text-danger text-xs pt-1"> {{ $message }} </p>
@@ -107,7 +116,8 @@
                                         value="automatic" {{ old('transmission',$vehicle->transmission) == 'automatic' ? 'selected' : '' }}>
                                         Automatic
                                     </option>
-                                    <option value="manual" {{ old('transmission',$vehicle->transmission) == 'manual' ? 'selected' : '' }}>
+                                    <option
+                                        value="manual" {{ old('transmission',$vehicle->transmission) == 'manual' ? 'selected' : '' }}>
                                         Manual
                                     </option>
                                 </select>
@@ -120,9 +130,13 @@
                                 <label for="fuel_type" class="form-label">Fuel Type</label>
                                 <select id="fuel_type" name="fuel_type" class="form-select">
                                     <option value="">Choose...</option>
-                                    <option value="petrol" {{ old('fuel_type',$vehicle->fuel_type) == 'petrol' ? 'selected' : '' }}>Petrol
+                                    <option
+                                        value="petrol" {{ old('fuel_type',$vehicle->fuel_type) == 'petrol' ? 'selected' : '' }}>
+                                        Petrol
                                     </option>
-                                    <option value="diesel" {{ old('fuel_type',$vehicle->fuel_type) == 'diesel' ? 'selected' : '' }}>Diesel
+                                    <option
+                                        value="diesel" {{ old('fuel_type',$vehicle->fuel_type) == 'diesel' ? 'selected' : '' }}>
+                                        Diesel
                                     </option>
                                 </select>
                                 @error('fuel_type')
@@ -134,9 +148,12 @@
                                 <label for="interior_color" class="form-label">Interior color</label>
                                 <select id="interior_color" name="interior_color" class="form-select">
                                     <option value="">Choose...</option>
-                                    <option value="dark" {{ old('interior_color',$vehicle->interior_color) == 'dark' ? 'selected' : '' }}>Dark
+                                    <option
+                                        value="dark" {{ old('interior_color',$vehicle->interior_color) == 'dark' ? 'selected' : '' }}>
+                                        Dark
                                     </option>
-                                    <option value="white" {{ old('interior_color',$vehicle->interior_color) == 'white' ? 'selected' : '' }}>
+                                    <option
+                                        value="white" {{ old('interior_color',$vehicle->interior_color) == 'white' ? 'selected' : '' }}>
                                         White
                                     </option>
                                 </select>
@@ -149,12 +166,53 @@
                                 <label for="exterior_color" class="form-label">Exterior color</label>
                                 <select id="exterior_color" name="exterior_color" class="form-select">
                                     <option value="">Choose...</option>
-                                    <option value="black" {{ old('exterior_color',$vehicle->exterior_color) == 'black' ? 'selected' : '' }}>
+                                    <option
+                                        value="black" {{ old('exterior_color', $vehicle->exterior_color) == 'black' ? 'selected' : '' }}>
                                         Black
                                     </option>
                                     <option
-                                        value="pearl_white" {{ old('exterior_color',$vehicle->exterior_color) == 'pearl_white' ? 'selected' : '' }}>
-                                        Pearl White
+                                        value="white" {{ old('exterior_color', $vehicle->exterior_color) == 'white' ? 'selected' : '' }}>
+                                        White
+                                    </option>
+                                    <option
+                                        value="gray_silver" {{ old('exterior_color', $vehicle->exterior_color) == 'gray_silver' ? 'selected' : '' }}>
+                                        Gray/Silver
+                                    </option>
+                                    <option
+                                        value="blue" {{ old('exterior_color', $vehicle->exterior_color) == 'blue' ? 'selected' : '' }}>
+                                        Blue
+                                    </option>
+                                    <option
+                                        value="red" {{ old('exterior_color', $vehicle->exterior_color) == 'red' ? 'selected' : '' }}>
+                                        Red
+                                    </option>
+                                    <option
+                                        value="green" {{ old('exterior_color', $vehicle->exterior_color) == 'green' ? 'selected' : '' }}>
+                                        Green
+                                    </option>
+                                    <option
+                                        value="yellow" {{ old('exterior_color', $vehicle->exterior_color) == 'yellow' ? 'selected' : '' }}>
+                                        Yellow
+                                    </option>
+                                    <option
+                                        value="orange" {{ old('exterior_color', $vehicle->exterior_color) == 'orange' ? 'selected' : '' }}>
+                                        Orange
+                                    </option>
+                                    <option
+                                        value="brown" {{ old('exterior_color', $vehicle->exterior_color) == 'brown' ? 'selected' : '' }}>
+                                        Brown
+                                    </option>
+                                    <option
+                                        value="gold" {{ old('exterior_color', $vehicle->exterior_color) == 'gold' ? 'selected' : '' }}>
+                                        Gold
+                                    </option>
+                                    <option
+                                        value="beige_tan" {{ old('exterior_color', $vehicle->exterior_color) == 'beige_tan' ? 'selected' : '' }}>
+                                        Beige/Tan
+                                    </option>
+                                    <option
+                                        value="purple" {{ old('exterior_color', $vehicle->exterior_color) == 'purple' ? 'selected' : '' }}>
+                                        Purple
                                     </option>
                                 </select>
                                 @error('exterior_color')
@@ -188,25 +246,6 @@
                                 <p class="text-danger text-xs pt-1"> {{ $message }} </p>
                                 @enderror
                             </div>
-
-                            <div class="col-md-4">
-                                <label for="sacco" class="form-label">Sacco Name</label>
-                                <input type="text" name="sacco" class="form-control" id="sacco" placeholder="Sacco Name"
-                                       value="{{ old('sacco',$vehicle->sacco) }}">
-                                @error('sacco')
-                                <p class="text-danger text-xs pt-1"> {{ $message }} </p>
-                                @enderror
-                            </div>
-
-                            <div class="col-md-4">
-                                <label for="route" class="form-label">Route</label>
-                                <input type="text" name="route" class="form-control" id="route" placeholder="Route"
-                                       value="{{ old('route',$vehicle->route) }}">
-                                @error('route')
-                                <p class="text-danger text-xs pt-1"> {{ $message }} </p>
-                                @enderror
-                            </div>
-
                             <div class="col-12">
                                 <label for="description" class="form-label">Description(What is unique about this
                                     car?)</label>
@@ -217,7 +256,8 @@
                                 @enderror
                             </div>
                             <div class="col-md-4">
-                                <label style="width:100%;" for="vehicle_images" class="">Upload car photos(Max 10) <span class="text-danger">These Images will replace the old one*</span></label>
+                                <label style="width:100%;" for="vehicle_images" class="">Upload car photos(Max 10) <span
+                                        class="text-danger">These Images will replace the old one*</span></label>
                                 <input class="form-control" type="file" name="vehicle_images[]" id="vehicle_images"
                                        multiple>
                                 @error('vehicle_images')

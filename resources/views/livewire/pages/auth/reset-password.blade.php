@@ -6,12 +6,15 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
 use Livewire\Volt\Component;
 
-new #[Layout('layouts.front-end')] class extends Component
-{
+new #[Layout('layouts.front-end')] class extends Component {
+
+    use LivewireAlert;
+
     #[Locked]
     public string $token = '';
     public string $email = '';
@@ -63,8 +66,7 @@ new #[Layout('layouts.front-end')] class extends Component
             return;
         }
 
-        Session::flash('status', __($status));
-
+        $this->alert('success', __($status));
         $this->redirectRoute('login', navigate: true);
     }
 }; ?>
@@ -87,25 +89,28 @@ new #[Layout('layouts.front-end')] class extends Component
             <div id="page-contents">
                 <div id="login">
                     <p style="color:#b39af2;">Please enter your new password</p>
-                    <form  wire:submit="resetPassword">
+                    <form wire:submit="resetPassword">
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" wire:model="email" class="form-control" id="email" aria-describedby="emailHelp">
-                            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                            <input type="email" wire:model="email" class="form-control" id="email"
+                                   aria-describedby="emailHelp">
+                            <x-input-error :messages="$errors->get('email')" class="mt-2"/>
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input wire:model="password"  type="password" class="form-control" name="password" id="password">
-                            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                            <input wire:model="password" type="password" class="form-control" name="password"
+                                   id="password">
+                            <x-input-error :messages="$errors->get('password')" class="mt-2"/>
                         </div>
                         <div class="mb-3">
                             <label for="password_confirmation" class="form-label">Confirm Password</label>
-                            <input wire:model="password" name="password_confirmation"  type="password" class="form-control" id="password_confirmation">
-                            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                            <input wire:model="password_confirmation" name="password_confirmation" type="password"
+                                   class="form-control" id="password_confirmation">
                         </div>
                         <button type="submit" class="btn btn-primary">Reset Password</button>
                     </form>
-                    <p style=" text-align:right; margin-top:10px;"><a href="{{ route('login') }}">Login</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="{{ route('register') }}">Register</a></p>
+                    <p style=" text-align:right; margin-top:10px;"><a href="{{ route('login') }}">Login</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a
+                            href="{{ route('register') }}">Register</a></p>
                 </div> <!--==end of <div id="login">==-->
             </div> <!--==end of <div id="page-contents">==-->
 
@@ -118,7 +123,8 @@ new #[Layout('layouts.front-end')] class extends Component
             <h1>SIGN UP FOR AUTO SHOW ALERTS</h1>
             <h2>Sign up to recieve exclusive tickets offers,show info,awards etc.</h2>
             <form id="newsletter">
-                <input type="email" id="newsInputEmail1" aria-describedby="emailHelp" placeholder="Enter your email address">
+                <input type="email" id="newsInputEmail1" aria-describedby="emailHelp"
+                       placeholder="Enter your email address">
                 <button type="submit" class="btn btn-primary">SIGN UP</button>
             </form>
         </div> <!--==end of <div id="container">==-->

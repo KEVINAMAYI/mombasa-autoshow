@@ -70,10 +70,9 @@ new #[Layout('layouts.front-end')] class extends Component {
                     <h3 class="title2">{{ $vehicle->name.' '.$vehicle->make->name.'-'.$vehicle->vehicle_model->name }}</h3>
                     <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
                         <div class="carousel-inner">
-                            @forelse($vehicle->images as $image )
-                                <div class="carousel-item active">
-                                    <img src="{{ $vehicle->images->first()->image_url }}" class="d-block w-100"
-                                         alt="...">
+                            @forelse($vehicle->images as $index => $image)
+                                <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
+                                    <img src="{{ $image->image_url }}" class="d-block w-100" alt="...">
                                 </div>
                             @empty
                                 <div class="carousel-item active">
@@ -135,7 +134,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                         </tr>
                         <tr>
                             <td>Vehicle Registration</td>
-                            <td>{{ $vehicle->vehicle_reg }}</td>
+                            <td>{{ substr($vehicle->vehicle_reg, 0, strlen($vehicle->vehicle_reg) - 4) . ' ' . str_repeat('*', 3) . substr($vehicle->vehicle_reg, -1) }}</td>
                         </tr>
                         <tr>
                             <td>Category</td>
@@ -147,7 +146,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                             </td>
                             <td><a href="#" style="float:right;"><img src="front-end/images/share.png"/></a></td>
                         </tr>
-                        @if(auth()->user()->is_admin)
+                        @if(auth()->check() && auth()->user()->is_admin)
                             <tr>
                                 <td><a href="{{ route('front-end.edit-car',$vehicle->id) }}"
                                        class="btn btn-success btn-sm">Edit</a></td>

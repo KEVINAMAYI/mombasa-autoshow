@@ -152,7 +152,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                                    href="{{ route('front-end.car-details',$vehicle->id) }}"
                                    class="title3">{{ $vehicle->name.' '.$vehicle->make->name.'-'.$vehicle->vehicle_model->name }}</a>
                             </td>
-                            <td>{{ $vehicle->vehicle_reg }}</td>
+                            <td>{{ substr($vehicle->vehicle_reg, 0, strlen($vehicle->vehicle_reg) - 4) . ' ' . str_repeat('*', 3) . substr($vehicle->vehicle_reg, -1) }}</td>
                             <td>{{ $vehicle->eng_cc }}</td>
                             <td>{{ $vehicle->fuel_type }}</td>
                             <td>{{ $vehicle->transmission }}</td>
@@ -179,7 +179,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="text-center">No Users Were Found</td>
+                            <td colspan="8" class="text-center">No Vehicles Were Found</td>
                         </tr>
                     @endforelse
                     </tbody>

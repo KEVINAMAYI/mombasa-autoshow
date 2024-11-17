@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->foreignId('country_id');
-            $table->foreignId('town_id');
+            $table->string('town')->nullable();
             $table->integer('accept_terms');
             $table->boolean('is_active')->default(true);
             $table->boolean('is_admin')->default(false);

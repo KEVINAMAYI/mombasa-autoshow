@@ -1,11 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Password;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 
-new #[Layout('layouts.front-end')] class extends Component
-{
+new #[Layout('layouts.front-end')] class extends Component {
+
+    use LivewireAlert;
+
     public string $email = '';
 
     /**
@@ -31,15 +34,12 @@ new #[Layout('layouts.front-end')] class extends Component
         }
 
         $this->reset('email');
-
-        session()->flash('status', __($status));
+        $this->alert('success', "We have sent a link to your Email for Resetting Password");
     }
 }; ?>
 
 <div class="page-content">
 
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
 
     <div id="banner-in">
         <img src="front-end/images/banner-inner.jpg" id="bannerin-img">
@@ -61,12 +61,14 @@ new #[Layout('layouts.front-end')] class extends Component
                     <form wire:submit="sendPasswordResetLink">
                         <div class="mb-3">
                             <label for="email" class="form-label">Email address</label>
-                            <input wire:model="email" id="email" type="email" class="form-control"  aria-describedby="emailHelp">
-                            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                            <input wire:model="email" id="email" type="email" class="form-control"
+                                   aria-describedby="emailHelp">
+                            <x-input-error :messages="$errors->get('email')" class="mt-2"/>
                         </div>
                         <button type="submit" class="btn btn-primary">Reset</button>
                     </form>
-                    <p style=" text-align:right; margin-top:10px;"><a href="{{ route('login') }}" >Login</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="{{ route('register') }}">Register</a></p>
+                    <p style=" text-align:right; margin-top:10px;"><a href="{{ route('login') }}">Login</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a
+                            href="{{ route('register') }}">Register</a></p>
                 </div> <!--==end of <div id="login">==-->
             </div> <!--==end of <div id="page-contents">==-->
 
@@ -80,7 +82,8 @@ new #[Layout('layouts.front-end')] class extends Component
             <h1>SIGN UP FOR AUTO SHOW ALERTS</h1>
             <h2>Sign up to recieve exclusive tickets offers,show info,awards etc.</h2>
             <form id="newsletter">
-                <input type="email" id="newsInputEmail1" aria-describedby="emailHelp" placeholder="Enter your email address">
+                <input type="email" id="newsInputEmail1" aria-describedby="emailHelp"
+                       placeholder="Enter your email address">
                 <button type="submit" class="btn btn-primary">SIGN UP</button>
             </form>
         </div> <!--==end of <div id="container">==-->

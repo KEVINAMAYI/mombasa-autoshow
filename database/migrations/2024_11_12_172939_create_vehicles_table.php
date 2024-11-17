@@ -22,12 +22,10 @@ return new class extends Migration {
             $table->string('manufacturing_year');
             $table->enum('fuel_type', ['petrol', 'diesel']);
             $table->enum('interior_color', ['dark', 'white']);
-            $table->enum('exterior_color', ['black', 'pearl_white']);
+            $table->string('exterior_color');
             $table->string('vehicle_reg');
             $table->string('price');
             $table->string('name');
-            $table->string('sacco');
-            $table->string('route');
             $table->longText('description');
             $table->boolean('published')->default(true);
             $table->boolean('featured')->default(false);

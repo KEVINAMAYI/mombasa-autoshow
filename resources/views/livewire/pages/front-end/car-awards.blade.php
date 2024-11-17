@@ -17,6 +17,7 @@ new #[Layout('layouts.front-end')] class extends Component {
     public $category_id;
     public $make_id;
     public $vehicle_model_id;
+    public $manufacturing_year;
 
     public function mount()
     {
@@ -75,6 +76,11 @@ new #[Layout('layouts.front-end')] class extends Component {
         // Model Filter
         if ($this->vehicle_model_id) {
             $query->where('vehicle_model_id', $this->vehicle_model_id);
+        }
+
+        // Model Filter
+        if ($this->manufacturing_year) {
+            $query->where('manufacturing_year', $this->manufacturing_year);
         }
 
         $this->vehicles = $query->get();
@@ -156,9 +162,12 @@ new #[Layout('layouts.front-end')] class extends Component {
                         </select>
                     </div>
                     <div class="col-sm-3">
-                        <label class="visually-hidden" for="autoSizingSelect">Year of Award</label>
-                        <select class="form-select" id="autoSizingSelect">
-                            <option value="2025">2025</option>
+                        <label class="visually-hidden" for="manufacturing_year">Year of Award</label>
+                        <select wire:change="getVehicles" wire:model="manufacturing_year" class="form-select" id="manufacturing_year">
+                            <option value="" selected>All Years...</option>
+                            @for ($year = 2010; $year <= 2025; $year++)
+                                <option value="{{ $year }}">{{ $year }}</option>
+                            @endfor
                         </select>
                     </div>
                 </div>

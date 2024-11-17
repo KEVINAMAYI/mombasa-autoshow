@@ -28,13 +28,14 @@ Route::name('front-end.')->group(function () {
 
     Volt::route('/voting', 'pages.front-end.voting')
         ->name('voting');
+
+    Volt::route('/car-details/{vehicle}', 'pages.front-end.car-details')
+        ->name('car-details');
+
 });
 
 
 Route::middleware('auth')->name('front-end.')->group(function () {
-
-    Volt::route('/car-details/{vehicle}', 'pages.front-end.car-details')
-        ->name('car-details');
 
     Volt::route('/checkout/{vehicle_id}', 'pages.front-end.checkout')
         ->name('checkout');

@@ -21,7 +21,7 @@ class User extends Authenticatable
         'first_name',
         'last_name',
         'country_id',
-        'town_id',
+        'town',
         'accept_terms',
         'phone_number',
         'email',
