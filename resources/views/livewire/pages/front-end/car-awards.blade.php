@@ -165,7 +165,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                         <label class="visually-hidden" for="manufacturing_year">Year of Award</label>
                         <select wire:change="getVehicles" wire:model="manufacturing_year" class="form-select" id="manufacturing_year">
                             <option value="" selected>All Years...</option>
-                            @for ($year = 2010; $year <= 2025; $year++)
+                            @for ($year = 2010; $year <= 2024; $year++)
                                 <option value="{{ $year }}">{{ $year }}</option>
                             @endfor
                         </select>

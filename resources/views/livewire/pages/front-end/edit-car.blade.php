@@ -66,7 +66,7 @@
                                 <label for="manufacturing_year" class="form-label">Year of Manufacture</label>
                                 <select id="manufacturing_year" name="manufacturing_year" class="form-select">
                                     <option value="">Choose...</option>
-                                    @for ($year = 2010; $year <= 2025; $year++)
+                                    @for ($year = 2010; $year <= 2024; $year++)
                                         <option
                                             value="{{ $year }}" {{ old('manufacturing_year', $vehicle->manufacturing_year) == $year ? 'selected' : '' }}>
                                             {{ $year }}
