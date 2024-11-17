@@ -66,7 +66,7 @@ new class extends Component {
                                     </li>
                             @endif
                             <!--====== for super admins view only =========-->
-                                <li><a wire:click="logout" class="dropdown-item" href="#">Log Out</a></li>
+                                <li><button wire:click="logout" class="dropdown-item" >Log Out</button></li>
                             </ul>
                         </li>
                     @endauth
