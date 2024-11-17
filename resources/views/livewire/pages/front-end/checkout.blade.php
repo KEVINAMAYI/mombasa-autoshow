@@ -108,8 +108,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                         </div>
                         <div class="col-md-8">
                             <p>For every Ksh. 50, you receive one vote. For example, a payment of Ksh. 100 will earn you
-                                2 votes.Each vote enters you into a weekly draw for a chance to win cash prizes.
-                                The more you vote, the higher your chances of winning.<br/>
+                                2 votes.<br/>
                                 <em>Terms and Conditions apply</em></p>
                         </div>
 

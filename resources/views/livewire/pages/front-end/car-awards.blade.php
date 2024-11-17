@@ -113,11 +113,11 @@ new #[Layout('layouts.front-end')] class extends Component {
                     prize,trophies and many more giveaways.</p>
 
                 <div class="row g-3">
-                    <div class="{{ auth()->user()->is_admin ? 'col-sm-9' : 'col-sm-12' }}">
+                    <div class="{{ auth()->check() && auth()->user()->is_admin ? 'col-sm-9' : 'col-sm-12' }}">
                         <input type="text" name="search" wire:model.live="search" class="form-control"
                                placeholder="Search for car by make, model, or any keyword">
                     </div>
-                    @if(auth()->user()->is_admin)
+                    @if(auth()->check() && auth()->user()->is_admin)
                         <div class="col-sm-3">
                             <a href="{{ route('front-end.create-car') }}" class="btn2" style="margin-top:0;">Submit a
                                 Car</a>
