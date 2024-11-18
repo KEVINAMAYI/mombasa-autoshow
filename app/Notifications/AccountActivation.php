@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class PasswordUpdated extends Notification
+class AccountActivation extends Notification
 {
     use Queueable;
 
@@ -35,8 +35,8 @@ class PasswordUpdated extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('Password Updated')
-            ->view('emails.password-updated', [
+            ->subject('Account Activated')
+            ->view('emails.account-activated', [
                 'userName' => $notifiable->first_name . ' ' . $notifiable->last_name
             ]);
     }

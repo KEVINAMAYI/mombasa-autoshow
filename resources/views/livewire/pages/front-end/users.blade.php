@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\Notifications\AccountActivation;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
@@ -43,13 +44,19 @@ new #[Layout('layouts.front-end')] class extends Component {
         try {
 
             $user = User::find($user_id);
+            $accountActivated = false;
 
             if ($user->is_active) {
                 $user->update(['is_active' => false]);
                 $message = 'User deactivated successfully';
             } else {
                 $user->update(['is_active' => true]);
+                $accountActivated = true;
                 $message = 'User activated successfully';
+            }
+
+            if ($accountActivated) {
+                $user->notify(new AccountActivation());
             }
 
             $this->getUsers();
@@ -147,7 +154,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                                             class="btn btn-sm btn-outline-warning">Deactivate
                                     </button>
                                 @else
-                                    <button wire:click="updatesUserStatus({{$user->id}})"
+                                    <button  wire:click="updatesUserStatus({{$user->id}})"
                                             class="btn btn-sm btn-outline-success">Activate
                                     </button>
                                 @endif
@@ -156,7 +163,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                                             class="btn btn-sm btn-outline-danger">Remove Admin
                                     </button>
                                 @else
-                                    <button wire:click="updatesUserAdminStatus({{$user->id}})"
+                                    <button ire:click="updatesUserAdminStatus({{$user->id}})"
                                             class="btn btn-sm btn-outline-success">Set as Admin
                                     </button>
                                 @endif
