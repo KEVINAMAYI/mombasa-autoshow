@@ -3,10 +3,13 @@
 use App\Livewire\Forms\LoginForm;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Session;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 
 new #[Layout('layouts.front-end')] class extends Component {
+
+    use LivewireAlert;
 
     public LoginForm $form;
     public $showPassword = false;
@@ -21,6 +24,8 @@ new #[Layout('layouts.front-end')] class extends Component {
         $this->form->authenticate();
 
         Session::regenerate();
+
+        $this->alert('success', 'Login was Successfully');
 
         $this->redirectIntended(default: RouteServiceProvider::HOME, navigate: true);
     }
@@ -83,7 +88,8 @@ new #[Layout('layouts.front-end')] class extends Component {
                                 >
                                 <button type="button" class="btn btn-outline-secondary"
                                         wire:click="togglePasswordVisibility">
-                                    <i style="color:purple;" class="fas {{ $showPassword === false ? 'fa-eye-slash' : 'fa-eye' }}"></i>
+                                    <i style="color:purple;"
+                                       class="fas {{ $showPassword === false ? 'fa-eye-slash' : 'fa-eye' }}"></i>
                                     <!-- Eye icon -->
                                 </button>
                             </div>
