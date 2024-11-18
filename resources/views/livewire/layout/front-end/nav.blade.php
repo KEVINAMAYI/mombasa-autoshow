@@ -15,7 +15,13 @@ new class extends Component {
     }
 
 }; ?>
-
+@push('css')
+    <style>
+        #verify-btn:hover{
+            color: white !important;
+        }
+    </style>
+@endpush
 <div id="main-menu">
     <nav class="navbar navbar-expand-lg navbar-light ">
         <div class="container-fluid">
@@ -44,36 +50,45 @@ new class extends Component {
                                 MY ACCOUNT
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <li><a class="dropdown-item" href="{{ route('front-end.my-profile') }}">My Profile</a>
-                                </li>
-                                <li><a class="dropdown-item" href="{{ route('front-end.car-awards') }}">Car of the
-                                        year</a>
-                                </li>
-                                <li><a class="dropdown-item" href="{{ route('front-end.my-votes') }}">My Votes</a></li>
-                                <li><a class="dropdown-item" href="{{ route('front-end.my-transactions') }}">My
-                                        Transactions</a></li>
-                                <!--====== for super admins view only =========-->
-                                @if(auth()->user()->is_admin)
-                                    <li><a class="dropdown-item" href="{{ route('front-end.results') }}">Voting
-                                            Results</a>
+
+                                @if (!auth()->user()->hasVerifiedEmail())
+                                    <li>
+                                        <div class="alert alert-warning" style="margin: 10px; font-size: 14px;">
+                                            Your account is not verified. <a id="verify-btn" class="btn mt-3 btn-md btn-outline-warning text-warning" href="{{ route('verification.notice') }}">Verify Now</a>
+                                        </div>
                                     </li>
-                                    <li><a class="dropdown-item" href="{{ route('front-end.transactions') }}">All
+                                @else
+                                    <li><a class="dropdown-item" href="{{ route('front-end.my-profile') }}">My Profile</a>
+                                    </li>
+                                    <li><a class="dropdown-item" href="{{ route('front-end.car-awards') }}">Car of the
+                                            year</a>
+                                    </li>
+                                    <li><a class="dropdown-item" href="{{ route('front-end.my-votes') }}">My Votes</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('front-end.my-transactions') }}">My
                                             Transactions</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('front-end.vehicles') }}">All
-                                            Vehicles</a>
+                                    <!--====== for super admins view only =========-->
+                                    @if(auth()->user()->is_admin)
+                                        <li><a class="dropdown-item" href="{{ route('front-end.results') }}">Voting
+                                                Results</a>
+                                        </li>
+                                        <li><a class="dropdown-item" href="{{ route('front-end.transactions') }}">All
+                                                Transactions</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('front-end.vehicles') }}">All
+                                                Vehicles</a>
+                                        </li>
+                                        <li><a class="dropdown-item" href="{{ route('front-end.users') }}">All Users</a>
+                                        </li>
+                                    @endif
+                                <!--====== for super admins view only =========-->
+                                    <li>
+                                        <button wire:click="logout" class="dropdown-item"
+                                                style="font-weight:bold; font-size:15px; color: white; transition: color 0.3s ease;"
+                                                onmouseover="this.style.color='black';"
+                                                onmouseout="this.style.color='white';">
+                                            Log Out
+                                        </button>
                                     </li>
-                                    <li><a class="dropdown-item" href="{{ route('front-end.users') }}">All Users</a>
-                                    </li>
-                            @endif
-                            <!--====== for super admins view only =========-->
-                                <li>
-                                    <button wire:click="logout" class="dropdown-item"
-                                            style="font-weight:bold; font-size:15px; color: white; transition: color 0.3s ease;"
-                                            onmouseover="this.style.color='black';"
-                                            onmouseout="this.style.color='white';">
-                                        Log Out
-                                    </button>
-                                </li>
+                                @endif
                             </ul>
                         </li>
                     @endauth
