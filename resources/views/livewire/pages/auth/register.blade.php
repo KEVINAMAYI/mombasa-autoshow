@@ -31,7 +31,7 @@ new #[Layout('layouts.front-end')] class extends Component {
     /**
      * Handle an incoming registration request.
      */
-    public function register(): void
+    public function register()
     {
         $validated = $this->validate([
             'first_name' => ['required', 'string', 'max:255'],
@@ -50,7 +50,12 @@ new #[Layout('layouts.front-end')] class extends Component {
 
         Auth::login($user);
 
-        $this->redirect(RouteServiceProvider::HOME, navigate: true);
+        if (!empty(auth()->user()->email_verified_at)) {
+            $this->redirectIntended(default: RouteServiceProvider::HOME, navigate: true);
+        }
+
+        return redirect('verify-email');
+
     }
 
 

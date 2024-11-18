@@ -17,7 +17,7 @@ new #[Layout('layouts.front-end')] class extends Component {
     /**
      * Handle an incoming authentication request.
      */
-    public function login(): void
+    public function login()
     {
         $this->validate();
 
@@ -27,7 +27,11 @@ new #[Layout('layouts.front-end')] class extends Component {
 
         $this->alert('success', 'Login was Successfully');
 
-        $this->redirectIntended(default: RouteServiceProvider::HOME, navigate: true);
+        if (!empty(auth()->user()->email_verified_at)) {
+            $this->redirectIntended(default: RouteServiceProvider::HOME, navigate: true);
+        }
+
+        return redirect('verify-email');
     }
 
     public function togglePasswordVisibility()
