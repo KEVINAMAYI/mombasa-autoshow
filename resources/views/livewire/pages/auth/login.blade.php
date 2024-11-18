@@ -63,7 +63,7 @@ new #[Layout('layouts.front-end')] class extends Component {
         <div id="container">
             <div id="page-contents">
                 <div id="login">
-                    <p style="color:#b39af2;">Welcome to Mombasa Annual Motor Show</p>
+                    <p style="color:#b39af2;">Please login to access your account</p>
                     <form wire:submit="login">
                         <div class="mb-3">
                             <label for="email" class="form-label">Email address</label>
