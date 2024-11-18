@@ -20,7 +20,9 @@
         }
     </style>
 
-    <!-- Bootstrap JS -->
+@stack('css')
+
+<!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
     <script src="front-end/js/bootstrap.min.js"
             integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
