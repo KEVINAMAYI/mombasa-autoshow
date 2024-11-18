@@ -2,6 +2,7 @@
 
 use App\Models\Country;
 use App\Models\Town;
+use App\Notifications\PasswordUpdated;
 use Illuminate\Support\Facades\DB;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Layout;
@@ -67,8 +68,16 @@ new #[Layout('layouts.front-end')] class extends Component {
                 'town' => $this->town,
             ];
 
+            $passwordUpdated = false;
+
             if (!empty($this->password)) {
                 $userData['password'] = bcrypt($this->password);
+                $passwordUpdated = true;
+            }
+
+            // Send notification if password is updated
+            if ($passwordUpdated) {
+                auth()->user()->notify(new PasswordUpdated());
             }
 
             auth()->user()->update($userData);
@@ -76,6 +85,7 @@ new #[Layout('layouts.front-end')] class extends Component {
             DB::commit();
             $this->alert('success', 'Profile Updated Successfully');
         } catch (\Exception $e) {
+            dd($e->getMessage());
             DB::rollBack();
             $this->alert('error', 'An error occurred while updating your profile: ' . $e->getMessage());
         }
