@@ -39,6 +39,42 @@ new #[Layout('layouts.front-end')] class extends Component {
     }
 }; ?>
 
+@push('css')
+    <style>
+        #thank-you-text {
+            font-size: 20px;
+            color: #000;
+            margin-bottom: 15px;
+            display: none; /* Hide by default */
+        }
+
+        @media (max-width: 500px) {
+
+            #login {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            #thank-you-text {
+                display: block; /* Show thank-you text on mobile */
+            }
+
+            #title-inner {
+                display: none;
+            }
+
+            #login {
+                gap: 10px; /* Add spacing between elements */
+            }
+
+            .btn {
+                width: 90%; /* Full-width buttons on mobile */
+            }
+        }
+    </style>
+@endpush
 <div class="page-content">
 
     <div id="banner-in">
@@ -60,7 +96,13 @@ new #[Layout('layouts.front-end')] class extends Component {
             <div id="page-contents">
 
                 <div style="border:0px; background-color:transparent;" id="login">
-                    <button type="submit" wire:click="sendVerification" class="btn btn-primary">
+
+                    <div id="thank-you-text">
+                        {{ __('Thanks for signing up! Before getting started, could you verify your email address.') }}
+                    </div>
+
+                    <button  type="submit" wire:click="sendVerification"
+                            class="btn btn-primary">
                         {{ __('Resend Verification Email') }}
                     </button>
 
