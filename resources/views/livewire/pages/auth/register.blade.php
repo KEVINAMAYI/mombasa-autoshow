@@ -7,10 +7,14 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 
 new #[Layout('layouts.front-end')] class extends Component {
+
+    use LivewireAlert;
+
     public string $first_name = '';
     public string $last_name = '';
     public $country_id = '';
@@ -50,11 +54,13 @@ new #[Layout('layouts.front-end')] class extends Component {
 
         Auth::login($user);
 
-        if (!empty(auth()->user()->email_verified_at)) {
-            $this->redirectIntended(default: RouteServiceProvider::HOME, navigate: true);
+        $this->alert('success', 'You account was created Successful');
+
+        if (auth()->check() && !empty(auth()->user()->email_verified_at)) {
+            return redirect()->intended(RouteServiceProvider::HOME);
         }
 
-        return redirect('verify-email');
+        return redirect()->route('verify-email');
 
     }
 

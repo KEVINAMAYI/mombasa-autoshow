@@ -19,20 +19,22 @@ new #[Layout('layouts.front-end')] class extends Component {
      */
     public function login()
     {
+        // Validate the form input
         $this->validate();
 
         $this->form->authenticate();
 
         Session::regenerate();
 
-        $this->alert('success', 'Login was Successfully');
+        $this->alert('success', 'Login was Successful');
 
-        if (!empty(auth()->user()->email_verified_at)) {
-            $this->redirectIntended(default: RouteServiceProvider::HOME, navigate: true);
+        if (auth()->check() && !empty(auth()->user()->email_verified_at)) {
+            return redirect()->intended(RouteServiceProvider::HOME);
         }
 
-        return redirect('verify-email');
+        return redirect()->route('verify-email');
     }
+
 
     public function togglePasswordVisibility()
     {
