@@ -35,7 +35,7 @@ Route::name('front-end.')->group(function () {
 });
 
 
-Route::middleware('auth')->name('front-end.')->group(function () {
+Route::middleware(['auth','verified'])->name('front-end.')->group(function () {
 
     Volt::route('/checkout/{vehicle_id}', 'pages.front-end.checkout')
         ->name('checkout');

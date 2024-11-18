@@ -4,11 +4,14 @@ use App\Livewire\Actions\Logout;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 
-new #[Layout('layouts.guest')] class extends Component
-{
+new #[Layout('layouts.front-end')] class extends Component {
+
+    use LivewireAlert;
+
     /**
      * Send an email verification notification to the user.
      */
@@ -22,7 +25,7 @@ new #[Layout('layouts.guest')] class extends Component
 
         Auth::user()->sendEmailVerificationNotification();
 
-        Session::flash('status', 'verification-link-sent');
+        $this->alert('success', 'A verification email has been sent to your email');
     }
 
     /**
@@ -36,24 +39,55 @@ new #[Layout('layouts.guest')] class extends Component
     }
 }; ?>
 
-<div>
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
-    </div>
+<div class="page-content">
 
-    @if (session('status') == 'verification-link-sent')
-        <div class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
-            {{ __('A new verification link has been sent to the email address you provided during registration.') }}
-        </div>
-    @endif
+    <div id="banner-in">
+        <img src="front-end/images/banner-inner.jpg" id="bannerin-img">
+        <div id="inner-container">
 
-    <div class="mt-4 flex items-center justify-between">
-        <x-primary-button wire:click="sendVerification">
-            {{ __('Resend Verification Email') }}
-        </x-primary-button>
+            <livewire:layout.front-end.logo-branding/>
 
-        <button wire:click="logout" type="submit" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
-            {{ __('Log Out') }}
-        </button>
-    </div>
+            <livewire:layout.front-end.nav/>
+
+            <div style="padding:20px;  font-size:23px;" id="title-inner">
+                {{ __('Thanks for signing up! Before getting started, could you verify your email address.') }}
+            </div>
+        </div><!----end of  <div id="inner-container">---->
+    </div> <!--==end of <div id="banner-in"> ==-->
+
+    <div id="wrapper-inner">
+        <div id="container">
+            <div id="page-contents">
+
+                <div style="border:0px; background-color:transparent;" id="login">
+                    <button type="submit" wire:click="sendVerification" class="btn btn-primary">
+                        {{ __('Resend Verification Email') }}
+                    </button>
+
+                    <button type="submit" wire:click="logout" class="btn btn-primary">
+                        {{ __('Logout') }}
+                    </button>
+
+
+                </div> <!--==end of <div id="login">==-->
+            </div> <!--==end of <div id="page-contents">==-->
+
+        </div> <!--==end of <div id="container">==-->
+    </div> <!--==end of <div id="wrapper-inner">==-->
+
+
+    <div id="newsletter-wrap">
+        <div id="container">
+            <img src="front-end/images/news-line.jpg" class="news-line">
+            <h1>SIGN UP FOR AUTO SHOW ALERTS</h1>
+            <h2>Sign up to recieve exclusive tickets offers,show info,awards etc.</h2>
+            <form id="newsletter">
+                <input type="email" id="newsInputEmail1" aria-describedby="emailHelp"
+                       placeholder="Enter your email address">
+                <button type="submit" class="btn btn-primary">SIGN UP</button>
+            </form>
+        </div> <!--==end of <div id="container">==-->
+    </div> <!--==end of <div id="newsletter-wrap">==-->
 </div>
+
+

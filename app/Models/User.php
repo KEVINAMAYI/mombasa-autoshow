@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -29,7 +29,6 @@ class User extends Authenticatable
         'is_active',
         'is_admin',
     ];
-
 
 
     /**
@@ -54,19 +53,23 @@ class User extends Authenticatable
     ];
 
 
-    public function votes(){
+    public function votes()
+    {
         return $this->hasMany(Vote::class);
     }
 
-    public function transactions(){
-        return $this->belongsTo(User::class,'user_id');
+    public function transactions()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function country(){
+    public function country()
+    {
         return $this->belongsTo(Country::class);
     }
 
-    public function town(){
+    public function town()
+    {
         return $this->belongsTo(Town::class);
     }
 
