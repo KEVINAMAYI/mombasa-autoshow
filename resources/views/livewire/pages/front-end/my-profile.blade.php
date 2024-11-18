@@ -49,7 +49,7 @@ new #[Layout('layouts.front-end')] class extends Component {
             'phone_number' => 'required|string',
             'country_id' => 'required|exists:countries,id',
             'town' => 'required|string',
-            'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
+            'password' => ['nullable', 'string', 'confirmed', Rules\Password::defaults()],
         ];
     }
 
@@ -59,6 +59,8 @@ new #[Layout('layouts.front-end')] class extends Component {
 
         DB::beginTransaction();
         try {
+            $user = auth()->user();
+
             $userData = [
                 'first_name' => $this->first_name,
                 'last_name' => $this->last_name,
@@ -75,17 +77,21 @@ new #[Layout('layouts.front-end')] class extends Component {
                 $passwordUpdated = true;
             }
 
-            // Send notification if password is updated
             if ($passwordUpdated) {
-                auth()->user()->notify(new PasswordUpdated());
+                $user->notify(new PasswordUpdated());
             }
 
-            auth()->user()->update($userData);
+            $user->update($userData);
+
+            if ($user->wasChanged('email')) {
+                $user->email_verified_at = null;
+                $user->save();
+                $user->sendEmailVerificationNotification();
+            }
 
             DB::commit();
             $this->alert('success', 'Profile Updated Successfully');
         } catch (\Exception $e) {
-            dd($e->getMessage());
             DB::rollBack();
             $this->alert('error', 'An error occurred while updating your profile: ' . $e->getMessage());
         }
