@@ -60,7 +60,7 @@ new #[Layout('layouts.front-end')] class extends Component {
             return redirect()->intended(RouteServiceProvider::HOME);
         }
 
-        return redirect()->route('verify-email');
+        return redirect()->route('verification.notice');
 
     }
 
