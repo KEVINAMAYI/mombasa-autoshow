@@ -6,22 +6,25 @@ use App\Models\Vehicle;
 use App\Models\VehicleModel;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
+use Livewire\WithPagination;
 
 new #[Layout('layouts.front-end')] class extends Component {
 
-    public $vehicles;
-    public $makes;
-    public $categories;
-    public $models;
+    use WithPagination;
+
+    protected $paginationTheme = 'bootstrap';
+
     public $search = '';
     public $category_id;
     public $make_id;
     public $vehicle_model_id;
     public $manufacturing_year;
+    public $makes;
+    public $categories;
+    public $models;
 
     public function mount()
     {
-        $this->getVehicles();
         $this->makes = Make::all();
         $this->categories = Category::all();
         $this->models = VehicleModel::all();
@@ -29,16 +32,16 @@ new #[Layout('layouts.front-end')] class extends Component {
 
     public function updatedSearch()
     {
-        $this->getVehicles();
+        $this->resetPage(); // Reset pagination when search is updated
     }
 
     public function updateModels()
     {
         $this->models = VehicleModel::where('make_id', $this->make_id)->get();
-        $this->getVehicles();
+        $this->resetPage(); // Reset pagination when models are updated
     }
 
-    public function getVehicles()
+    public function getVehiclesQuery()
     {
         $query = Vehicle::where('published', 1)
             ->with(['make', 'vehicle_model', 'images', 'votes']); // Eager load relationships
@@ -47,8 +50,6 @@ new #[Layout('layouts.front-end')] class extends Component {
             $query->where('vehicle_reg', 'like', '%' . $this->search . '%')
                 ->orWhere('location', 'like', '%' . $this->search . '%')
                 ->orWhere('name', 'like', '%' . $this->search . '%')
-                ->orWhere('sacco', 'like', '%' . $this->search . '%')
-                ->orWhere('route', 'like', '%' . $this->search . '%')
                 ->orWhere('interior_color', 'like', '%' . $this->search . '%')
                 ->orWhere('exterior_color', 'like', '%' . $this->search . '%')
                 ->orWhere('transmission', 'like', '%' . $this->search . '%')
@@ -63,28 +64,30 @@ new #[Layout('layouts.front-end')] class extends Component {
                 });
         }
 
-        // Make Filter
+        // Filters
         if ($this->category_id) {
             $query->where('category_id', $this->category_id);
         }
-
-        // Make Filter
         if ($this->make_id) {
             $query->where('make_id', $this->make_id);
         }
-
-        // Model Filter
         if ($this->vehicle_model_id) {
             $query->where('vehicle_model_id', $this->vehicle_model_id);
         }
-
-        // Model Filter
         if ($this->manufacturing_year) {
             $query->where('manufacturing_year', $this->manufacturing_year);
         }
 
-        $this->vehicles = $query->get();
+        return $query;
     }
+
+    public function with()
+    {
+        return [
+            'vehicles' => $this->getVehiclesQuery()->paginate(10)
+        ];
+    }
+
 
 } ?>
 
@@ -163,7 +166,8 @@ new #[Layout('layouts.front-end')] class extends Component {
                     </div>
                     <div class="col-sm-3">
                         <label class="visually-hidden" for="manufacturing_year">Year of Award</label>
-                        <select wire:change="getVehicles" wire:model="manufacturing_year" class="form-select" id="manufacturing_year">
+                        <select wire:change="getVehicles" wire:model="manufacturing_year" class="form-select"
+                                id="manufacturing_year">
                             <option value="" selected>All Years...</option>
                             @for ($year = 2010; $year <= 2024; $year++)
                                 <option value="{{ $year }}">{{ $year }}</option>
@@ -214,10 +218,14 @@ new #[Layout('layouts.front-end')] class extends Component {
                     <p style="margin-top:20px; font-weight:bold; font-size:18px;" class="text-warning text-center">No
                         Vehicle Found</p>
                 @endif
+
             </div> <!--==end of <div id="page-contents">==-->
         </div> <!--==end of <div id="container">==-->
     </div> <!--==end of <div id="wrapper-inner">==-->
 
+    <div class="pagination-container">
+        {{ $vehicles->links() }}
+    </div>
 
     <div id="newsletter-wrap">
         <div id="container">

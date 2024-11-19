@@ -513,6 +513,39 @@ body {
     padding:20px 0;
     background:#FFFFFF;
 }
+
+/* Center the pagination */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px; /* Optional: adds some space above the pagination */
+    clear: both; /* Ensures it doesn't get affected by floated elements above it */
+}
+
+/* Optional: Add some custom spacing or styling for the pagination links */
+.pagination a,
+.pagination span {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 0 5px;
+    text-decoration: none;
+    color: #007bff;
+}
+
+.pagination a:hover {
+    background-color: #f0f0f0;
+    border-color: #007bff;
+}
+
+
+.pagination .disabled {
+    color: #ccc;
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+
 #page-contents{
     width:100%;
     height:auto;
