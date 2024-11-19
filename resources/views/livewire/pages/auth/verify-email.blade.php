@@ -12,6 +12,15 @@ new #[Layout('layouts.front-end')] class extends Component {
 
     use LivewireAlert;
 
+
+    public function mount()
+    {
+        if (auth()->check() && auth()->user()->email_verified_at) {
+            return redirect()->route('front-end.car-awards');
+        }
+    }
+
+
     /**
      * Send an email verification notification to the user.
      */
@@ -101,7 +110,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                         {{ __('Thanks for signing up! Before getting started, could you verify your email address.') }}
                     </div>
 
-                    <button  type="submit" wire:click="sendVerification"
+                    <button type="submit" wire:click="sendVerification"
                             class="btn btn-primary">
                         {{ __('Resend Verification Email') }}
                     </button>
