@@ -32,7 +32,7 @@ class MpesaController extends Controller
             ]);
 
             // Determine transaction status based on the amount paid
-            $status = $mpesa_transaction->amount_paid >= 1 ? 'completed' : 'incomplete';
+            $status = $mpesa_transaction->amount_paid >= 2 ? 'completed' : 'incomplete';
 
             // Attempt to update the transaction record in the database
             Transaction::where('account_number', $mpesa_transaction->account_number)
