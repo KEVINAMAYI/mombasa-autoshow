@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('vehicle_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('phone_number')->constrained()->cascadeOnDelete();
+            $table->string('phone_number')->nullable();
             $table->decimal('amount', 8, 2)->default(50);
             $table->string('transaction_code')->unique()->nullable();
-            $table->string('vehicle_account_number');
-            $table->enum('status', ['pending', 'completed', 'failed'])->default('pending');
+            $table->string('account_number');
+            $table->enum('status', ['pending', 'completed', 'incomplete'])->default('pending');
             $table->timestamps();
         });
     }

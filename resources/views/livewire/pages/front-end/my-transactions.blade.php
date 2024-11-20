@@ -50,7 +50,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                 // Search for transaction date (adjust field name if necessary)
                 $query->orWhereDate('created_at', '=', $this->search);
                 $query->orWhere('transaction_code', 'like', '%' . $this->search . '%');
-                $query->orWhere('vehicle_account_number', 'like', '%' . $this->search . '%');
+                $query->orWhere('account_number', 'like', '%' . $this->search . '%');
                 $query->orWhere('status', 'like', '%' . $this->search . '%');
                 $query->orWhere('phone_number', 'like', '%' . $this->search . '%');
 
@@ -115,7 +115,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                     @forelse($transactions as $transaction)
                         <tr>
                             <td>{{ $transaction->transaction_code }}</td>
-                            <td>{{ $transaction->vehicle_account_number }}</td>
+                            <td>{{ $transaction->account_number }}</td>
                             <td>
                                 <a href="{{ route('front-end.car-details',$transaction->votes->first()->vehicle->id) }}">{{ $transaction->votes->first()->vehicle->name.' '.$transaction->votes->first()->vehicle->make->name.'-'.$transaction->votes->first()->vehicle->vehicle_model->name }}</a>
                             </td>

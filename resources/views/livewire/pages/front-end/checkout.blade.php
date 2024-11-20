@@ -1,87 +1,91 @@
 <?php
 
+use App\Models\MpesaTransaction;
 use App\Models\Transaction;
 use App\Models\Vehicle;
 use App\Models\Vote;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
 use Livewire\Volt\Component;
 
 new #[Layout('layouts.front-end')] class extends Component {
 
+    use LivewireAlert;
+
     public $vehicle_id;
     public $vehicle;
-
-    #[Validate('required|integer|min:50')]
-    public $amount_payable = 50;
+    public $account_number;
 
     public function mount($vehicle_id)
     {
         $this->vehicle_id = $vehicle_id;
         $this->vehicle = Vehicle::where('id', $this->vehicle_id)->first();
+        $this->account_number = $this->generateAccountNumber();
 
+        Transaction::create([
+            'user_id' => auth()->user()->id,
+            'vehicle_id' => $vehicle_id,
+            'account_number' => $this->account_number
+        ]);
+
+    }
+
+
+    public function generateAccountNumber()
+    {
+        // Get the latest user account number
+        $latestAccountNumber = Transaction::latest('id')->first();
+
+        // Extract the numeric part and increment it
+        if ($latestAccountNumber) {
+            $lastNumber = (int)substr($latestAccountNumber->account_number, 3); // Assuming 'MSA' is the prefix
+            $newNumber = $lastNumber + 1;
+        } else {
+            // If there are no vehicles, start from 1
+            $newNumber = 1;
+        }
+
+        // Ensure the total length (prefix + numeric part) is 6 digits
+        $numericPart = str_pad($newNumber, 3, '0', STR_PAD_LEFT); // Padding only the numeric part to 3 digits
+        $accountNumber = 'MSA' . $numericPart;
+
+        // Ensure the account number is unique
+        while (Transaction::where('account_number', $accountNumber)->exists()) {
+            $newNumber++;
+            $numericPart = str_pad($newNumber, 3, '0', STR_PAD_LEFT); // Re-pad if the number changes
+            $accountNumber = 'MSA' . $numericPart;
+        }
+
+        return $accountNumber;
     }
 
 
     public function confirmPayment()
     {
-        try {
+        $transaction = Transaction::where('account_number', $this->account_number)->first();
 
-            // Validate user input
-            $this->validate();
+        if ($transaction->status !== 'completed') {
+            $this->alert('error', 'Your transaction is either pending or incomplete.');
+            return;
+        }
 
-            // Store transaction details
-            $transaction = Transaction::create([
+        $votes = $this->amount_payable / $transaction->amount;
+
+        for ($i = 1; $i <= $votes; $i++) {
+            // Store vote details
+            Vote::create([
+                'transaction_id' => $transaction->id,
                 'user_id' => auth()->user()->id,
                 'vehicle_id' => $this->vehicle_id,
-                'amount' => $this->amount_payable,
-                'transaction_code' => $this->generateUniqueCode(),
-                'vehicle_account_number' => $this->vehicle->account_number,
-                'phone_number' => '+254795704301',
-                'status' => 'completed',
             ]);
-
-            $votes = $this->amount_payable / 50;
-
-            for ($i = 1; $i <= $votes; $i++) {
-                // Store vote details
-                Vote::create([
-                    'transaction_id' => $transaction->id,
-                    'user_id' => auth()->user()->id,
-                    'vehicle_id' => $this->vehicle_id,
-                ]);
-            }
-
-            session()->flash('success', 'You have voted for vehicle ' . substr($this->vehicle->vehicle_reg, 0, strlen($this->vehicle->vehicle_reg) - 4) . ' ' . str_repeat('*', 3) . substr($this->vehicle->vehicle_reg, -1). ' successfully!');
-            return redirect()->route('front-end.car-awards');
-
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            // Handle validation errors
-            return redirect()->back()
-                ->withErrors($e->validator)
-                ->withInput();
-
-        } catch (\Exception $e) {
-            // Handle other exceptions
-            session()->flash('error', 'An unexpected error occurred. Please try again.');
-            return redirect()->back()->withInput();
         }
+
+        session()->flash('success', 'You have voted for vehicle ' . substr($this->vehicle->vehicle_reg, 0, strlen($this->vehicle->vehicle_reg) - 4) . ' ' . str_repeat('*', 3) . substr($this->vehicle->vehicle_reg, -1) . ' successfully!');
+        return redirect()->route('front-end.car-awards');
+
     }
 
-    function generateUniqueCode()
-    {
-        // Define the prefix and suffix
-        $prefix = 'SQRT';
-        $suffix = 'ER';
-
-        // Generate a random 4-digit number
-        $randomNumber = mt_rand(1000, 9999);
-
-        // Combine them into the desired format
-        $uniqueCode = $prefix . $randomNumber . $suffix;
-
-        return $uniqueCode;
-    }
 
 } ?>
 
@@ -114,20 +118,10 @@ new #[Layout('layouts.front-end')] class extends Component {
 
                         <p>
                         <ul style="margin-left:20px;">
-                            <li>
-                                Enter the amount you wish to pay in the input field below: <br>
-                                <input type="number" wire:model.live="amount_payable"
-                                       placeholder="Enter the amount here"
-                                       style="margin: 10px 0; padding: 5px; font-size: 16px; width: 100%; max-width: 300px;"/>
-                                @error('amount_payable')
-                                <p class="text-danger text-xs pt-1"> {{ $message }} </p>
-                                @enderror
-                            </li>
-                            <hr>
                             <li>Go to <strong>Pay Bill</strong> on the <strong>M-Pesa</strong></li>
                             <li>Enter <strong>Business number</strong> - <strong>4002487</strong></li>
                             <li>Enter the <strong>Account Number</strong> -
-                                <strong>{{ $vehicle->account_number }}</strong></li>
+                                <strong>{{ $account_number }}</strong></li>
                             <li>Enter the <strong>same amount</strong> you specified above</li>
                             <li>Enter your <strong>M-Pesa PIN</strong></li>
                             <li>Wait for <strong>Confirmation message</strong></li>
@@ -136,19 +130,13 @@ new #[Layout('layouts.front-end')] class extends Component {
                         </p>
 
                         <div class="col-12">
-                            <button type="submit" {{ $amount_payable < 50 ? 'disabled' : '' }} class="btn btn-success">
+                            <button type="submit" class="btn btn-success">
                                 Confirm Payment
                             </button>
                         </div>
-                        @if($amount_payable < 50)
-                            <strong class="text-danger text-xs pt-1">*If the amount is less than KES 50, you won't be abe to confirm payment </strong>
-                        @endif
                     </form>
-
-
                 </div> <!--==end of <div id="register">==-->
             </div> <!--==end of <div id="page-contents">==-->
-
         </div> <!--==end of <div id="container">==-->
     </div> <!--==end of <div id="wrapper-inner">==-->
 
