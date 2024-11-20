@@ -25,11 +25,8 @@ new #[Layout('layouts.front-end')] class extends Component {
     {
         $userId = Auth::id();
 
-        $query = Transaction::whereIn('status', ['completed', 'incomplete']);
-
-        $query->whereHas('votes.user', function ($query) use ($userId) {
-            $query->where('user_id', $userId);
-        });
+        $query = Transaction::whereIn('status', ['completed', 'incomplete'])
+                              ->where('user_id', $userId);
 
         // If a search term is provided, filter transactions based on vehicle, date, or phone
         if ($this->search) {
