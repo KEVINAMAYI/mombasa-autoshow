@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\APIs;
 
 use App\Http\Controllers\Controller;
+use App\Models\MpesaTransaction;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -36,7 +37,7 @@ class MpesaController extends Controller
         // Attempt to update the transaction record in the database
         Transaction::where('account_number', $mpesa_transaction->account_number)
             ->update([
-                'phone_number' => $mpesa_transaction->phone_number,
+                'phone_number' => auth()->user()->phone_number,
                 'amount' => $mpesa_transaction->amount_paid,
                 'transaction_code' => $mpesa_transaction->transaction_id,
                 'status' => $status,
