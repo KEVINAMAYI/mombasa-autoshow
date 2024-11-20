@@ -97,17 +97,18 @@ new #[Layout('layouts.front-end')] class extends Component {
                         <td><strong>Votes</strong></td>
                         <td><strong>Phone</strong></td>
                     </tr>
-                    @if(!empty($votes))
+                    @if($votes->isNotEmpty())
                         @foreach($votes as $vote)
                             <tr>
                                 <td>
-                                    <a href="{{ route('front-end.car-details', $vote->vehicle->id) }}">{{ $vote->vehicle->name.' '.$vote->vehicle->make->name.'-'.$vote->vehicle->vehicle_model->name }}</a>
+                                    <a href="{{ route('front-end.car-details', $vote->vehicle->id) }}">
+                                        {{ $vote->vehicle->name.' '.$vote->vehicle->make->name.'-'.$vote->vehicle->vehicle_model->name }}
+                                    </a>
                                 </td>
                                 <td>{{ \Carbon\Carbon::parse($vote->latest_vote)->format('d-M-Y H:i') }}</td>
                                 <td>{{ $vote->transaction?->amount ?? 'N/A' }}</td>
                                 <td>{{ $vote->vote_count }}</td>
                                 <td>{{ auth()->user()->phone_number }}</td>
-                                <!-- Using the logged-in user's phone number -->
                             </tr>
                         @endforeach
                     @else
@@ -115,6 +116,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                             <td colspan="8" class="text-center">No Vote Was Found</td>
                         </tr>
                     @endif
+
                     </tbody>
                 </table>
 
