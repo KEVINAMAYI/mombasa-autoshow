@@ -25,8 +25,9 @@ new #[Layout('layouts.front-end')] class extends Component {
     {
         $userId = Auth::id();
 
-        // Initialize the query for transactions where votes are associated with the authenticated user
-        $query = Transaction::whereHas('votes.user', function ($query) use ($userId) {
+        $query = Transaction::whereIn('status', ['completed', 'incomplete']);
+
+        $query->whereHas('votes.user', function ($query) use ($userId) {
             $query->where('user_id', $userId);
         });
 
@@ -117,11 +118,11 @@ new #[Layout('layouts.front-end')] class extends Component {
                             <td>{{ $transaction->transaction_code }}</td>
                             <td>{{ $transaction->account_number }}</td>
                             <td>
-                                <a href="{{ route('front-end.car-details',$transaction->votes->first()->vehicle->id) }}">{{ $transaction->votes->first()->vehicle->name.' '.$transaction->votes->first()->vehicle->make->name.'-'.$transaction->votes->first()->vehicle->vehicle_model->name }}</a>
+                                <a href="{{ route('front-end.car-details',$transaction->vehicle->id) }}">{{ $transaction->vehicle->name.' '.$transaction->vehicle->make->name.'-'.$transaction->vehicle->vehicle_model->name }}</a>
                             </td>
                             <td>{{ \Carbon\Carbon::parse($transaction->created_at)->format('d-M-Y H:i') }}</td>
                             <td>{{ $transaction->amount }}</td>
-                            <td>{{ $transaction->votes->count() }}</td>
+                            <td>{{ optional($transaction->votes)->count() ?? 0 }}</td>
                             <td>{{ $transaction->phone_number }}</td>
                             <td>{{ $transaction->status }}</td>
                         </tr>

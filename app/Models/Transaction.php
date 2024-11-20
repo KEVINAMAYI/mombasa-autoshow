@@ -19,6 +19,10 @@ class Transaction extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function vehicle(){
+        return $this->belongsTo(Vehicle::class);
+    }
+
     public function mpesaTransaction()
     {
         return $this->hasOne(MpesaTransaction::class, 'account_number', 'account_number');
