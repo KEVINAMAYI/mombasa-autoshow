@@ -15,10 +15,6 @@ class MpesaController extends Controller
         {
             $js_code = json_decode($request->getContent(), true);
 
-            Log::info('----- START OF MPESA RESPONSE -----');
-            Log::info($js_code);
-            Log::info('----- END OF MPESA RESPONSE -----');
-
             // Create Mpesa transaction entry
             $mpesa_transaction = MpesaTransaction::create([
                 'transaction_id' => $js_code['TransID'] ?? null,

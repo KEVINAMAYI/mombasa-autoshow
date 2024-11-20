@@ -173,15 +173,10 @@ class CarController extends Controller
                 foreach ($request->file('vehicle_images') as $image) {
                     $imageName = time() . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
 
-                    // Log the image path for debugging
-                    Log::info("Attempting to save image to: $destinationPath/$imageName");
-
                     // Move the image to the public/vehicle_images directory
                     $moved = $image->move($destinationPath, $imageName);
 
                     if ($moved) {
-                        // Log success
-                        Log::info("Image successfully saved: vehicle_images/$imageName");
 
                         Image::where('vehicle_id', $vehicle->id)->delete();
 
