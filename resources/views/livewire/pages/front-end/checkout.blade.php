@@ -26,7 +26,8 @@ new #[Layout('layouts.front-end')] class extends Component {
         Transaction::create([
             'user_id' => auth()->user()->id,
             'vehicle_id' => $vehicle_id,
-            'account_number' => $this->account_number
+            'account_number' => $this->account_number,
+            'phone_number' => auth()->user()->phone_number
         ]);
 
     }
