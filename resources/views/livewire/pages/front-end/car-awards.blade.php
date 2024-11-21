@@ -5,6 +5,7 @@ use App\Models\Make;
 use App\Models\Vehicle;
 use App\Models\VehicleModel;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\On;
 use Livewire\Volt\Component;
 use Livewire\WithPagination;
 
@@ -81,6 +82,7 @@ new #[Layout('layouts.front-end')] class extends Component {
         return $query;
     }
 
+    #[On('filter-category')]
     public function with()
     {
         return [
@@ -137,7 +139,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                 <div class="row g-3" style="margin-top:5px;">
                     <div class="col-sm-3">
                         <label class="visually-hidden" for="autoSizingSelect">Category</label>
-                        <select wire:change="getVehicles" wire:model="category_id" class="form-select"
+                        <select wire:change="$dispatch('filter-category')" wire:model="category_id" class="form-select"
                                 id="autoSizingSelect">
                             <option value="" selected>All Categories...</option>
                             @foreach($categories as $category)
