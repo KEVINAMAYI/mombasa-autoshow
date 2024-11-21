@@ -82,7 +82,7 @@ new #[Layout('layouts.front-end')] class extends Component {
         return $query;
     }
 
-    #[On('filter-category')]
+    #[On('filter')]
     public function with()
     {
         return [
@@ -139,7 +139,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                 <div class="row g-3" style="margin-top:5px;">
                     <div class="col-sm-3">
                         <label class="visually-hidden" for="autoSizingSelect">Category</label>
-                        <select wire:change="$dispatch('filter-category')" wire:model="category_id" class="form-select"
+                        <select wire:change="$dispatch('filter')" wire:model="category_id" class="form-select"
                                 id="autoSizingSelect">
                             <option value="" selected>All Categories...</option>
                             @foreach($categories as $category)
@@ -158,7 +158,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                     </div>
                     <div class="col-sm-3">
                         <label class="visually-hidden" for="vehicle_model_id">All Models</label>
-                        <select wire:change="getVehicles" class="form-select" wire:model="vehicle_model_id"
+                        <select wire:change="$dispatch('filter')" class="form-select" wire:model="vehicle_model_id"
                                 id="vehicle_model_id">
                             <option value="" selected>All Models...</option>
                             @foreach($models as $model)
@@ -168,7 +168,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                     </div>
                     <div class="col-sm-3">
                         <label class="visually-hidden" for="manufacturing_year">Year of Award</label>
-                        <select wire:change="getVehicles" wire:model="manufacturing_year" class="form-select"
+                        <select wire:change="$dispatch('filter')" wire:model="manufacturing_year" class="form-select"
                                 id="manufacturing_year">
                             <option value="" selected>All Years...</option>
                             @for ($year = 2010; $year <= 2024; $year++)
