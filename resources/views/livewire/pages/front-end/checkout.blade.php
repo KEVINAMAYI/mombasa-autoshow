@@ -48,27 +48,69 @@ new #[Layout('layouts.front-end')] class extends Component {
         // Get the latest user account number
         $latestAccountNumber = Transaction::latest('id')->first();
 
-        // Extract the numeric part and increment it
+        // Default to 'MAA001' if there are no transactions
         if ($latestAccountNumber) {
-            $lastNumber = (int)substr($latestAccountNumber->account_number, 3); // Assuming 'MSA' is the prefix
-            $newNumber = $lastNumber + 1;
+            $lastAccountNumber = $latestAccountNumber->account_number;
+
+            // Extract the prefix (e.g., 'MAA') and the numeric part (e.g., '001')
+            $prefix = substr($lastAccountNumber, 0, 3);  // First 3 characters: 'MAA'
+            $lastNumber = (int)substr($lastAccountNumber, 3); // Numeric part after the prefix, e.g., '001'
+
+            // Increment the numeric part
+            if ($lastNumber < 999) {
+                $newNumber = $lastNumber + 1;
+                $newPrefix = $prefix;
+            } else {
+                // If we reach 999, increment the prefix
+                $newNumber = 1;
+                $newPrefix = $this->incrementPrefix($prefix); // Get the next prefix (e.g., 'MAB' -> 'MAC')
+            }
         } else {
-            // If there are no vehicles, start from 1
+            // If there are no transactions, start with 'MAA001'
             $newNumber = 1;
+            $newPrefix = 'MAA';
         }
 
-        // Ensure the total length (prefix + numeric part) is 6 digits
-        $numericPart = str_pad($newNumber, 3, '0', STR_PAD_LEFT); // Padding only the numeric part to 3 digits
-        $accountNumber = 'MSA' . $numericPart;
+        // Ensure the numeric part is always 3 digits
+        $numericPart = str_pad($newNumber, 3, '0', STR_PAD_LEFT);
+
+        // Combine the prefix and numeric part to form the account number
+        $accountNumber = $newPrefix . $numericPart;
 
         // Ensure the account number is unique
         while (Transaction::where('account_number', $accountNumber)->exists()) {
             $newNumber++;
-            $numericPart = str_pad($newNumber, 3, '0', STR_PAD_LEFT); // Re-pad if the number changes
-            $accountNumber = 'MSA' . $numericPart;
+            if ($newNumber > 999) {
+                $newNumber = 1;
+                $newPrefix = $this->incrementPrefix($newPrefix); // Increment the prefix if needed
+            }
+            $numericPart = str_pad($newNumber, 3, '0', STR_PAD_LEFT);
+            $accountNumber = $newPrefix . $numericPart;
         }
 
         return $accountNumber;
+    }
+
+    private function incrementPrefix($currentPrefix)
+    {
+        // Increment the last character of the prefix ('A' -> 'B')
+        $prefixArray = str_split($currentPrefix);
+        $lastChar = $prefixArray[2];
+
+        // If last character is 'Z', roll over to the previous letter
+        if ($lastChar == 'Z') {
+            if ($prefixArray[1] == 'Z') {
+                $prefixArray[0] = chr(ord($prefixArray[0]) + 1); // Increment first character
+                $prefixArray[1] = 'A'; // Reset second character
+            } else {
+                $prefixArray[1] = chr(ord($prefixArray[1]) + 1); // Increment second character
+            }
+            $prefixArray[2] = 'A'; // Reset third character
+        } else {
+            $prefixArray[2] = chr(ord($lastChar) + 1); // Increment last character
+        }
+
+        return implode('', $prefixArray);
     }
 
 
