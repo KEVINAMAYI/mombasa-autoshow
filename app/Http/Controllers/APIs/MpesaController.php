@@ -52,6 +52,10 @@ class MpesaController extends Controller
         //get the amount only if the transaction exists
         $account_number = intval($js_code['BillRefNumber']);
 
+        Log::info('---VALIDATION REF NUMBER---');
+        Log::info($account_number);
+        Log::info('---VALIDATION REF NUMBER---');
+
         if (MpesaTransaction::where('account_number', $account_number)->count() > 0) {
             return response()->json([
                 'ResultCode' => "C2B00012",
