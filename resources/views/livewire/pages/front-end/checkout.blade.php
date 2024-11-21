@@ -20,16 +20,26 @@ new #[Layout('layouts.front-end')] class extends Component {
     public function mount($vehicle_id)
     {
         $this->vehicle_id = $vehicle_id;
-        $this->vehicle = Vehicle::where('id', $this->vehicle_id)->first();
-        $this->account_number = $this->generateAccountNumber();
+        $this->vehicle = Vehicle::find($this->vehicle_id);
 
-        Transaction::create([
-            'user_id' => auth()->user()->id,
-            'vehicle_id' => $vehicle_id,
-            'account_number' => $this->account_number,
-            'phone_number' => auth()->user()->phone_number
-        ]);
+        $transaction = Transaction::where('user_id', auth()->user()->id)
+            ->where('vehicle_id', $this->vehicle_id)
+            ->where('status', 'pending')
+            ->latest()
+            ->first();
 
+        if ($transaction) {
+            $this->account_number = $transaction->account_number;
+        } else {
+
+            $this->account_number = $this->generateAccountNumber();
+            Transaction::create([
+                'user_id' => auth()->user()->id,
+                'vehicle_id' => $this->vehicle_id,
+                'account_number' => $this->account_number,
+                'phone_number' => auth()->user()->phone_number,
+            ]);
+        }
     }
 
 
@@ -112,7 +122,8 @@ new #[Layout('layouts.front-end')] class extends Component {
                             <img src="front-end/images/mpesa.png">
                         </div>
                         <div class="col-md-8">
-                            <p>For every Ksh. 50, you receive one vote. For example, a payment of Ksh. 100 will earn you
+                            <p><strong class="text-success">For every Ksh. 50, you receive one vote</strong>. For
+                                example, a payment of Ksh. 100 will earn you
                                 2 votes.<br/>
                                 <em>Terms and Conditions apply</em></p>
                         </div>
@@ -123,7 +134,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                             <li>Enter <strong>Business number</strong> - <strong>4002487</strong></li>
                             <li>Enter the <strong>Account Number</strong> -
                                 <strong>{{ $account_number }}</strong></li>
-                            <li>Enter the <strong>same amount</strong> you specified above</li>
+                            <li>Enter the <strong>Amount</strong></li>
                             <li>Enter your <strong>M-Pesa PIN</strong></li>
                             <li>Wait for <strong>Confirmation message</strong></li>
                             <li>Click on <strong>Confirm Payment button</strong> to complete voting</li>
