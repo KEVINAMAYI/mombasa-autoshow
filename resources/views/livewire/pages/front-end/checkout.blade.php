@@ -118,8 +118,13 @@ new #[Layout('layouts.front-end')] class extends Component {
     {
         $transaction = Transaction::where('account_number', $this->account_number)->first();
 
-        if ($transaction->status !== 'completed') {
-            $this->alert('error', 'Your transaction is either pending or incomplete.');
+        if ($transaction->status === 'pending') {
+            $this->alert('error', 'Kindly complete the transaction and try again!.');
+            return;
+        }
+
+        if ($transaction->status === 'incomplete') {
+            $this->alert('error', 'Your transaction is successful. Zero votes awarded..');
             return;
         }
 

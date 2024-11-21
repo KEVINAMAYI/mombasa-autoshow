@@ -122,7 +122,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                             <td>{{ $transaction->amount }}</td>
                             <td>{{ optional($transaction->votes)->count() ?? 0 }}</td>
                             <td>{{ $transaction->phone_number }}</td>
-                            <td>{{ $transaction->status }}</td>
+                            <td>{{ ($transaction->status === 'incomplete') || ($transaction->status === 'completed') ? 'completed' : $transaction->status }}</td>
                         </tr>
                     @empty
                         <tr>
