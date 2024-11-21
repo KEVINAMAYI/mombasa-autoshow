@@ -124,24 +124,29 @@ new #[Layout('layouts.front-end')] class extends Component {
         }
 
         if ($transaction->status === 'incomplete') {
-            $this->alert('error', 'Your transaction is successful. Zero votes awarded..');
+            $this->alert('error', 'Your transaction is successful. Zero votes awarded.');
             return;
         }
 
         $votes = (int)($transaction->amount / 50);
 
+        // Prepare vote data for bulk insertion
+        $voteData = [];
         for ($i = 1; $i <= $votes; $i++) {
-            // Store vote details
-            Vote::create([
+            $voteData[] = [
                 'transaction_id' => $transaction->id,
                 'user_id' => auth()->user()->id,
                 'vehicle_id' => $this->vehicle_id,
-            ]);
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
         }
+
+        // Insert votes in bulk
+        Vote::insert($voteData);
 
         session()->flash('success', 'You have voted for vehicle ' . substr($this->vehicle->vehicle_reg, 0, strlen($this->vehicle->vehicle_reg) - 4) . ' ' . str_repeat('*', 3) . substr($this->vehicle->vehicle_reg, -1) . ' successfully!');
         return redirect()->route('front-end.car-awards');
-
     }
 
 
