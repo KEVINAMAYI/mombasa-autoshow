@@ -128,7 +128,7 @@ new #[Layout('layouts.front-end')] class extends Component {
             return;
         }
 
-        $votes = (int)($transaction->amount / 2);
+        $votes = (int)($transaction->amount / 50);
 
         for ($i = 1; $i <= $votes; $i++) {
             // Store vote details
