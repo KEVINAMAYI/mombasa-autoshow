@@ -146,8 +146,7 @@ new #[Layout('layouts.front-end')] class extends Component {
         Vote::insert($voteData);
 
         session()->flash('success', 'You have voted for vehicle ' . substr($this->vehicle->vehicle_reg, 0, strlen($this->vehicle->vehicle_reg) - 4) . ' ' . str_repeat('*', 3) . substr($this->vehicle->vehicle_reg, -1) . ' successfully!');
-        $this->redirectIntended('/car-awards',true);
-
+        return redirect()->route('front-end.car-awards');
     }
 
 
