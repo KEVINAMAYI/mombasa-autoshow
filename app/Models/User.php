@@ -74,6 +74,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(Town::class);
     }
 
+
     public function sendEmailVerificationNotification()
     {
         $this->notify(new CustomVerifyEmail());
