@@ -82,7 +82,7 @@ new #[Layout('layouts.front-end')] class extends Component {
         return $query;
     }
 
-    #[On('filter')]
+    #[On('filter')] #[On('votesProcessed')]
     public function with()
     {
         return [

@@ -1,5 +1,6 @@
 <?php
 
+use App\Jobs\ProcessVotes;
 use App\Models\MpesaTransaction;
 use App\Models\Transaction;
 use App\Models\Vehicle;
@@ -130,20 +131,8 @@ new #[Layout('layouts.front-end')] class extends Component {
 
         $votes = (int)($transaction->amount / 2);
 
-        // Prepare vote data for bulk insertion
-        $voteData = [];
-        for ($i = 1; $i <= $votes; $i++) {
-            $voteData[] = [
-                'transaction_id' => $transaction->id,
-                'user_id' => auth()->user()->id,
-                'vehicle_id' => $this->vehicle_id,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ];
-        }
-
-        // Insert votes in bulk
-        Vote::insert($voteData);
+        // Dispatch job for processing votes
+        ProcessVotes::dispatch($transaction->id, auth()->user()->id, $this->vehicle_id, $votes);
 
         session()->flash('success', 'You have voted for vehicle ' . substr($this->vehicle->vehicle_reg, 0, strlen($this->vehicle->vehicle_reg) - 4) . ' ' . str_repeat('*', 3) . substr($this->vehicle->vehicle_reg, -1) . ' successfully!');
         return redirect()->route('front-end.car-awards');
