@@ -33,13 +33,13 @@ new #[Layout('layouts.front-end')] class extends Component {
 
     public function updatedSearch()
     {
-        $this->resetPage(); // Reset pagination when search is updated
+        $this->with();
     }
 
     public function updateModels()
     {
         $this->models = VehicleModel::where('make_id', $this->make_id)->get();
-        $this->resetPage(); // Reset pagination when models are updated
+        $this->with();
     }
 
     public function getVehiclesQuery()
@@ -86,7 +86,7 @@ new #[Layout('layouts.front-end')] class extends Component {
     public function with()
     {
         return [
-            'vehicles' => $this->getVehiclesQuery()->paginate(10)
+            'vehicles' => $this->getVehiclesQuery()->paginate(1)
         ];
     }
 
