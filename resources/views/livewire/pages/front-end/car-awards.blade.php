@@ -45,7 +45,9 @@ new #[Layout('layouts.front-end')] class extends Component {
     public function getVehiclesQuery()
     {
         $query = Vehicle::where('published', 1)
-            ->with(['make', 'vehicle_model', 'images', 'votes']); // Eager load relationships
+            ->with(['make', 'vehicle_model', 'images', 'votes']) // Eager load relationships
+            ->withCount('votes')
+            ->orderBy('votes_count', 'desc');
 
         if ($this->search) {
             $query->where('vehicle_reg', 'like', '%' . $this->search . '%')
@@ -82,11 +84,11 @@ new #[Layout('layouts.front-end')] class extends Component {
         return $query;
     }
 
-    #[On('filter')] #[On('votesProcessed')]
+    #[On('filter')] #[On('VotesProcessed')]
     public function with()
     {
         return [
-            'vehicles' => $this->getVehiclesQuery()->paginate(1)
+            'vehicles' => $this->getVehiclesQuery()->paginate(10)
         ];
     }
 

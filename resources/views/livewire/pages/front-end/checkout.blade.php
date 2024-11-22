@@ -129,7 +129,7 @@ new #[Layout('layouts.front-end')] class extends Component {
             return;
         }
 
-        $votes = (int)($transaction->amount / 2);
+        $votes = (int)($transaction->amount / 50);
 
         // Dispatch job for processing votes
         ProcessVotes::dispatch($transaction->id, auth()->user()->id, $this->vehicle_id, $votes);
