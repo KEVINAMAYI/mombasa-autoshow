@@ -64,14 +64,27 @@
 <body>
 <div class="email-wrapper">
     <div class="email-header">
-       {{ $title }}
+        {{ $title }}
     </div>
     <div class="email-body">
         <h1>Hello, {{ $userName }}</h1>
         @yield('content')
-        <a style="color: white;" href="https://www.mombasaautoshow.com/login" class="email-button">Login to Your
-            Account</a>
+
+        @if($title === 'Verify Your Email')
+            <p style="text-align: center;">
+                <a href="{{ $verificationUrl }}"
+                   style="color: white;"
+                   class="email-button">
+                    Verify Email Address
+                </a>
+            </p>
+        @else
+            <a style="color: white;" href="https://www.mombasaautoshow.com/login" class="email-button">Login to Your
+                Account</a>
+        @endif
+
         <p style="margin-top: 20px;">Thanks for using our application!</p>
+
     </div>
     <div class="email-footer">
         If you did not request this change or have any question, please contact support immediately. <br>
