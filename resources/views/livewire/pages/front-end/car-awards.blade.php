@@ -84,7 +84,7 @@ new #[Layout('layouts.front-end')] class extends Component {
         return $query;
     }
 
-    #[On('filter')] #[On('VotesProcessed')]
+    #[On('filter')] #[On('get-vehicles')]
     public function with()
     {
         return [
@@ -249,5 +249,9 @@ new #[Layout('layouts.front-end')] class extends Component {
         setTimeout(function () {
             document.getElementById('success-message').style.display = 'none';
         }, 4000); // Hide after 3 seconds
+
+        setTimeout(function () {
+            Livewire.dispatch('get-vehicles');
+        }, 5000);
     </script>
 @endpush

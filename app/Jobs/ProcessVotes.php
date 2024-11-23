@@ -46,8 +46,6 @@ class ProcessVotes implements ShouldQueue
 
         Vote::insert($voteData);
 
-        //dispatch event
-        broadcast(new VotesProcessed($this->userId, $this->vehicleId));
 
     }
 }
