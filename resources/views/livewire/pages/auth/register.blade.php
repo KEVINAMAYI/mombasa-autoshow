@@ -141,7 +141,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                             <input type="checkbox" wire:model="accept_terms" name="accept_terms" value="1"
                                    id="accept_terms">
                             <label class="form-label" for="inputPassword4">
-                                I agree to <a href="terms.html" target="_blank">Terms</a> and <a href="privacy.html"
+                                I agree to <a href="{{ route('front-end.terms') }}" target="_blank">Terms</a> and <a href="{{ route('front-end.privacy') }}"
                                                                                                  target="_blank">Privacy
                                     Policy</a>
                             </label>
