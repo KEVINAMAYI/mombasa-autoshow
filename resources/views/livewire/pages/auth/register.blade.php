@@ -56,11 +56,7 @@ new #[Layout('layouts.front-end')] class extends Component {
 
         $this->alert('success', 'You account was created Successful');
 
-        if (auth()->check() && !empty(auth()->user()->email_verified_at)) {
-            return redirect()->intended(RouteServiceProvider::HOME);
-        }
-
-        return redirect()->route('front-end.car-awards');
+        return redirect()->intended(RouteServiceProvider::HOME);
 
     }
 
@@ -141,8 +137,9 @@ new #[Layout('layouts.front-end')] class extends Component {
                             <input type="checkbox" wire:model="accept_terms" name="accept_terms" value="1"
                                    id="accept_terms">
                             <label class="form-label" for="inputPassword4">
-                                I agree to <a href="{{ route('front-end.terms') }}" target="_blank">Terms</a> and <a href="{{ route('front-end.privacy') }}"
-                                                                                                 target="_blank">Privacy
+                                I agree to <a href="{{ route('front-end.terms') }}" target="_blank">Terms</a> and <a
+                                    href="{{ route('front-end.privacy') }}"
+                                    target="_blank">Privacy
                                     Policy</a>
                             </label>
                             <x-input-error :messages="$errors->get('accept_terms')" class="mt-2"/>

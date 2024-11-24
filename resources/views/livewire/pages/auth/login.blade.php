@@ -28,11 +28,7 @@ new #[Layout('layouts.front-end')] class extends Component {
 
         $this->alert('success', 'Login was Successful');
 
-        if (auth()->check() && !empty(auth()->user()->email_verified_at)) {
-            return redirect()->intended(RouteServiceProvider::HOME);
-        }
-
-        return redirect()->route('front-end.car-awards');
+        return redirect()->intended(RouteServiceProvider::HOME);
     }
 
 
