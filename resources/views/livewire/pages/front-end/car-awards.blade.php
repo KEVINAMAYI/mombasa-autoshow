@@ -214,8 +214,8 @@ new #[Layout('layouts.front-end')] class extends Component {
                                            class="btn btn-primary btn-sm">Vote for me</a>
                                     </td>
                                     <td>
-                                        <a href="#" id="shareModalBtn" data-id="{{ $vehicle->id }}"
-                                           style="float:right;"><img src="front-end/images/share.png"/></a>
+                                        <a href="#"  data-id="{{ $vehicle->id }}"
+                                           style="float:right;" class="shareModalBtn"><img src="front-end/images/share.png"/></a>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -255,7 +255,7 @@ new #[Layout('layouts.front-end')] class extends Component {
 
     <script>
 
-        $('#shareModalBtn').on('click', function (e) {
+        $('.shareModalBtn').on('click', function (e) {
             e.preventDefault();
 
             // Get the vehicle ID from the data-id attribute
