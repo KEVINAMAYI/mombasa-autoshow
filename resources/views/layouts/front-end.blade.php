@@ -91,13 +91,45 @@
     </div> <!--==end of <div id="container">==-->
 </div> <!--==end of <div id="top-bar">==-->
 
+<!-- Modal -->
+<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="shareModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="shareModalLabel">Share Vehicle</h5>
+            </div>
+            <div class="modal-body text-center">
+                <p>Select a platform to share this vehicle:</p>
+                <div class="share-icons">
+                    <!-- Facebook Share -->
+                    <a href="#" id="shareFacebook" target="_blank" class="btn btn-primary mr-2">
+                        <i class="fab fa-facebook-f"></i> Facebook
+                    </a>
+                    <!-- Twitter Share -->
+                    <a href="#" id="shareTwitter" target="_blank" class="btn btn-info mr-2">
+                        <i class="fab fa-twitter"></i> Twitter
+                    </a>
+                    <!-- WhatsApp Share -->
+                    <a href="#" id="shareWhatsApp" target="_blank" class="btn btn-success">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </a>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="closeShareModalBtn" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- sweet alert js -->
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 
 <x-livewire-alert::scripts/>
 
 @stack('js')
+
 
 </body>
 </html>
