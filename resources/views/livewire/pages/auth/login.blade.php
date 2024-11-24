@@ -32,7 +32,7 @@ new #[Layout('layouts.front-end')] class extends Component {
             return redirect()->intended(RouteServiceProvider::HOME);
         }
 
-        return redirect()->route('verification.notice');
+        return redirect()->route('front-end.car-awards');
     }
 
 
