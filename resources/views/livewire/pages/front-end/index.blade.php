@@ -23,6 +23,10 @@ new #[Layout('layouts.front-end')] class extends Component {
 
 } ?>
 
+@push('css')
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+@endpush
 <div class="page-content">
     <div id="banner">
         <img src="front-end/images/banner1.jpg" id="banner-img">
@@ -93,7 +97,9 @@ new #[Layout('layouts.front-end')] class extends Component {
                                 <td><a href="{{ route('front-end.checkout', $vehicle->id) }}" type="button"
                                        class="btn btn-primary btn-sm">Vote for me</a>
                                 </td>
-                                <td><a href="#" style="float:right;"><img src="front-end/images/share.png"/></a>
+                                <td>
+                                    <a href="#"  data-id="{{ $vehicle->id }}"
+                                       style="float:right;" class="shareModalBtn"><img src="front-end/images/share.png"/></a>
                                 </td>
                             </tr>
                             </tbody>
@@ -102,7 +108,8 @@ new #[Layout('layouts.front-end')] class extends Component {
                 </div>
             @endforeach
             @else
-                <p style="margin-top:20px; font-weight:bold; font-size:18px;" class="text-warning text-center">No Featured Vehicle Found</p>
+                <p style="margin-top:20px; font-weight:bold; font-size:18px;" class="text-warning text-center">No
+                    Featured Vehicle Found</p>
         @endif
         <!--==end of <div id="car-wrap">==-->
 
@@ -144,3 +151,31 @@ new #[Layout('layouts.front-end')] class extends Component {
         </div> <!--==end of <div id="container">==-->
     </div> <!--==end of <div id="newsletter-wrap">==-->
 </div>
+@push('js')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+
+        $('.shareModalBtn').on('click', function (e) {
+            e.preventDefault();
+
+            // Get the vehicle ID from the data-id attribute
+            const vehicleId = $(this).data('id');
+
+            // Construct the dynamic URL
+            const vehicleUrl = `https://www.mombasaautoshow.com/car-details/${vehicleId}`;
+
+            // Set the URLs in the modal dynamically (for sharing)
+            $('#shareFacebook').attr('href', `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(vehicleUrl)}`);
+            $('#shareTwitter').attr('href', `https://twitter.com/intent/tweet?url=${encodeURIComponent(vehicleUrl)}`);
+            $('#shareWhatsApp').attr('href', `https://api.whatsapp.com/send?text=${encodeURIComponent(vehicleUrl)}`);
+
+
+            $('#shareModal').modal('show');
+        })
+
+        $('#closeShareModalBtn').on('click', function (e) {
+            $('#shareModal').modal('hide');
+        })
+@endpush
