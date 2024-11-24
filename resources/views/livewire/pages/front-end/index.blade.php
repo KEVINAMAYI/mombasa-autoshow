@@ -98,8 +98,9 @@ new #[Layout('layouts.front-end')] class extends Component {
                                        class="btn btn-primary btn-sm">Vote for me</a>
                                 </td>
                                 <td>
-                                    <a href="#"  data-id="{{ $vehicle->id }}"
-                                       style="float:right;" class="shareModalBtn"><img src="front-end/images/share.png"/></a>
+                                    <a href="#" data-id="{{ $vehicle->id }}"
+                                       style="float:right;" class="shareModalBtn"><img
+                                            src="front-end/images/share.png"/></a>
                                 </td>
                             </tr>
                             </tbody>
@@ -178,4 +179,5 @@ new #[Layout('layouts.front-end')] class extends Component {
         $('#closeShareModalBtn').on('click', function (e) {
             $('#shareModal').modal('hide');
         })
+    </script>
 @endpush
