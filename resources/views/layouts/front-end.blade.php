@@ -11,8 +11,6 @@
     <link href="front-end/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link href="front-end/css/style.css" rel="stylesheet" type="text/css"/>
-
-
     <style>
         .dt-length label {
             text-transform: capitalize;
@@ -42,6 +40,18 @@
         </div> <!--==end of <div id="top-right"> ==-->
     </div> <!--==end of <div id="container">==-->
 </div> <!--==end of <div id="top-bar">==-->
+@if(auth()->check())
+    @if (!auth()->user()->hasVerifiedEmail())
+        @if(!in_array(Route::currentRouteName(),['verification.notice']))
+            <p style="text-align: center; margin-top:2px; border-top:1px solid grey;">
+                Your account is not verified. Please verify it to continue
+                <a id="verify-btn" class="btn btn-md btn-outline-warning text-warning"
+                   href="{{ route('verification.notice') }}">Verify Now
+                </a>
+            </p>
+        @endif
+    @endif
+@endif
 
 @if(in_array(Route::currentRouteName(),['front-end.create-car','front-end.edit-car']))
     @yield('content')
@@ -117,7 +127,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" id="closeShareModalBtn" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" id="closeShareModalBtn" class="btn btn-secondary" data-dismiss="modal">Close
+                </button>
             </div>
         </div>
     </div>

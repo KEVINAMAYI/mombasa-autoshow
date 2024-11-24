@@ -35,19 +35,21 @@ Route::name('front-end.')->group(function () {
 });
 
 
-Route::middleware(['auth','verified'])->name('front-end.')->group(function () {
+Route::middleware(['auth'])->name('front-end.')->group(function () {
 
     Volt::route('/checkout/{vehicle_id}', 'pages.front-end.checkout')
         ->name('checkout');
 
-    Volt::route('/my-profile', 'pages.front-end.my-profile')
-        ->name('my-profile');
+    Route::middleware(['verified'])->group(function () {
+        Volt::route('/my-profile', 'pages.front-end.my-profile')
+            ->name('my-profile');
 
-    Volt::route('/my-transactions', 'pages.front-end.my-transactions')
-        ->name('my-transactions');
+        Volt::route('/my-transactions', 'pages.front-end.my-transactions')
+            ->name('my-transactions');
 
-    Volt::route('/my-votes', 'pages.front-end.my-votes')
-        ->name('my-votes');
+        Volt::route('/my-votes', 'pages.front-end.my-votes')
+            ->name('my-votes');
+    });
 
     //Admin Routes
     Route::middleware(['is_admin'])->group(function () {
