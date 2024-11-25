@@ -110,9 +110,9 @@ new #[Layout('layouts.front-end')] class extends Component {
                         {{ __('Thanks for signing up! Before getting started, could you verify your email address.') }}
                     </div>
 
-                    <a  href="{{ route('front-end.car-awards') }}"
+                    <a style="background-color:green;" href="{{ route('front-end.car-awards') }}"
                             class="btn btn-primary">
-                        {{ __('Click Here to vote') }}
+                        {{ __('Proceed to Vote') }}
                     </a>
 
                     <button type="submit" wire:click="sendVerification"
