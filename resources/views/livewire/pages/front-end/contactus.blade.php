@@ -25,17 +25,17 @@ new #[Layout('layouts.front-end')] class extends Component {
                 <div class="date-wrap">
                     <img src="front-end/images/general.png">
                     <h3>GENERAL <br> INQUIRIES</h3>
-                    <p>+254 757629630 <br> info@mombasaautoshow.com</p>
+                    <p>info@mombasaautoshow.com</p>
                 </div> <!--==end of <div class="date-wrap">==-->
                 <div class="date-wrap">
                     <img src="front-end/images/exhibit.png">
                     <h3>EXHIBIT <br> INQUIRIES</h3>
-                    <p>+254 757629630 <br> info@mombasaautoshow.com</p>
+                    <p> info@mombasaautoshow.com</p>
                 </div> <!--==end of <div class="date-wrap">==-->
                 <div class="date-wrap">
                     <img src="front-end/images/sponsorship.png">
                     <h3>SPONSORSHIP <br> INQUIRIES</h3>
-                    <p>+254 757629630 <br> info@mombasaautoshow.com</p>
+                    <p>info@mombasaautoshow.com</p>
                 </div> <!--==end of <div class="date-wrap">==-->
 
             </div> <!--==end of <div id="page-contents">==-->
@@ -50,7 +50,8 @@ new #[Layout('layouts.front-end')] class extends Component {
             <h1>SIGN UP FOR AUTO SHOW ALERTS</h1>
             <h2>Sign up to recieve exclusive tickets offers,show info,awards etc.</h2>
             <form id="newsletter">
-                <input type="email" id="newsInputEmail1" aria-describedby="emailHelp" placeholder="Enter your email address">
+                <input type="email" id="newsInputEmail1" aria-describedby="emailHelp"
+                       placeholder="Enter your email address">
                 <button type="submit" class="btn btn-primary">SIGN UP</button>
             </form>
         </div> <!--==end of <div id="container">==-->

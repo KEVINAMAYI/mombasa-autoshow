@@ -2,13 +2,13 @@
 
 namespace App\Jobs;
 
-use App\Events\VotesProcessed;
 use App\Models\Vote;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 
 class ProcessVotes implements ShouldQueue
 {
@@ -32,20 +32,35 @@ class ProcessVotes implements ShouldQueue
 
     public function handle()
     {
-        $voteData = [];
+        DB::beginTransaction();
 
-        for ($i = 1; $i <= $this->votes; $i++) {
-            $voteData[] = [
-                'transaction_id' => $this->transactionId,
-                'user_id' => $this->userId,
-                'vehicle_id' => $this->vehicleId,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ];
+        try {
+
+            $existingVotesCount = Vote::where('transaction_id', $this->transactionId)
+                ->where('vehicle_id', $this->vehicleId)
+                ->count();
+
+            $votesToInsert = $this->votes - $existingVotesCount;
+
+            if ($votesToInsert > 0) {
+                $voteData = [];
+                for ($i = 1; $i <= $votesToInsert; $i++) {
+                    $voteData[] = [
+                        'transaction_id' => $this->transactionId,
+                        'user_id' => $this->userId,
+                        'vehicle_id' => $this->vehicleId,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                }
+
+                Vote::insert($voteData);
+            }
+
+            DB::commit();
+
+        } catch (\Exception $e) {
+            DB::rollBack();
         }
-
-        Vote::insert($voteData);
-
-
     }
 }

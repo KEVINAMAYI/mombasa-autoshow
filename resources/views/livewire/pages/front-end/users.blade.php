@@ -1,42 +1,50 @@
 <?php
 
 use App\Models\User;
+use App\Models\UserAward;
 use App\Notifications\AccountActivation;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
+use Livewire\WithPagination;
 
 new #[Layout('layouts.front-end')] class extends Component {
 
-    use LivewireAlert;
+    use LivewireAlert, WithPagination;
 
-    public $users;
     public $search = '';
+    protected $paginationTheme = 'bootstrap';
 
-
-    public function mount()
+    public function with()
     {
-        $this->getUsers();
+        return [
+            'users' => $this->getUsers()->paginate(10)
+        ];
+
     }
 
 
     public function updatedSearch()
     {
-        $this->getUsers();
+        return [
+            'users' => $this->getUsers()->paginate(10)
+        ];
     }
 
     // Method to fetch users based on search input
     public function getUsers()
     {
+        $query = User::orderBy('created_at', 'DESC');
+
         if ($this->search) {
-            $this->users = User::where('first_name', 'like', '%' . $this->search . '%')
+            $query->where('first_name', 'like', '%' . $this->search . '%')
                 ->orWhere('last_name', 'like', '%' . $this->search . '%')
                 ->orWhere('email', 'like', '%' . $this->search . '%')
                 ->orWhere('phone_number', 'like', '%' . $this->search . '%')
                 ->get();
-        } else {
-            $this->users = User::all();
         }
+
+        return $query;
     }
 
     public function updatesUserStatus($user_id)
@@ -95,6 +103,26 @@ new #[Layout('layouts.front-end')] class extends Component {
 
     }
 
+    public function resetPoints($user_id)
+    {
+        try {
+            // Attempt to delete the user's awards
+            $deleted = UserAward::where('user_id', $user_id)->delete();
+
+            // Check if any rows were affected
+            if ($deleted) {
+                $this->alert('success', 'User’s awarded points were reset successfully.');
+            } else {
+                $this->alert('warning', 'No awarded points were found for this user.');
+            }
+        } catch (\Exception $e) {
+            // Log the error and show a friendly message
+            \Log::error('Error resetting rewards: ' . $e->getMessage());
+            $this->alert('error', 'An error occurred while resetting the user’s awarded points.');
+        }
+    }
+
+
 } ?>
 
 <div class="page-content">
@@ -120,7 +148,6 @@ new #[Layout('layouts.front-end')] class extends Component {
                         <input type="text" name="search" wire:model.live="search" class="form-control"
                                placeholder="Search users">
                     </div>
-
                 </div>
                 <!-- =======end of Search====-->
 
@@ -129,23 +156,37 @@ new #[Layout('layouts.front-end')] class extends Component {
                        class="table">
                     <tbody>
                     <tr>
-                        <td><strong>Names</strong></td>
-                        <td><strong>Email</strong></td>
-                        <td><strong>Phone</strong></td>
+                        <td><strong>User</strong></td>
                         <td><strong>Country</strong></td>
                         <td><strong>Town</strong></td>
+                        <td><strong>Points</strong></td>
+                        <td><strong>Points in Kshs</strong></td>
                         <td><strong>Status</strong></td>
                         <td><strong>Date</strong></td>
                         <td><strong>Action</strong></td>
                     </tr>
 
-                    @forelse($users as $user)
+                    @if($users->isNotEmpty()) <!-- Use isNotEmpty() for collection check -->
+                    @foreach($users as $user)
                         <tr>
-                            <td>{{ $user->first_name.' '.$user->last_name }}</td>
-                            <td>{{ $user->email }}</td>
-                            <td>{{ $user->phone_number }}</td>
+                            <td>
+
+                                <div class="d-flex flex-column justify-content-center">
+                                    <p style="font-weight: bold; font-size: 14px;">
+                                        {{ $user->first_name.' '.$user->last_name }}
+                                    </p>
+                                    <p style="margin-top: -20px;" class="text-secondary mb-0">
+                                        {{ $user->email }}
+                                    </p>
+                                    <p style="color:#007BFF; font-weight: bold;" class="text-secondary mb-0">
+                                        {{ $user->phone_number }}
+                                    </p>
+                                </div>
+                            </td>
                             <td>{{ $user->country->name }}</td>
                             <td>{{ $user->town }}</td>
+                            <td>{{ $user->awards->first()->points ?? '0' }}</td>
+                            <td>{{ !empty($user->awards->first()->points) ? ($user->awards->first()->points * 50)/2 : '0' }}</td>
                             <td>{{ $user->is_active ? 'Active' : 'Inactive' }}</td>
                             <td>{{ \Carbon\Carbon::parse($user->created_at)->format('d-M-Y') }}</td>
                             <td>
@@ -154,7 +195,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                                             class="btn btn-sm btn-outline-warning">Deactivate
                                     </button>
                                 @else
-                                    <button  wire:click="updatesUserStatus({{$user->id}})"
+                                    <button wire:click="updatesUserStatus({{$user->id}})"
                                             class="btn btn-sm btn-outline-success">Activate
                                     </button>
                                 @endif
@@ -167,16 +208,24 @@ new #[Layout('layouts.front-end')] class extends Component {
                                             class="btn btn-sm btn-outline-success">Set as Admin
                                     </button>
                                 @endif
+                                <button wire:click="resetPoints({{$user->id}})"
+                                        wire:confirm="User Awards will be reset to 0 !"
+                                        class="btn btn-sm btn-outline-info">Reset points
+                                </button>
                             </td>
                         </tr>
-                    @empty
+                    @endforeach
+                    @else
                         <tr>
                             <td colspan="8" class="text-center">No Users Were Found</td>
                         </tr>
-                    @endforelse
+                    @endif
                     </tbody>
                 </table>
 
+                <div>
+                    {{ $users->links() }}
+                </div>
 
             </div> <!--==end of <div id="page-contents">==-->
 

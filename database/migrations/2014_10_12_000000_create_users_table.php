@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('password');
             $table->foreignId('country_id');
             $table->string('town')->nullable();
+            $table->string('ref_code');
             $table->integer('accept_terms');
             $table->boolean('is_active')->default(true);
             $table->boolean('is_admin')->default(false);

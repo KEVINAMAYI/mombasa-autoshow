@@ -2,8 +2,12 @@
 
 use App\Models\Category;
 use App\Models\Make;
+use App\Models\Transaction;
 use App\Models\Vehicle;
 use App\Models\VehicleModel;
+use App\Models\Vote;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\On;
 use Livewire\Volt\Component;
@@ -84,12 +88,70 @@ new #[Layout('layouts.front-end')] class extends Component {
         return $query;
     }
 
-    #[On('filter')] #[On('get-vehicles')]
+    #[On('filter')]
     public function with()
     {
         return [
             'vehicles' => $this->getVehiclesQuery()->paginate(10)
         ];
+    }
+
+    #[On('get-vehicles')]
+    public function confirmVotes()
+    {
+
+
+        DB::beginTransaction();
+
+        try {
+
+            $lastTransaction = Transaction::latest()->first();
+
+            if ($lastTransaction && $lastTransaction->status === 'completed') {
+
+                $votesFromTransaction = floor($lastTransaction->amount / 50);
+
+                $existingVotesCount = Vote::where('transaction_id', $lastTransaction->id)
+                    ->count();
+
+                $votesToInsert = $votesFromTransaction - $existingVotesCount;
+
+                if ($votesToInsert > 0) {
+                    $voteData = [];
+                    for ($i = 1; $i <= $votesToInsert; $i++) {
+                        $voteData[] = [
+                            'transaction_id' => $lastTransaction->id,
+                            'user_id' => auth()->user()->id,
+                            'vehicle_id' => $lastTransaction->vehicle_id,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
+                    }
+
+                    Vote::insert($voteData);
+                }
+
+                if ($votesToInsert < 0) {
+
+                    $votesToDelete = abs($votesToInsert);
+                    Vote::where('transaction_id', $lastTransaction->id)
+                        ->where('vehicle_id', $lastTransaction->vehicle_id)
+                        ->orderBy('created_at', 'desc')
+                        ->take($votesToDelete)
+                        ->delete();
+
+                }
+
+            }
+
+            $this->with();
+            DB::commit();
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::info($e->getMessage());
+
+        }
     }
 
 
@@ -100,10 +162,15 @@ new #[Layout('layouts.front-end')] class extends Component {
 @endpush
 <div class="page-content">
 
-    @if (session('success'))
-        <div class="alert text-success alert-light" id="success-message"
-             style="position: fixed; top: 20px; right: 20px; max-width: 300px; z-index: 1000; padding: 15px; border-radius: 5px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
-            {{ session('success') }}
+    @if (session('success_messages'))
+        <div id="alert-container">
+            @foreach (session('success_messages') as $index => $message)
+                <div class="alert text-success alert-light"
+                     id="alert-{{ $index }}"
+                     style="position: fixed; top: 20px; right: 20px; max-width: 300px; z-index: 1000; padding: 15px; border-radius: 5px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); margin-bottom: 10px; display: none;">
+                    {{ $message }}
+                </div>
+            @endforeach
         </div>
     @endif
 
@@ -214,8 +281,9 @@ new #[Layout('layouts.front-end')] class extends Component {
                                            class="btn btn-primary btn-sm">Vote for me</a>
                                     </td>
                                     <td>
-                                        <a href="#"  data-id="{{ $vehicle->id }}"
-                                           style="float:right;" class="shareModalBtn"><img src="front-end/images/share.png"/></a>
+                                        <a href="#" data-id="{{ $vehicle->id }}"
+                                           style="float:right;" class="shareModalBtn"><img
+                                                src="front-end/images/share.png"/></a>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -277,12 +345,31 @@ new #[Layout('layouts.front-end')] class extends Component {
             $('#shareModal').modal('hide');
         })
 
-        setTimeout(function () {
-            document.getElementById('success-message').style.display = 'none';
-        }, 4000); // Hide after 3 seconds
 
-        setTimeout(function () {
-            Livewire.dispatch('get-vehicles');
-        }, 5000);
+        // A cleaner version of your original code
+        async function showMessages(messages) {
+            for (let i = 0; i < messages.length; i++) {
+                const alert = messages[i];
+                const delay = i * 4000; // Stagger the appearance of each message by 4 seconds
+
+                // Show the message and hide it after 4 seconds
+                setTimeout(() => {
+                    alert.style.display = 'block';
+                    setTimeout(() => {
+                        alert.style.display = 'none';
+                    }, 4000); // Hide each message after 4 seconds
+                }, delay);
+            }
+
+            // Dispatch the 'get-vehicles' event after all messages have been processed
+            setTimeout(() => {
+                Livewire.dispatch('get-vehicles');
+            }, messages.length * 4000 + 1000); // Dispatch after all messages are hidden
+        }
+
+        // Call the function to show messages and trigger Livewire event
+        showMessages(document.querySelectorAll('#alert-container .alert'));
+
+
     </script>
 @endpush

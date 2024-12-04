@@ -47,22 +47,6 @@ class MpesaController extends Controller
 
     public function validate_transaction(Request $request)
     {
-        $js_code = json_decode($request->getContent(), true);
-
-        //get the amount only if the transaction exists
-        $account_number = intval($js_code['BillRefNumber']);
-
-        Log::info('---VALIDATION REF NUMBER---');
-        Log::info($account_number);
-        Log::info('---VALIDATION REF NUMBER---');
-
-        if (MpesaTransaction::where('account_number', $account_number)->count() > 0) {
-            return response()->json([
-                'ResultCode' => "C2B00012",
-                'ResultDesc' => "Rejected",
-            ]);
-        }
-
         return response()->json([
             'ResultCode' => 0,
             'ResultDesc' => "Accepted",

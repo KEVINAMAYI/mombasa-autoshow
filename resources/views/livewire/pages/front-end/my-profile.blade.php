@@ -106,7 +106,10 @@ new #[Layout('layouts.front-end')] class extends Component {
 
             <livewire:layout.front-end.nav/>
 
-            <div id="title-inner">My Profile</div>
+            <div id="title-inner">
+                My Profile
+            </div>
+
         </div><!----end of  <div id="inner-container">---->
     </div> <!--==end of <div id="banner-in"> ==-->
 
@@ -115,6 +118,9 @@ new #[Layout('layouts.front-end')] class extends Component {
             <div id="page-contents">
                 <div id="register">
                     <form wire:submit.prevent="updateProfile" class="row g-3">
+                        <div class="row" style="font-size:20px; padding-top:10px; display: flex; justify-content: end; padding-left:20px; color:green" id="title-inner">
+                            Referral Code : {{ auth()->user()->ref_code }}
+                        </div>
                         <div class="col-md-6">
                             <label for="first_name" class="form-label">First Name</label>
                             <input type="text" class="form-control" id="first_name" wire:model="first_name">

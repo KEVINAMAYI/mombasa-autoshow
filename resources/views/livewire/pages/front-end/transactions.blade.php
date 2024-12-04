@@ -3,27 +3,37 @@
 use App\Models\Transaction;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
+use Livewire\WithPagination;
 
 new #[Layout('layouts.front-end')] class extends Component {
 
-    public $search;
-    public $transactions;
-    public $totalAmount;
+    use WithPagination;
 
-    public function mount()
+    public $search;
+    public $totalAmount;
+    protected $paginationTheme = 'bootstrap';
+
+    public function calculateTotalAmount()
     {
-        $this->getUserTransactions();
+        $this->totalAmount = $this->getUserTransactions()->sum('amount'); // Replace 'amount' with the actual field name for the transaction amount in your database.
     }
 
+    public function with()
+    {
+        return [
+            'transactions' => $this->getUserTransactions()->paginate(10)
+        ];
+    }
 
     public function updatedSearch()
     {
         $this->getUserTransactions();
+        $this->with();
     }
 
-    public function getUserTransactions($searchTerm = null)
+    public function getUserTransactions()
     {
-        $query = Transaction::whereIn('status', ['completed', 'incomplete']);
+        $query = Transaction::orderBy('created_at', 'DESC')->whereIn('status', ['completed', 'incomplete']);
 
         if ($this->search) {
             $query->where(function ($query) {
@@ -53,17 +63,14 @@ new #[Layout('layouts.front-end')] class extends Component {
                     $query->where('phone_number', 'like', '%' . $this->search . '%')
                         ->orWhere('first_name', 'like', '%' . $this->search . '%')
                         ->orWhere('last_name', 'like', '%' . $this->search . '%');
-
                 });
             });
         }
 
-        // Include 'votes' and 'vehicle' relations for eager loading
-        $this->transactions = $query->with(['votes', 'votes.vehicle'])->get();
-
-        // Calculate the total amount of all transactions
-        $this->totalAmount = $this->transactions->sum('amount');
+        // Return the query itself for pagination later
+        return $query->with(['votes', 'votes.vehicle']);
     }
+
 } ?>
 
 <div class="page-content">
@@ -108,9 +115,11 @@ new #[Layout('layouts.front-end')] class extends Component {
                         <td><strong>Amount</strong></td>
                         <td><strong>Votes</strong></td>
                         <td><strong>Phone</strong></td>
+                        <td><strong>Referral Code</strong></td>
                         <td><strong>Status</strong></td>
                     </tr>
-                    @forelse($transactions as $transaction)
+                    @if($transactions->isNotEmpty()) <!-- Use isNotEmpty() for collection check -->
+                    @foreach($transactions as $transaction)
                         <tr>
                             <td>{{ $transaction->user->first_name.' '.$transaction->user->last_name }}</td>
                             <td>{{ $transaction->transaction_code }}</td>
@@ -122,16 +131,21 @@ new #[Layout('layouts.front-end')] class extends Component {
                             <td>{{ $transaction->amount }}</td>
                             <td>{{ optional($transaction->votes)->count() ?? 0 }}</td>
                             <td>{{ $transaction->phone_number }}</td>
+                            <td>{{ $transaction->ref_code ?? 'NA' }}</td>
                             <td>{{ ($transaction->status === 'incomplete') || ($transaction->status === 'completed') ? 'completed' : $transaction->status }}</td>
                         </tr>
-                    @empty
+                    @endforeach
+                    @else
                         <tr>
                             <td colspan="9" class="text-center">No Transaction Was Found</td>
                         </tr>
-                    @endforelse
+                    @endif
                     </tbody>
                 </table>
 
+                <div>
+                    {{ $transactions->links() }}
+                </div>
 
             </div> <!--==end of <div id="page-contents">==-->
 
