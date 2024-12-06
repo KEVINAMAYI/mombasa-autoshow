@@ -50,7 +50,10 @@ new #[Layout('layouts.front-end')] class extends Component {
 
         $validated['password'] = Hash::make($validated['password']);
 
-        event(new Registered($user = User::create($validated)));
+        $latestUserId = User::latest('id')->value('id') ?? 0; // Get the latest user_id or 0 if no users exist
+        $refCode = 'REFMA' . $latestUserId;
+
+        event(new Registered($user = User::create($validated + ['ref_code' => $refCode ])));
 
         Auth::login($user);
 

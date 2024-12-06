@@ -32,7 +32,8 @@ new #[Layout('layouts.front-end')] class extends Component {
                 WHERE t.vehicle_id = votes.vehicle_id
             ) as total_amount') // Subquery to sum transaction amounts for each vehicle
         )
-            ->groupBy('votes.vehicle_id'); // Group by vehicle_id to calculate total per vehicle
+            ->groupBy('votes.vehicle_id') // Group by vehicle_id to calculate total per vehicle
+            ->orderBy('vote_count', 'DESC'); // Order by vote count in descending order
 
         // Apply search filter if search term is provided
         if ($this->search) {

@@ -31,21 +31,25 @@ new #[Layout('layouts.front-end')] class extends Component {
         ];
     }
 
-    // Method to fetch users based on search input
     public function getUsers()
     {
-        $query = User::orderBy('created_at', 'DESC');
+        $query = User::query()
+            ->leftJoin('user_awards', 'users.id', '=', 'user_awards.user_id')
+            ->select('users.*', 'user_awards.points')
+            ->orderBy('user_awards.points', 'DESC');
 
         if ($this->search) {
-            $query->where('first_name', 'like', '%' . $this->search . '%')
-                ->orWhere('last_name', 'like', '%' . $this->search . '%')
-                ->orWhere('email', 'like', '%' . $this->search . '%')
-                ->orWhere('phone_number', 'like', '%' . $this->search . '%')
-                ->get();
+            $query->where(function ($q) {
+                $q->where('users.first_name', 'like', '%' . $this->search . '%')
+                    ->orWhere('users.last_name', 'like', '%' . $this->search . '%')
+                    ->orWhere('users.email', 'like', '%' . $this->search . '%')
+                    ->orWhere('users.phone_number', 'like', '%' . $this->search . '%');
+            });
         }
 
-        return $query;
+        return $query
     }
+
 
     public function updatesUserStatus($user_id)
     {
@@ -160,7 +164,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                         <td><strong>Country</strong></td>
                         <td><strong>Town</strong></td>
                         <td><strong>Points</strong></td>
-                        <td><strong>Points in Kshs</strong></td>
+                        <td><strong>Points(Kshs)</strong></td>
                         <td><strong>Status</strong></td>
                         <td><strong>Date</strong></td>
                         <td><strong>Action</strong></td>
@@ -186,7 +190,7 @@ new #[Layout('layouts.front-end')] class extends Component {
                             <td>{{ $user->country->name }}</td>
                             <td>{{ $user->town }}</td>
                             <td>{{ $user->awards->first()->points ?? '0' }}</td>
-                            <td>{{ !empty($user->awards->first()->points) ? ($user->awards->first()->points * 50)/2 : '0' }}</td>
+                            <td>{{ !empty($user->awards->first()->points) ? ($user->awards->first()->points * 50) : '0' }}</td>
                             <td>{{ $user->is_active ? 'Active' : 'Inactive' }}</td>
                             <td>{{ \Carbon\Carbon::parse($user->created_at)->format('d-M-Y') }}</td>
                             <td>

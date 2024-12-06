@@ -45,8 +45,8 @@ new #[Layout('layouts.front-end')] class extends Component {
                 \DB::raw('MAX(created_at) as latest_vote')
             )
             ->with(['vehicle', 'transaction']) // Include relationships
-            ->groupBy('vehicle_id'); // Group by transaction_id as well
-
+            ->groupBy('vehicle_id')// Group by transaction_id as well
+            ->orderBy('vote_count', 'DESC'); // Order by vote count in descending order
 
         // Apply search filter if search term is provided
         if ($this->search) {
