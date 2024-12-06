@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\Models\UserAudit;
 use App\Models\UserAward;
 use App\Notifications\AccountActivation;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
@@ -47,7 +48,7 @@ new #[Layout('layouts.front-end')] class extends Component {
             });
         }
 
-        return $query
+        return $query;
     }
 
 
@@ -109,18 +110,38 @@ new #[Layout('layouts.front-end')] class extends Component {
 
     public function resetPoints($user_id)
     {
+
+        $user = User::where('id', $user_id)->first();
+
         try {
+
+            $points = UserAward::where('user_id', $user_id)->first()->points;
+
             // Attempt to delete the user's awards
             $deleted = UserAward::where('user_id', $user_id)->delete();
 
             // Check if any rows were affected
             if ($deleted) {
+
+                UserAudit::create([
+                    'first_name' => $user->first_name,
+                    'last_name' => $user->last_name,
+                    'phone_number' => $user->phone_number,
+                    'email' => $user->email,
+                    'country' => $user->country->name,
+                    'town' => $user->town,
+                    'points' => $points,
+                    'points_in_ksh' => $points * 50,
+                ]);
+
                 $this->alert('success', 'User’s awarded points were reset successfully.');
             } else {
                 $this->alert('warning', 'No awarded points were found for this user.');
             }
         } catch (\Exception $e) {
             // Log the error and show a friendly message
+            dd($e->getMessage());
+
             \Log::error('Error resetting rewards: ' . $e->getMessage());
             $this->alert('error', 'An error occurred while resetting the user’s awarded points.');
         }

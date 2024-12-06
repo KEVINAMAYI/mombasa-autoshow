@@ -145,6 +145,11 @@ new class extends Component {
                                         <li><a class="dropdown-item" href="{{ route('front-end.users') }}">All Users</a>
                                         </li>
                                         <li>
+                                            <a class="dropdown-item" href="{{ route('front-end.audit-logs') }}">
+                                                Audit Logs
+                                            </a>
+                                        </li>
+                                        <li>
                                             <button wire:click="refreshVotes" class="dropdown-item"
                                                     style="font-weight:bold; font-size:10px; color: white; transition: color 0.3s ease;"
                                                     onmouseover="this.style.color='black';"
