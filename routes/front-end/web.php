@@ -68,6 +68,9 @@ Route::middleware(['auth'])->name('front-end.')->group(function () {
         Volt::route('/audit-logs', 'pages.front-end.audit-logs')
             ->name('audit-logs');
 
+        Volt::route('/bulk-sms', 'pages.front-end.bulk-sms')
+            ->name('bulk-sms');
+
         Volt::route('/vote-per-car', 'pages.front-end.vote-per-car')
             ->name('vote-per-car');
 

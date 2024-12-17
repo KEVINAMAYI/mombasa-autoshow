@@ -112,8 +112,17 @@ new #[Layout('layouts.front-end')] class extends Component {
 
     public function calculateRewards($amount_transacted)
     {
-        // List of primes
-        $primes = [7, 11, 13, 17, 19];
+
+        // Fetch the latest reward settings
+        $settings = DB::table('reward_settings')->latest()->first();
+        if (!$settings) {
+            return response()->json(['error' => 'No reward settings configured.']);
+        }
+
+        // Extract settings
+        $primes = json_decode($settings->prime_numbers, true);
+        $multiplier = $settings->reward_multiplier;
+        $divisor = $settings->reward_divisor;
 
         // Generate a random six-digit number
         $randomNumber = rand(100000, 999999);
@@ -133,7 +142,7 @@ new #[Layout('layouts.front-end')] class extends Component {
         if ($multipleOf) {
 
             // Calculate points based on the given formula
-            $calculatedPoints = ($amount_transacted * 2) / 50;
+            $calculatedPoints = ($amount_transacted * $multiplier) / $divisor;
 
             // Get the logged-in user's ID (assuming a session or authentication system)
             $userId = auth()->id(); // Laravel example. Adjust for your setup.
